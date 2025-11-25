@@ -1,14 +1,17 @@
+import axios from "axios";
+import { User } from "@/types/user";
+
 const BASE_URL = "https://jsonplaceholder.typicode.com";
 
-export const getUsers = async () => {
-  const res = await fetch(`${BASE_URL}/users`);
-  return res.json();
+export const getUsers = async (): Promise<User[]> => {
+  const res = await axios.get<User[]>(`${BASE_URL}/users`);
+  return res.data; 
 };
 
-export const getUser = async (id: number) => {
-  const res = await fetch(`${BASE_URL}/users/${id}`);
-  return res.json();
-};
+// export const getUser = async (id: number) => {
+//   const res = await fetch(`${BASE_URL}/users/${id}`);
+//   return res.json();
+// };
 
 // export const createUser = async (data: any) => {
 //   const res = await fetch(`${BASE_URL}/users`, {
@@ -27,7 +30,3 @@ export const getUser = async (id: number) => {
 //   });
 //   return res.json();
 // };
-
-export const deleteUser = async (id: number) => {
-  await fetch(`${BASE_URL}/users/${id}`, { method: "DELETE" });
-};
