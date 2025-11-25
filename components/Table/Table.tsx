@@ -6,9 +6,10 @@ import { User } from "@/types/user";
 interface TableProps {
   rows: User[];
   deleteUser: (userId: number) => void;
+  editUser: (userId: number, newData: Partial<User>) => void;
 }
 
-export default function Table({ rows, deleteUser }: TableProps) {
+export default function Table({ rows, deleteUser, editUser }: TableProps) {
   return (
     <table className="w-full border border-gray-300">
       <thead>
@@ -21,7 +22,12 @@ export default function Table({ rows, deleteUser }: TableProps) {
       </thead>
       <tbody>
         {rows.map((user) => (
-          <TableRow key={user.id} user={user} deleteUser={deleteUser} />
+          <TableRow
+            key={user.id}
+            user={user}
+            deleteUser={deleteUser}
+            editUser={editUser}
+          />
         ))}
       </tbody>
     </table>

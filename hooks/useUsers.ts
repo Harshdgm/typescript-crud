@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { User } from "@/types/user";
-import { getUsers } from "@/lib/api";
+import { getUsers, updateUser } from "@/lib/api";
 
 export function useUsers() {
   const [users, setUsers] = useState<User[]>([]);
@@ -11,7 +11,7 @@ export function useUsers() {
     const storedUsers = sessionStorage.getItem("users");
 
     if (storedUsers) {
-     setTimeout(() => setUsers(JSON.parse(storedUsers)), 0);
+      setTimeout(() => setUsers(JSON.parse(storedUsers)), 0);
     } else {
       const fetchUsers = async () => {
         const data: User[] = await getUsers();
@@ -35,5 +35,20 @@ export function useUsers() {
     sessionStorage.setItem("users", JSON.stringify(updatedUsers));
   };
 
-  return { users, deleteUser, setUsers };
+  const editUser = async (userId: number, newData: Partial<User>) => {
+    try {
+      const updatedUser = await updateUser(userId, newData);
+
+      const updatedUsers = users.map((user) =>
+        user.id === userId ? updatedUser : user
+      );
+      setUsers(updatedUsers);
+
+      sessionStorage.setItem("users", JSON.stringify(updatedUsers));
+    } catch (error) {
+      console.error("Failed to update user:", error);
+    }
+  };
+
+  return { users, deleteUser, editUser, setUsers };
 }
