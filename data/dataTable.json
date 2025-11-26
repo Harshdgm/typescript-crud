@@ -1,20 +1,20 @@
 {
-    "Users":[
- {
-  "id": "1",
-  "email": "nataliya@gmail.com",
-  "phone": 9898989898,
-  "address": "amreli",
-  "image": "https://www.viewbug.com/media/mediafiles/2016/01/11/62182159_large1300.jpg",
-  "hobby": "Swimming"
- },
- {
-  "id": "2",
-  "email": "maria@gmail.com",
-  "phone": 9192939493,
-  "address": "surat",
-  "image": "https://media.istockphoto.com/id/175490523/photo/beautiful-nature-big-world-of-small-things.jpg?s=612x612&w=0&k=20&c=YX-Ko3IqSajMqxn1HCyMBdYjfWlbSXjlaY75ebcK3f8=",
-  "hobby": "Drawing"
- }
+  "Users":[
+    {
+    "id": "1",
+    "email": "nataliya@gmail.com",
+    "phone": 9898989898,
+    "address": "amreli",
+    "image": "https://www.viewbug.com/media/mediafiles/2016/01/11/62182159_large1300.jpg",
+    "hobby": "Swimming"
+    },
+    {
+    "id": "2",
+    "email": "maria@gmail.com",
+    "phone": 9192939493,
+    "address": "surat",
+    "image": "https://media.istockphoto.com/id/175490523/photo/beautiful-nature-big-world-of-small-things.jpg?s=612x612&w=0&k=20&c=YX-Ko3IqSajMqxn1HCyMBdYjfWlbSXjlaY75ebcK3f8=",
+    "hobby": "Drawing"
+    }
  ]
 }
