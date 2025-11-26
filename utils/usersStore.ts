@@ -5,34 +5,50 @@ import { UserData } from "@/types/user";
 
 const STORAGE_KEY = "usersData";
 
-// Helper: read from sessionStorage
+let cache: UserData[] = [];
+const EMPTY: UserData[] = [];
+
 function getSnapshot(): UserData[] {
-  if (typeof window === "undefined") return [];
-  const stored = sessionStorage.getItem(STORAGE_KEY);
-  return stored ? JSON.parse(stored) : [];
+  return cache;
 }
 
-// Helper: subscribe to storage changes (reactive)
+function getServerSnapshot(): UserData[] {
+  return EMPTY;
+}
+
 function subscribe(callback: () => void) {
-  window.addEventListener("storage", callback);
-  return () => window.removeEventListener("storage", callback);
+  function handleStorage() {
+    const data = sessionStorage.getItem(STORAGE_KEY);
+    cache = data ? JSON.parse(data) : [];
+    callback();
+  }
+
+  window.addEventListener("storage", handleStorage);
+  handleStorage(); 
+
+  return () => window.removeEventListener("storage", handleStorage);
 }
 
-// Hook: use this in any component
 export function useUsersStore(): UserData[] {
-  return useSyncExternalStore(subscribe, getSnapshot);
+  return useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 }
 
-// Function to update the store
 export function addUsers(newUsers: UserData[]) {
-  const current = getSnapshot();
-  const updated = [...current, ...newUsers];
-  sessionStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+  cache = [...cache, ...newUsers];
+  sessionStorage.setItem(STORAGE_KEY, JSON.stringify(cache));
   window.dispatchEvent(new Event("storage"));
 }
 
-// Optional: clear all users
+export function initUsersFromAPI(apiUsers: UserData[]) {
+  if (cache.length === 0) {
+    cache = apiUsers;
+    sessionStorage.setItem(STORAGE_KEY, JSON.stringify(cache));
+    window.dispatchEvent(new Event("storage"));
+  }
+}
+
 export function clearUsers() {
+  cache = [];
   sessionStorage.removeItem(STORAGE_KEY);
   window.dispatchEvent(new Event("storage"));
 }

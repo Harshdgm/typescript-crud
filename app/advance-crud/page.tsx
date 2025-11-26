@@ -1,25 +1,27 @@
-'use client';
+"use client";
 
+import { useEffect } from "react";
 import AdvanceTable from "@/components/AdvanceTable/AdvanceTable";
 import AddUserModal from "@/components/AdvanceTable/AddUserModal";
+import { useUsersStore, initUsersFromAPI, addUsers } from "@/utils/usersStore";
 import { fetchUserData } from "@/lib/api";
-import { UserData } from "@/types/user";
-import { use, useMemo, useState } from "react";
 
 export default function UsersAdvancedPage() {
-  const initialUsers: UserData[] = use(
-    useMemo(() => fetchUserData(), [])
-  );
+  // Read from sessionStorage (reactive)
+  const usersData = useUsersStore();
 
-  const [usersData, setUsersData] = useState<UserData[]>(initialUsers);
-
-  const handleAddUsers = (newUsers: UserData[]) => {
-    setUsersData([...usersData, ...newUsers]);
-  };
+  // Load initial API users once
+  useEffect(() => {
+    async function loadInitial() {
+      const apiUsers = await fetchUserData();
+      initUsersFromAPI(apiUsers); // Adds API users into sessionStorage
+    }
+    loadInitial();
+  }, []);
 
   return (
     <div className="p-6">
-      <AddUserModal onAddUsers={handleAddUsers} />
+      <AddUserModal onAddUsers={addUsers} />
       <AdvanceTable data={usersData} />
     </div>
   );
