@@ -11,16 +11,16 @@ interface TableProps {
 
 export default function Table({ rows, deleteUser, editUser }: TableProps) {
   return (
-    <table className="w-full border border-gray-300">
-      <thead>
+    <table className="w-full border-2 border-gray-300 rounded-lg overflow-hidden">
+      <thead className="bg-blue-100">
         <tr>
-          <th className="border p-2">ID</th>
-          <th className="border p-2">Name</th>
-          <th className="border p-2">Email</th>
-          <th className="border p-2">Actions</th>
+          <th className="border-b-2 p-2 ">ID</th>
+          <th className="border-b-2 p-2">Name</th>
+          <th className="border-b-2 p-2">Email</th>
+          <th className="border-b-2 p-2">Actions</th>
         </tr>
       </thead>
-      <tbody>
+      <tbody className="text-center bg-gray-200">
         {rows.map((user) => (
           <TableRow
             key={user.id}

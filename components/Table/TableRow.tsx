@@ -48,9 +48,9 @@ export default function TableRow({ user, editUser, deleteUser }: TableRowProps) 
           user.email
         )}
       </td>
-      <td className="border p-2 flex gap-2">
+      <td className="border p-2 flex gap-4 justify-center">
         <button
-          className="text-blue-500 cursor-pointer"
+          className="text-blue-800 cursor-pointer"
           onClick={handleEditSave}
         >
           {isEditing ? "Save" : "Edit"}

@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
 import { useState, useEffect } from "react";
 import { User } from "@/types/user";
-import { getUsers, updateUser } from "@/lib/api";
+import { getUsers, updateUser, createUser } from "@/lib/api";
 
 export function useUsers() {
   const [users, setUsers] = useState<User[]>([]);
@@ -21,6 +21,24 @@ export function useUsers() {
       fetchUsers();
     }
   }, []);
+
+  const addUser = async (data: User) => {
+  try {
+    const newId = users.length ? users[users.length - 1].id + 1 : 1;
+
+    const payload = { ...data, id: newId };
+
+    const created = await createUser(payload);
+
+    const finalUser = { ...created, id: newId }; 
+    const updatedUsers = [...users, finalUser];
+
+    setUsers(updatedUsers);
+    sessionStorage.setItem("users", JSON.stringify(updatedUsers));
+  } catch (err) {
+    console.error("Failed to create user:", err);
+  }
+};
 
   const deleteUser = (userId: number) => {
     const deletedUser = users.find((user) => user.id === userId);
@@ -42,13 +60,19 @@ export function useUsers() {
       const updatedUsers = users.map((user) =>
         user.id === userId ? updatedUser : user
       );
-      setUsers(updatedUsers);
 
+      setUsers(updatedUsers);
       sessionStorage.setItem("users", JSON.stringify(updatedUsers));
     } catch (error) {
       console.error("Failed to update user:", error);
     }
   };
 
-  return { users, deleteUser, editUser, setUsers };
+  return {
+    users,
+    addUser,
+    deleteUser,
+    editUser,
+    setUsers,
+  };
 }
