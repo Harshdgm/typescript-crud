@@ -7,7 +7,7 @@ export interface User {
 }
 
 export type UserData = {
-  id: string;
+  id: number;
   email: string;
   phone: number;
   address: string;

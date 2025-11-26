@@ -1,20 +1,24 @@
 "use client";
 
-import {use, useMemo} from "react";
+//import {use, useMemo} from "react";
 import { UserData } from "@/types/user";
-import { fetchUserData } from "@/lib/api";
+// import { fetchUserData } from "@/lib/api";
 import Image from "next/image";
 
-export default function AdvanceTable() {
+type Props = {
+  data: UserData[];
+};
 
-    const usersData: UserData[] = use(
-  useMemo(() => fetchUserData(), [])
-);
+export default function AdvanceTable({ data }: Props) {
+
+    // const usersData: UserData[] = use(
+    //   useMemo(() => fetchUserData(), [])
+    // );
 
   return (
     <div>
         <h1 className="text-xl font-bold mb-4">Advanced Users Table</h1>
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto text-center">
             <div className="grid grid-cols-6 bg-gray-100 font-bold border border-black rounded-2xl mb-2">
                 <div className="p-2">ID</div>
                 <div className="p-2">Email</div>
@@ -23,8 +27,8 @@ export default function AdvanceTable() {
                 <div className="p-2">Image</div>
                 <div className="p-2">Hobby</div>
             </div>
-            {usersData.map((user)=>(
-                <div key={user.id} className="grid grid-cols-6 mb-1 text-center">
+            {data.map((user)=>(
+                <div key={user.id} className="grid grid-cols-6 mb-1">
                     <div className="p-2 border  rounded-tl-2xl rounded-bl-2xl">{user.id}</div>
                     <div className="p-2 border">{user.email}</div>
                     <div className="p-2 border">{user.phone}</div>
@@ -34,7 +38,7 @@ export default function AdvanceTable() {
                             src={user.image}
                             alt={user.email}
                             width={64}
-                            height={32}
+                            height={64}
                             className="w-16 h-16 object-cover rounded"
                         />
                     </div>
@@ -43,6 +47,5 @@ export default function AdvanceTable() {
             ))}
         </div>
     </div>
-    
   )
 }
