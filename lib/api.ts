@@ -1,5 +1,5 @@
 import axios from "axios";
-import { User } from "@/types/user";
+import { User, UserData } from "@/types/user";
 
 
 const BASE_URL = "https://jsonplaceholder.typicode.com";
@@ -20,3 +20,13 @@ export const updateUser = async (id: number, data: Partial<User>): Promise<User>
     throw error;
   }
 };
+
+export const fetchUserData = async():Promise<UserData[]>=>{
+  try{
+   const res = await axios.get("http://localhost:3000/dataTable.json");
+   return res.data.Users;
+  }catch(error){
+    console.error("Failed to fetch data--------",error);
+    return [];
+  }
+}

@@ -5,3 +5,12 @@ export interface User {
   email: string;
   isNew: boolean;
 }
+
+export type UserData = {
+  id: string;
+  email: string;
+  phone: number;
+  address: string;
+  image: string;
+  hobby: string;
+};
