@@ -21,15 +21,16 @@ export default function Table({ rows, deleteUser, editUser }: TableProps) {
         </tr>
       </thead>
       <tbody className="text-center bg-gray-200">
-        {rows.map((user) => (
-          <TableRow
-            key={user.id}
-            user={user}
-            deleteUser={deleteUser}
-            editUser={editUser}
-          />
-        ))}
-      </tbody>
+      {rows.map((user) => (
+        <TableRow
+          key={user.id}
+          user={user}
+          deleteUser={deleteUser}
+          editUser={editUser}
+          isNew={user.isNew}
+        />
+      ))}
+    </tbody>
     </table>
   );
 }

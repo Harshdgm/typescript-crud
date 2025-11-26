@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { User } from "@/types/user";
-import { getUsers, updateUser, createUser } from "@/lib/api";
+import { getUsers, updateUser} from "@/lib/api";
 
 export function useUsers() {
   const [users, setUsers] = useState<User[]>([]);
@@ -22,23 +22,22 @@ export function useUsers() {
     }
   }, []);
 
-  const addUser = async (data: User) => {
-  try {
-    const newId = users.length ? users[users.length - 1].id + 1 : 1;
+  const addUser = () => {
+  const newId = users.length ? users[users.length - 1].id + 1 : 1;
 
-    const payload = { ...data, id: newId };
+  const newUser: User = {
+    id: newId,
+    name: "",
+    username: "",
+    email: "",
+    isNew: true,
+  };
 
-    const created = await createUser(payload);
+  const updatedUsers = [...users, newUser];
 
-    const finalUser = { ...created, id: newId }; 
-    const updatedUsers = [...users, finalUser];
-
-    setUsers(updatedUsers);
+  setUsers(updatedUsers);
     sessionStorage.setItem("users", JSON.stringify(updatedUsers));
-  } catch (err) {
-    console.error("Failed to create user:", err);
-  }
-};
+  };
 
   const deleteUser = (userId: number) => {
     const deletedUser = users.find((user) => user.id === userId);
@@ -53,12 +52,24 @@ export function useUsers() {
     sessionStorage.setItem("users", JSON.stringify(updatedUsers));
   };
 
-  const editUser = async (userId: number, newData: Partial<User>) => {
+    const editUser = async (userId: number, newData: Partial<User>) => {
+    const user = users.find((u) => u.id === userId);
+
+    if (user?.isNew) {
+      const updatedUser = { ...user, ...newData, isNew: false };
+      const updatedUsers = users.map((u) =>
+        u.id === userId ? updatedUser : u
+      );
+
+      setUsers(updatedUsers);
+      sessionStorage.setItem("users", JSON.stringify(updatedUsers));
+      return;
+    }
+
     try {
       const updatedUser = await updateUser(userId, newData);
-
-      const updatedUsers = users.map((user) =>
-        user.id === userId ? updatedUser : user
+      const updatedUsers = users.map((u) =>
+        u.id === userId ? updatedUser : u
       );
 
       setUsers(updatedUsers);
