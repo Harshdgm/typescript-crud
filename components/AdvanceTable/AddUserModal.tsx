@@ -3,7 +3,7 @@
 import { UserData } from "@/types/user";
 import { useState } from "react";
 import UserRow from "./UserRow";
-import { FiPlus } from "react-icons/fi";
+import { CiCirclePlus } from "react-icons/ci";
 import { validateRow } from "@/utils/validateRow";
 
 type Props = {
@@ -50,12 +50,14 @@ export default function AddUserModal({onAddUsers}:Props) {
 
   return (
     <div className="mb-4">
+    <div className="flex items-center justify-between">
+        <h1 className="text-xl font-bold mb-4">Advanced Users Table</h1>
         <button onClick={()=>setShowModal(true)} className="bg-blue-500 text-white px-4 py-2 rounded">Add Data</button>
-
+    </div>
 
     {showModal && (
-        <div className="">
-            <div className="p-6 rounded-lg w-full max-w-4xl max-h-[90vh] overflow-y-auto">
+        <div className="border border-gray-200 p-2 rounded-md my-2">
+            <div className="p-6 rounded-lg w-full max-w-full max-h-[90vh] overflow-y-auto   ">
                 <h2 className="text-xl font-bold mb-4">Add Users</h2>
 
                 {rows.map((row,index)=>(
@@ -69,8 +71,8 @@ export default function AddUserModal({onAddUsers}:Props) {
                 ))}
             </div>
             <div className="flex gap-2 mb-4">
-                <button onClick={addRow} className="flex items-center gap-1 text-green-500">
-                    <FiPlus />Add Row
+                <button onClick={addRow} className="flex items-center gap-1 text-green-500 ml-6">
+                    <CiCirclePlus className="text-2xl" />Add Row
                 </button>
             </div>
             <div className="flex justify-end gap-2">

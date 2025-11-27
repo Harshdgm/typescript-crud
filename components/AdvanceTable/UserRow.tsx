@@ -1,6 +1,6 @@
 "use client";
 
-import {FiMinus} from "react-icons/fi";
+import { FiMinusCircle } from "react-icons/fi";
 import { UserData } from "@/types/user";
 
 type Props = {
@@ -12,7 +12,7 @@ type Props = {
 
 export default function UserRow({index, user, onChange, onRemove }: Props) {
   return (
-    <div className="grid grid-cols-6 gap-2 mb-2 items-center">
+    <div className="grid grid-cols-7 gap-2 mb-2 items-center">
         <input 
             type="text"
             placeholder="ID"
@@ -55,7 +55,7 @@ export default function UserRow({index, user, onChange, onRemove }: Props) {
             value={user.hobby}
             onChange={(e) => onChange(index, "hobby", e.target.value)}
         />
-            <button className="text-red-500 text-xl" onClick={()=>onRemove(index)}><FiMinus /></button>
+            <button className="text-red-500 text-2xl" onClick={()=>onRemove(index)}><FiMinusCircle /></button>
     </div>
   )
 }
