@@ -1,12 +1,13 @@
 "use client";
 
-//import {use, useMemo} from "react";
 import { UserData } from "@/types/user";
-import { deleteUserById } from "@/utils/usersStore"; 
-// import { fetchUserData } from "@/lib/api";
+import { deleteUserById, useUsersStore } from "@/utils/usersStore"; 
 import { toCamelCase } from "@/utils/toCamelCase";
 import Image from "next/image";
 import { RiDeleteBin6Line } from "react-icons/ri";
+import { FiEdit } from "react-icons/fi";
+import EditUserModal from "./EditUserModal";
+import { useState } from "react";
 
 type Props = {
   data: UserData[];
@@ -14,10 +15,22 @@ type Props = {
 
 export default function AdvanceTable({ data }: Props) {
 
-    // const usersData: UserData[] = use(
-    //   useMemo(() => fetchUserData(), [])
-    // );
-    
+  const [selectedUser, setSelectedUser] = useState<UserData | null>(null);
+
+  const handleSave = (updatedUser: UserData) => {
+  
+    const existingData = sessionStorage.getItem("usersData");
+    const cache: UserData[] = existingData ? JSON.parse(existingData) : [];
+
+    const newCache = cache.map((u) =>
+        u.id === updatedUser.id ? updatedUser : u
+    );
+
+    sessionStorage.setItem("usersData", JSON.stringify(newCache));
+
+    window.dispatchEvent(new Event("storage"));
+  };
+
   return (
     <div>
         <div className="overflow-x-auto text-center">
@@ -46,10 +59,22 @@ export default function AdvanceTable({ data }: Props) {
                         />
                     </div>
                     <div className="p-2 border">{toCamelCase(String(user.address ?? ""))}</div>
-                    <div className="p-2 border rounded-tr-2xl rounded-br-2xl flex items-center justify-center"><RiDeleteBin6Line className="text-red-500 h-5 w-5" onClick={() => deleteUserById(user.id)} /></div>
+                    <div className="p-2 border rounded-tr-2xl rounded-br-2xl flex items-center justify-center gap-2">
+                        <FiEdit  className="cursor-pointer" onClick={()=>setSelectedUser(user)}/>
+                        <RiDeleteBin6Line className="text-red-500 h-5 w-5" onClick={() => deleteUserById(user.id)} />
+                    </div>
                 </div>
             ))}
         </div>
+        {
+            selectedUser && (
+                <EditUserModal
+                    user = {selectedUser}
+                    onClose={()=>setSelectedUser(null)}
+                  onSave={handleSave}
+                />
+            )
+        }
     </div>
   )
 }
