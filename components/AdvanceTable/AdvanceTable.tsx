@@ -17,6 +17,7 @@ export default function AdvanceTable({ data }: Props) {
     // const usersData: UserData[] = use(
     //   useMemo(() => fetchUserData(), [])
     // );
+    
   return (
     <div>
         <div className="overflow-x-auto text-center">
