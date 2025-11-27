@@ -1,39 +1,51 @@
-import { UserData } from "@/types/user";
+import { UserData, UserError } from "@/types/user";
 import { MAX_ID_DIGITS, MAX_PHONE_DIGITS, IMAGE_URL_REGEX } from "@/utils/constant";
 
-export function validateRow(row: UserData, index: number): string | null {
-  if (row.id === null || row.id === undefined || typeof row.id !== "number") {
-    return `Row ${index + 1}: ID must be a number`;
+export function validateRow(row: UserData): UserError {
+  const errors: UserError = {
+    id: "",
+    email: "",
+    phone: "",
+    address: "",
+    image: "",
+    hobby: "",
+  };
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  if (!row.id) {
+    errors.id = "ID is required";
+  } else if (row.id.toString().length > MAX_ID_DIGITS) {
+    errors.id = `Max ${MAX_ID_DIGITS} digits allowed`;
   }
 
-  if (row.id.toString().length > MAX_ID_DIGITS) {
-    return `Row ${index + 1}: ID cannot exceed ${MAX_ID_DIGITS} digits`;
+  if (!row.email) {
+    errors.email = "Email is required";
+  } else if (!emailRegex.test(row.email)) {
+    errors.email = "Invalid email";
   }
 
-  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-  if (!row.email || !emailRegex.test(row.email)) {
-    return `Row ${index + 1}: Invalid email`;
+  if (!row.phone) {
+    errors.phone = "Phone is required";
+  } else if (row.phone.toString().length !== MAX_PHONE_DIGITS) {
+    errors.phone = `Phone must be ${MAX_PHONE_DIGITS} digits`;
   }
 
-  if (!row.phone || typeof row.phone !== "number") {
-    return `Row ${index + 1}: Phone must be a number`;
+  if (!row.address) {
+    errors.address = "Address is required";
   }
 
-  if (row.phone.toString().length !== MAX_PHONE_DIGITS) {
-    return `Row ${index + 1}: Phone must be exactly ${MAX_PHONE_DIGITS} digits`;
+  if (!row.image) {
+    errors.image = "Image URL is required";
+  } else if (!IMAGE_URL_REGEX.test(row.image)) {
+    errors.image = "Invalid image URL";
   }
 
-  if (!row.address || typeof row.address !== "string") {
-    return `Row ${index + 1}: Address must be a string`;
+  if (!row.hobby) {
+    errors.hobby = "Hobby is required";
+  } else if (/[0-9]/.test(row.hobby)) {
+    errors.hobby = "Hobby cannot contain numbers";
   }
 
-  if (!row.image || typeof row.image !== "string" || !IMAGE_URL_REGEX.test(row.image)) {
-    return `Row ${index + 1}: Image URL must be a valid image URL`;
-  }
-
-  if (!row.hobby || typeof row.hobby !== "string" || /[0-9]/.test(row.hobby)) {
-    return `Row ${index + 1}: Hobby must be a string without numbers`;
-  }
-
-  return null;
+  return errors;
 }

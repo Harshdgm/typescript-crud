@@ -14,3 +14,12 @@ export type UserData = {
   image: string;
   hobby: string;
 };
+
+export type UserError = {
+  id: string;
+  email: string;
+  phone: string;
+  address: string;
+  image: string;
+  hobby: string;
+};
