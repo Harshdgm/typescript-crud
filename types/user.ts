@@ -24,10 +24,21 @@ export type UserError = {
   hobby: string;
 };
 
+export type EmployeeError = {
+  id:string;
+  name:string;
+  email:string
+  role:string;
+  status: string; 
+  action: string;
+}
+
 export type EmployeeData = {
   id: number;
   name: string;
   email: string;
   role: string;
   status: "Active" | "Inactive";
+  action: boolean;
 };
+

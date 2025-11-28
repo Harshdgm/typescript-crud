@@ -1,6 +1,7 @@
 import axios from "axios";
-import { User, UserData } from "@/types/user";
+import { EmployeeData, User, UserData } from "@/types/user";
 import data from "@/data/dataTable.json";
+import data1 from "@/data/employeeTable.json";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL ;
 
@@ -43,3 +44,17 @@ export const fetchUserData = async (): Promise<UserData[]> => {
     return [];
   }
 };
+
+
+export const fetchEmployeeData = async (): Promise<EmployeeData[]> => {
+  try {
+    return data1.Employees.map(emp => ({
+      ...emp,
+      status: emp.status === "Active" ? "Active" : "Inactive", 
+    }));
+  } catch (err) {
+    console.error("Failed to fetch employee data:", err);
+    return [];
+  }
+};
+

@@ -1,0 +1,20 @@
+{
+  "Employees":[
+    {
+        "id": 1,
+        "name":"nataliya",
+        "email": "nataliya@gmail.com",
+        "role": "Admin",
+        "status": "Active",
+        "action":true
+    },
+    {
+        "id": 5,
+        "name": "Michael",
+        "email": "michael@gmail.com",
+        "role": "Employee",
+        "status": "Inactive",
+        "action": false
+    }
+ ]
+}

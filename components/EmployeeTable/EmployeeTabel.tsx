@@ -1,45 +1,76 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { EmployeeData } from "@/types/user";
 import ReusableTable, { Column } from "@/common/ReusableTable";
+import EditEmployeeModal from "./EditEmployeeModal";
 
-export type EmployeeData = {
-  id: number;
-  name: string;
-  email: string;
-  role: string;
-  status: string;
-};
+const employeeColumns: Column<EmployeeData>[] = [
+  { key: "id", label: "ID" },
+  { key: "name", label: "Name" },
+  { key: "email", label: "Email" },
+  { key: "role", label: "Role" },
+  {
+    key: "status",
+    label: "Status",
+    render: (item) => item.status, 
+  },
+  {
+    key: "action",
+    label: "Action Allowed",
+    render: (item) => (item.action ? "Yes" : "No"),
+  },
+  { key: "actions", label: "Actions" },
+];
 
-export default function EmployeeTable() {
-  const [employees, setEmployees] = useState<EmployeeData[]>([
-    { id: 1, name: "John Doe", email: "john@example.com", role: "Admin", status: "Active" },
-    { id: 2, name: "Jane Smith", email: "jane@example.com", role: "Editor", status: "Inactive" },
-  ]);
+export default function EmployeeTable({ data }: { data: EmployeeData[] }) {
+  const [employees, setEmployees] = useState<EmployeeData[]>([]); 
+  const [selectedEmployee, setSelectedEmployee] = useState<EmployeeData | null>(null);
 
-  // Define columns explicitly with Column<EmployeeData>
-  const employeeColumns: Column<EmployeeData>[] = [
-    { key: "id", label: "ID" },
-    { key: "name", label: "Name" },
-    { key: "email", label: "Email" },
-    { key: "role", label: "Role" },
-    { key: "status", label: "Status" },
-    { key: "actions", label: "Actions" },
-  ];
+  useEffect(() => {
+  if (typeof window !== "undefined") {
+    const saved = sessionStorage.getItem("employeesData");
+    setEmployees(saved ? JSON.parse(saved) : data);
+  }
+}, [data]);
 
-  const handleDelete = (emp: EmployeeData) =>
-    setEmployees((prev) => prev.filter((e) => e.id !== emp.id));
+useEffect(() => {
+  if (typeof window !== "undefined") {
+    sessionStorage.setItem("employeesData", JSON.stringify(employees));
+  }
+}, [employees]);
 
-  const handleEdit = (emp: EmployeeData) => console.log("Edit employee:", emp);
+  const handleEdit = (employee: EmployeeData) => setSelectedEmployee(employee);
+
+  const handleDelete = (employee: EmployeeData) => {
+    const newEmployees = employees.filter((e) => e.id !== employee.id);
+    setEmployees(newEmployees);
+  };
+
+  const handleSave = (updatedEmployee: EmployeeData) => {
+    const newEmployees = employees.map((e) =>
+      e.id === updatedEmployee.id ? { ...updatedEmployee } : e
+    );
+    setEmployees(newEmployees);
+    setSelectedEmployee(null);
+  };
 
   return (
-    <div className="p-4">
+    <div>
       <ReusableTable<EmployeeData>
         data={employees}
         columns={employeeColumns}
         onEdit={handleEdit}
         onDelete={handleDelete}
       />
+
+      {selectedEmployee && (
+        <EditEmployeeModal
+          user={selectedEmployee}
+          onClose={() => setSelectedEmployee(null)}
+          onSave={handleSave}
+        />
+      )}
     </div>
   );
 }
