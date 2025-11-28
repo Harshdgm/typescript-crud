@@ -40,16 +40,11 @@ export default function ReusableTable({
 
   return (
     <div className="overflow-x-auto text-center">
-      <div
-        className="grid mb-2"
-        style={{ gridTemplateColumns: `repeat(${columns.length}, minmax(0, 1fr))` }}
-      >
-        {columns.map((col, index) => {
+      <div className={`grid grid-cols-${columns.length} mb-2`}>
+        {columns.map((col, idx) => {
           let classes = "p-2 font-bold bg-gray-100 border border-black";
-
-          if (index === 0) classes += " rounded-tl-2xl rounded-bl-2xl"; 
-          if (index === columns.length - 1) classes += " rounded-tr-2xl rounded-br-2xl";
-
+          if (idx === 0) classes += " rounded-tl-2xl rounded-bl-2xl";
+          if (idx === columns.length - 1) classes += " rounded-tr-2xl rounded-br-2xl";
           return (
             <div key={String(col.key)} className={classes}>
               {col.label}
@@ -61,27 +56,21 @@ export default function ReusableTable({
       {data.map((user, rowIndex) => (
         <div
           key={user.id}
-          className={`mb-1 rounded-2xl ${rowIndex % 2 === 0 ? "" : "bg-gray-100"}`}
+          className={`mb-1 rounded-2xl overflow-hidden ${rowIndex % 2 === 0 ? "" : "bg-gray-100"}`}
         >
-          <div
-            className="grid"
-            style={{ gridTemplateColumns: `repeat(${columns.length}, minmax(0, 1fr))` }}
-          >
+          <div className={`grid grid-cols-${columns.length}`}>
             {columns.map((col, colIndex) => {
               let cellClasses = "p-2 border";
+              if (colIndex === 0) cellClasses += " rounded-tl-2xl rounded-bl-2xl";
+              if (colIndex === columns.length - 1) cellClasses += " rounded-tr-2xl rounded-br-2xl";
 
               if (col.key === "actions") {
-                if (colIndex === 0) cellClasses += " rounded-tl-2xl rounded-bl-2xl";
-                if (colIndex === columns.length - 1) cellClasses += " rounded-tr-2xl rounded-br-2xl";
-
                 return (
-                  <div key="actions" className={cellClasses + " flex items-center justify-center gap-2"}>
-                    {onEdit && (
-                      <FiEdit
-                        className="cursor-pointer"
-                        onClick={() => setSelectedUser(user)}
-                      />
-                    )}
+                  <div
+                    key="actions"
+                    className={`${cellClasses} flex items-center justify-center gap-2`}
+                  >
+                    {onEdit && <FiEdit className="cursor-pointer" onClick={() => setSelectedUser(user)} />}
                     {onDelete && (
                       <RiDeleteBin6Line
                         className="text-red-500 h-5 w-5"
@@ -104,7 +93,7 @@ export default function ReusableTable({
 
               if (col.isImage && typeof value === "string") {
                 return (
-                  <div key={String(col.key)} className={cellClasses + " flex items-center justify-center p-1"}>
+                  <div key={String(col.key)} className={`${cellClasses} flex items-center justify-center p-1`}>
                     <Image
                       src={value}
                       alt=""
@@ -116,16 +105,12 @@ export default function ReusableTable({
                 );
               }
 
-              if (colIndex === 0) cellClasses += " rounded-tl-2xl rounded-bl-2xl";
-              if (colIndex === columns.length - 1) cellClasses += " rounded-tr-2xl rounded-br-2xl";
-
               return <div key={String(col.key)} className={cellClasses}>{String(value ?? "")}</div>;
             })}
           </div>
         </div>
       ))}
 
-      {/* Edit Modal */}
       {selectedUser && (
         <EditUserModal
           user={selectedUser}
