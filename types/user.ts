@@ -23,3 +23,11 @@ export type UserError = {
   image: string;
   hobby: string;
 };
+
+export type EmployeeData = {
+  id: number;
+  name: string;
+  email: string;
+  role: string;
+  status: "Active" | "Inactive";
+};

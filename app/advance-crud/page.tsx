@@ -19,7 +19,7 @@ export default function UsersAdvancedPage() {
 
   return (
     <div className="p-6">
-      <AddUserModal onAddUsers={addUsers} />
+      <AddUserModal existingRows={usersData} onAddUsers={addUsers} />
       <AdvanceTable data={usersData} />
     </div>
   );

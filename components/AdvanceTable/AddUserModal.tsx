@@ -7,10 +7,11 @@ import { CiCirclePlus } from "react-icons/ci";
 import { validateRow } from "@/utils/validateRow";
 
 type Props = {
+  existingRows: UserData[];
   onAddUsers: (users: UserData[]) => void;
 };
 
-export default function AddUserModal({ onAddUsers }: Props) {
+export default function AddUserModal({ existingRows, onAddUsers }: Props) {
     const [showModal, setShowModal] = useState(false);
 
     const [rows, setRows] = useState<UserData[]>([
@@ -50,7 +51,7 @@ export default function AddUserModal({ onAddUsers }: Props) {
   };
 
   const handleSubmit = () => {
-   const newErrors = rows.map((row) => validateRow(row));
+   const newErrors = rows.map((row) => validateRow(row, existingRows));
     setErrors(newErrors);
 
     const hasErrors = newErrors.some((e) =>

@@ -1,7 +1,7 @@
 import { UserData, UserError } from "@/types/user";
 import { MAX_ID_DIGITS, MAX_PHONE_DIGITS, IMAGE_URL_REGEX } from "@/utils/constant";
 
-export function validateRow(row: UserData): UserError {
+export function validateRow(row: UserData,existingRows: UserData[]=[]): UserError {
   const errors: UserError = {
     id: "",
     email: "",
@@ -17,6 +17,8 @@ export function validateRow(row: UserData): UserError {
     errors.id = "ID is required";
   } else if (row.id.toString().length > MAX_ID_DIGITS) {
     errors.id = `Max ${MAX_ID_DIGITS} digits allowed only`;
+  }else if (existingRows.some(u => u.id === row.id)) {
+    errors.id = "ID already exists"; 
   }
 
   if (!row.email) {
