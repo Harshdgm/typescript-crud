@@ -16,7 +16,7 @@ export function validateRow(row: UserData): UserError {
   if (!row.id) {
     errors.id = "ID is required";
   } else if (row.id.toString().length > MAX_ID_DIGITS) {
-    errors.id = `Max ${MAX_ID_DIGITS} digits allowed`;
+    errors.id = `Max ${MAX_ID_DIGITS} digits allowed only`;
   }
 
   if (!row.email) {
