@@ -2,31 +2,44 @@ import axios from "axios";
 import { User, UserData } from "@/types/user";
 import data from "@/data/dataTable.json";
 
-const BASE_URL = "https://jsonplaceholder.typicode.com";
+const API_URL = process.env.NEXT_PUBLIC_API_URL ;
+
+const api = axios.create({
+  baseURL: API_URL,
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
 
 export const getUsers = async (): Promise<User[]> => {
-  const res = await axios.get<User[]>(`${BASE_URL}/users`);
-  return res.data; 
-};
-
-export const updateUser = async (id: number, data: Partial<User>): Promise<User> => {
   try {
-    const res = await axios.put<User>(`${BASE_URL}/users/${id}`, data, {
-      headers: { "Content-Type": "application/json" },
-    });
-    return res.data; 
-  } catch (error) {
-    console.error("Failed to update user:", error);
-    throw error;
-  }
-};
-
-export const fetchUserData = async():Promise<UserData[]>=>{
-  try{
-//const res = await axios.get("http://localhost:3000/dataTable.json");
-   return data.Users;
-  }catch(error){
-    console.error("Failed to fetch data--------",error);
+    const res = await api.get<User[]>("/users");
+    return res.data;
+  } catch (err) {
+    console.error("Failed to fetch users:", err);
     return [];
   }
-}
+};
+
+export const updateUser = async (
+  id: number,
+  payload: Partial<User>
+): Promise<User> => {
+  try {
+    const res = await api.put<User>(`/users/${id}`, payload);
+    return res.data;
+  } catch (err) {
+    console.error("Failed to update user:", err);
+    throw err;
+  }
+};
+
+
+export const fetchUserData = async (): Promise<UserData[]> => {
+  try {
+    return data.Users;
+  } catch (err) {
+    console.error("Failed to fetch table data:", err);
+    return [];
+  }
+};

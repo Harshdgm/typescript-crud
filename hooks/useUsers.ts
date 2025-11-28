@@ -79,11 +79,5 @@ export function useUsers() {
     }
   };
 
-  return {
-    users,
-    addUser,
-    deleteUser,
-    editUser,
-    setUsers,
-  };
+  return { users, addUser, deleteUser, editUser, setUsers};
 }
