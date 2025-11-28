@@ -5,6 +5,7 @@ import { FiEdit } from "react-icons/fi";
 import Image from "next/image";
 import { useState } from "react";
 import EditUserModal from "@/components/AdvanceTable/EditUserModal";
+import { UserData } from "@/types/user";
 
 type Column<T> = {
   key: keyof T;
@@ -13,41 +14,31 @@ type Column<T> = {
   width?: string;
 };
 
-type DynamicTableProps<T> = {
-  data: T[];
-  columns: Column<T>[];
-  onEdit?: (item: T) => void;
+type DynamicTableProps = {
+  data: UserData[];
+  columns: Column<UserData>[];
+  onEdit?: (item: UserData) => void;
   onDelete?: (id: number) => void;
-  renderActions?: (item: T) => React.ReactNode;
+  renderActions?: (item: UserData) => React.ReactNode;
 };
 
-const getGridCols = (n: number) => {
-  switch (n) {
-    case 1: return "grid-cols-1";
-    case 2: return "grid-cols-2";
-    case 3: return "grid-cols-3";
-    case 4: return "grid-cols-4";
-    case 5: return "grid-cols-5";
-    case 6: return "grid-cols-6";
-    case 7: return "grid-cols-7";
-    default: return `grid-cols-${n}`;
-  }
-};
-
-export default function DynamicTable<T extends { id: number }>({
+export default function DynamicTable({
   data,
   columns,
   onEdit,
   onDelete,
   renderActions,
-}: DynamicTableProps<T>) {
-  const [selectedItem, setSelectedItem] = useState<T | null>(null);
+}: DynamicTableProps) {
+  const [selectedItem, setSelectedItem] = useState<UserData | null>(null);
 
   if (!data || data.length === 0) return <p>No data available</p>;
 
   return (
     <div className="overflow-x-auto">
-      <div className={`grid ${getGridCols(columns.length + 1)} bg-gray-100 font-bold border border-black rounded-2xl mb-2`}>
+      {/* Table Header */}
+      <div
+        className={`grid grid-cols-${columns.length + 1} bg-gray-100 font-bold border border-black rounded-2xl mb-2`}
+      >
         {columns.map((col) => (
           <div key={String(col.key)} className="p-2">
             {col.label ?? String(col.key)}
@@ -55,52 +46,67 @@ export default function DynamicTable<T extends { id: number }>({
         ))}
         <div className="p-2">Actions</div>
       </div>
-    {data.map((item) => (
-    <div key={item.id} className={`grid ${getGridCols(columns.length + 1)} mb-1 odd:bg-gray-100`}>
-        <>
-        {columns.map((col, idx) => {
-            const value = item[col.key];
-            const isFirst = idx === 0;
-            const isLast = idx === columns.length - 1;
 
-            return (
-            <div
-                key={String(col.key)}
-                className={`p-2 border ${isFirst ? "rounded-tl-2xl rounded-bl-2xl" : ""} `}
-            >
-                {col.type === "image" && value ? (
-                <div className="flex items-center justify-center p-1">
-                    <Image
-                    src={String(value)}
-                    alt={String(value)}
-                    width={64}
-                    height={64}
-                    className="w-16 h-10 object-cover rounded"
-                    />
-                </div>
-                ) : (
-                String(value ?? "")
-                )}
+      {/* Table Rows */}
+      {data.map((item) => (
+  <div
+    key={item.id}
+    className={`grid grid-cols-${columns.length + 1} mb-1 odd:bg-gray-100`}
+  >
+    {columns.map((col, idx) => {
+      const value = item[col.key];
+      const isFirst = idx === 0;
+      const isLast = idx === columns.length - 1;
+
+      return (
+        <div
+          key={String(col.key)}
+          className={`p-2 border ${
+            isFirst ? "rounded-tl-2xl rounded-bl-2xl" : ""
+          } ${isLast ? "rounded-tr-2xl rounded-br-2xl" : ""}`}
+        >
+          {col.type === "image" && value ? (
+            <div className="flex items-center justify-center p-1">
+              <Image
+                src={String(value)}
+                alt={String(value)}
+                width={64}
+                height={64}
+                className="w-16 h-10 object-cover rounded"
+              />
             </div>
-            );
-        })}
-        </>
-        
-        <div className="p-2 border rounded-tr-2xl rounded-br-2xl flex items-center justify-center gap-2">
-        {onEdit && <FiEdit className="cursor-pointer" onClick={() => setSelectedItem(item)} />}
-        {onDelete && <RiDeleteBin6Line className="text-red-500 h-5 w-5" onClick={() => onDelete(item.id)} />}
-        {renderActions && renderActions(item)}
+          ) : (
+            String(value ?? "")
+          )}
         </div>
+      );
+    })} {/* ✅ Only one closing brace here, not `}))}` */}
+
+    <div className="p-2 border rounded-tr-2xl rounded-br-2xl flex items-center justify-center gap-2">
+      {onEdit && (
+        <FiEdit
+          className="cursor-pointer"
+          onClick={() => setSelectedItem(item)}
+        />
+      )}
+      {onDelete && (
+        <RiDeleteBin6Line
+          className="text-red-500 h-5 w-5"
+          onClick={() => onDelete(item.id)}
+        />
+      )}
+      {renderActions && renderActions(item)}
     </div>
-    ))}
+  </div>
+))}
 
 
-      {selectedItem && onEdit && (
+      {selectedItem && (
         <EditUserModal
           user={selectedItem}
           onClose={() => setSelectedItem(null)}
           onSave={(updated) => {
-            onEdit(updated);
+            if (onEdit) onEdit(updated);
             setSelectedItem(null);
           }}
         />
@@ -108,8 +114,6 @@ export default function DynamicTable<T extends { id: number }>({
     </div>
   );
 }
-
-
 
 
 
