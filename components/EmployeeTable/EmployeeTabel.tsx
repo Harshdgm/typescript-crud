@@ -56,14 +56,15 @@ useEffect(() => {
   };
 
   return (
-    <div>
+    <div className="w-full overflow-x-auto">
+      <div className="min-w-[1080px]">
       <ReusableTable<EmployeeData>
         data={employees}
         columns={employeeColumns}
         onEdit={handleEdit}
         onDelete={handleDelete}
       />
-
+      </div>
       {selectedEmployee && (
         <EditEmployeeModal
           user={selectedEmployee}

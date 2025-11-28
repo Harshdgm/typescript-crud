@@ -49,13 +49,15 @@ export default function AdvanceTable({ data }: { data: UserData[] }) {
   };
 
   return (
-    <div>
+     <div className="w-full overflow-x-auto">
+      <div className="min-w-[1080px]">
       <ReusableTable<UserData>
         data={users}
         columns={userColumns}
         onEdit={handleEdit}
         onDelete={handleDelete}
       />
+      </div>
 
       {selectedUser && (
         <EditUserModal
