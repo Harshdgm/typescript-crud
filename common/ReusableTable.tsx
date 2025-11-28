@@ -32,7 +32,6 @@ export default function ReusableTable({
   const handleSave = (updatedUser: UserData) => {
     const existingData = sessionStorage.getItem("usersData");
     const cache: UserData[] = existingData ? JSON.parse(existingData) : [];
-
     const newCache = cache.map((u) => (u.id === updatedUser.id ? updatedUser : u));
     sessionStorage.setItem("usersData", JSON.stringify(newCache));
     window.dispatchEvent(new Event("storage"));
@@ -40,31 +39,43 @@ export default function ReusableTable({
   };
 
   return (
-    <div>
-      <div className="overflow-x-auto text-center">
-        <div className="grid" style={{ gridTemplateColumns: `repeat(${columns.length}, minmax(0, 1fr))`}} >
-          {columns.map((col) => (
-            <div key={String(col.key)} className="p-2 font-bold bg-gray-100 border border-black">
+    <div className="overflow-x-auto text-center">
+      <div
+        className="grid mb-2"
+        style={{ gridTemplateColumns: `repeat(${columns.length}, minmax(0, 1fr))` }}
+      >
+        {columns.map((col, index) => {
+          let classes = "p-2 font-bold bg-gray-100 border border-black";
+
+          if (index === 0) classes += " rounded-tl-2xl rounded-bl-2xl"; 
+          if (index === columns.length - 1) classes += " rounded-tr-2xl rounded-br-2xl";
+
+          return (
+            <div key={String(col.key)} className={classes}>
               {col.label}
             </div>
-          ))}
-        </div>
+          );
+        })}
+      </div>
 
-        {data.map((user) => (
+      {data.map((user, rowIndex) => (
+        <div
+          key={user.id}
+          className={`mb-1 rounded-2xl ${rowIndex % 2 === 0 ? "" : "bg-gray-100"}`}
+        >
           <div
-            key={user.id}
             className="grid"
-            style={{
-              gridTemplateColumns: `repeat(${columns.length}, minmax(0, 1fr))`,
-            }}
+            style={{ gridTemplateColumns: `repeat(${columns.length}, minmax(0, 1fr))` }}
           >
-            {columns.map((col) => {
+            {columns.map((col, colIndex) => {
+              let cellClasses = "p-2 border";
+
               if (col.key === "actions") {
+                if (colIndex === 0) cellClasses += " rounded-tl-2xl rounded-bl-2xl";
+                if (colIndex === columns.length - 1) cellClasses += " rounded-tr-2xl rounded-br-2xl";
+
                 return (
-                  <div
-                    key="actions"
-                    className="p-2 flex items-center justify-center gap-2 border rounded-tr-2xl rounded-br-2xl"
-                  >
+                  <div key="actions" className={cellClasses + " flex items-center justify-center gap-2"}>
                     {onEdit && (
                       <FiEdit
                         className="cursor-pointer"
@@ -85,7 +96,7 @@ export default function ReusableTable({
 
               if (col.render) {
                 return (
-                  <div key={String(col.key)} className="p-2 border">
+                  <div key={String(col.key)} className={cellClasses}>
                     {col.render(user)}
                   </div>
                 );
@@ -93,7 +104,7 @@ export default function ReusableTable({
 
               if (col.isImage && typeof value === "string") {
                 return (
-                  <div key={String(col.key)} className="p-1 border flex items-center justify-center">
+                  <div key={String(col.key)} className={cellClasses + " flex items-center justify-center p-1"}>
                     <Image
                       src={value}
                       alt=""
@@ -105,12 +116,16 @@ export default function ReusableTable({
                 );
               }
 
-              return <div key={String(col.key)} className="p-2 border">{String(value ?? "")}</div>;
+              if (colIndex === 0) cellClasses += " rounded-tl-2xl rounded-bl-2xl";
+              if (colIndex === columns.length - 1) cellClasses += " rounded-tr-2xl rounded-br-2xl";
+
+              return <div key={String(col.key)} className={cellClasses}>{String(value ?? "")}</div>;
             })}
           </div>
-        ))}
-      </div>
+        </div>
+      ))}
 
+      {/* Edit Modal */}
       {selectedUser && (
         <EditUserModal
           user={selectedUser}
