@@ -58,7 +58,7 @@ export default function AdvanceTable({ data }: Props) {
                             className="w-16 h-10 object-cover rounded"
                         />
                     </div>
-                    <div className="p-2 border">{toCamelCase(String(user.address ?? ""))}</div>
+                    <div className="p-2 border">{toCamelCase(String(user.hobby ?? ""))}</div>
                     <div className="p-2 border rounded-tr-2xl rounded-br-2xl flex items-center justify-center gap-2">
                         <FiEdit  className="cursor-pointer" onClick={()=>setSelectedUser(user)}/>
                         <RiDeleteBin6Line className="text-red-500 h-5 w-5" onClick={() => deleteUserById(user.id)} />
