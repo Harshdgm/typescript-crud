@@ -27,18 +27,32 @@ export type UserError = {
 export type EmployeeError = {
   id:string;
   name:string;
-  email:string
+  email:string;
+  age?:number;
   role:string;
   status: string; 
   action: string;
+
+  salary?: number | string;
+  city?: string;
+  phone?: string;
+  hobby?: string;
+  dob?: string;
 }
 
 export type EmployeeData = {
   id: number;
   name: string;
   email: string;
+  age?:number;
   role: string;
   status: "Active" | "Inactive";
   action: boolean;
+
+  salary?: number | string;
+  city?: string;
+  phone?: string;
+  hobby?: string;
+  dob?: string;
 };
 

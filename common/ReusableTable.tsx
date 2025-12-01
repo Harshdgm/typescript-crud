@@ -1,7 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import { FiEdit } from "react-icons/fi";
+import { useState } from "react";
+import { FiEdit, FiChevronDown, FiChevronUp } from "react-icons/fi";
 import { RiDeleteBin6Line } from "react-icons/ri";
 
 export type Column<T> = {
@@ -16,6 +17,8 @@ interface ReusableTableProps<T> {
   columns: Column<T>[];
   onEdit?: (item: T) => void;
   onDelete?: (item: T) => void;
+  expandableKey?: keyof T; 
+  renderNestedRow?: (item: T) => React.ReactNode;
 }
 
 export default function ReusableTable<T extends { id: number }>({
@@ -23,52 +26,110 @@ export default function ReusableTable<T extends { id: number }>({
   columns,
   onEdit,
   onDelete,
+  expandableKey,
+  renderNestedRow,
 }: ReusableTableProps<T>) {
+
+  const [expandedId, setExpandedId] = useState<number | null>(null);
+  
   return (
     <div className="overflow-x-auto text-center">
-      <div className={`grid grid-cols-${columns.length} mb-2`}>
+      <div className="grid mb-2" style={{ gridTemplateColumns: `repeat(${columns.length}, minmax(0, 1fr))` }}>
         {columns.map((col, idx) => {
           let classes = "p-2 font-bold bg-gray-100 border border-black";
+
           if (idx === 0) classes += " rounded-tl-2xl rounded-bl-2xl";
           if (idx === columns.length - 1) classes += " rounded-tr-2xl rounded-br-2xl";
+
           return <div key={String(col.key)} className={classes}>{col.label}</div>;
         })}
       </div>
 
       {data.map((item, rowIndex) => (
-        <div
-          key={item.id}
-          className={`mb-1 rounded-2xl overflow-hidden ${rowIndex % 2 === 0 ? "" : "bg-gray-100"}`}
-        >
-          <div className={`grid grid-cols-${columns.length}`}>
+        <div key={item.id} className={`mb-1 rounded-2xl overflow-hidden ${rowIndex % 2 === 0 ? "" : "bg-gray-100"}`}>
+          <div
+            className="grid"
+            style={{
+              gridTemplateColumns: `repeat(${columns.length}, minmax(0, 1fr))`,
+            }}
+          >
             {columns.map((col, colIndex) => {
               let cellClasses = "p-2 border";
-              if (colIndex === 0) cellClasses += " rounded-tl-2xl rounded-bl-2xl";
-              if (colIndex === columns.length - 1) cellClasses += " rounded-tr-2xl rounded-br-2xl";
+              if (colIndex === 0)
+                cellClasses += " rounded-tl-2xl rounded-bl-2xl";
+              if (colIndex === columns.length - 1)
+                cellClasses += " rounded-tr-2xl rounded-br-2xl";
 
               if (col.key === "actions") {
                 return (
-                  <div key="actions" className={`${cellClasses} flex items-center justify-center gap-2`}>
-                    {onEdit && <FiEdit className="cursor-pointer" onClick={() => onEdit(item)} />}
-                    {onDelete && <RiDeleteBin6Line className="text-red-500 h-5 w-5" onClick={() => onDelete(item)} />}
+                  <div
+                    key="actions"
+                    className={`${cellClasses} flex items-center justify-center gap-2`}
+                  >
+                    {onEdit && (
+                      <FiEdit
+                        className="cursor-pointer"
+                        onClick={() => onEdit(item)}
+                      />
+                    )}
+                    {onDelete && (
+                      <RiDeleteBin6Line
+                        className="text-red-500 h-5 w-5 cursor-pointer"
+                        onClick={() => onDelete(item)}
+                      />
+                    )}
                   </div>
                 );
               }
 
               const value = item[col.key as keyof T];
-
-              if (col.render) return <div key={String(col.key)} className={cellClasses}>{col.render(item)}</div>;
-              if (col.isImage && typeof value === "string") {
+               if (expandableKey === col.key) {
                 return (
-                  <div key={String(col.key)} className={`${cellClasses} flex items-center justify-center p-1`}>
-                    <Image src={value} alt="" width={64} height={64} className="w-16 h-10 object-cover rounded" />
+                  <div
+                    key={String(col.key)}
+                    className={`${cellClasses} cursor-pointer flex items-center justify-center gap-1 `}
+                    onClick={() => setExpandedId(expandedId === item.id ? null : item.id)}
+                  >
+                    <span>{String(value)}</span>
+                    {expandedId === item.id ? <FiChevronUp /> : <FiChevronDown />}
                   </div>
                 );
               }
 
-              return <div key={String(col.key)} className={cellClasses}>{String(value ?? "")}</div>;
+              if (col.render)
+                return (
+                  <div key={String(col.key)} className={cellClasses}>
+                    {col.render(item)}
+                  </div>
+                );
+
+              if (col.isImage && typeof value === "string") {
+                return (
+                  <div
+                    key={String(col.key)}
+                    className={`${cellClasses} flex items-center justify-center p-1`}
+                  >
+                    <Image
+                      src={value}
+                      alt=""
+                      width={64}
+                      height={64}
+                      className="w-16 h-10 object-cover rounded"
+                    />
+                  </div>
+                );
+              }
+
+              return (
+                <div key={String(col.key)} className={cellClasses}>
+                  {String(value ?? "")}
+                </div>
+              );
             })}
           </div>
+          {expandedId === item.id && renderNestedRow && (
+            <div className="p-3 bg-gray-100 border-t">{renderNestedRow(item)}</div>
+          )}
         </div>
       ))}
     </div>

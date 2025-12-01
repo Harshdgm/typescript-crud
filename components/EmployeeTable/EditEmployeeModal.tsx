@@ -20,7 +20,9 @@ export default function EditEmployeeModal({ user, onClose, onSave }: Props) {
     id: "",
     name: "",
     email: "",
+    age:0,
     role: "",
+    salary:0,
     status: "",
     action: "",
   });
@@ -38,7 +40,9 @@ export default function EditEmployeeModal({ user, onClose, onSave }: Props) {
       id: "",
       name: "",
       email: "",
+      age:0 ,
       role: "",
+      salary:0,
       status: "",
       action: "",
     };
@@ -94,12 +98,16 @@ export default function EditEmployeeModal({ user, onClose, onSave }: Props) {
 
           <div>
             <label>Role:</label>
-            <input
-              type="text"
+            <select
               value={editValues.role}
               onChange={(e) => handleChange("role", e.target.value)}
               className={`border p-2 rounded w-full ${errors.role ? "border-red-500" : ""}`}
-            />
+            >
+              <option value="">Select role</option>
+              <option value="Employee">Employee</option>
+              <option value="Admin">Admin</option>
+              <option value="User">User</option>
+            </select>
             {errors.role && <p className="text-red-500 text-sm">{errors.role}</p>}
           </div>
 

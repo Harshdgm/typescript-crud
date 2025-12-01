@@ -4,17 +4,29 @@
         "id": 1,
         "name":"nataliya",
         "email": "nataliya@gmail.com",
+        "age":25,
         "role": "Admin",
         "status": "Active",
-        "action":true
+        "action":true,
+        "salary": 56000,
+        "city": "New York",
+        "phone": "9876543210",
+        "hobby": "Dancing",
+        "dob": "1999-06-15"
     },
     {
         "id": 5,
         "name": "Michael",
         "email": "michael@gmail.com",
+        "age":30,
         "role": "Employee",
         "status": "Inactive",
-        "action": false
+        "action": false,
+        "salary": 30000,
+        "city": "Canada",
+        "phone": "9976543230",
+        "hobby": "Movie",
+        "dob": "2020-06-15"
     }
  ]
 }
