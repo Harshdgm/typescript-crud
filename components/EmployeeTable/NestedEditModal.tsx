@@ -14,7 +14,7 @@ export default function NestedEditModal({ employee, onClose, onSave }: Props) {
   const [values, setValues] = useState<EmployeeData>({ ...employee });
   const [errors, setErrors] = useState<EmployeeError>({
     id: "", name: "", email: "", role: "", status: "", action: "",
-    salary: 0, city: "", phone: "", hobby: "", dob: "", age: 0
+    salary: "", city: "", phone: "", hobby: "", dob: "", age: 0
   });
 
   const handleChange = <K extends keyof EmployeeData>(key: K, value: EmployeeData[K]) => {
@@ -46,7 +46,7 @@ export default function NestedEditModal({ employee, onClose, onSave }: Props) {
       <div className="absolute inset-0 bg-black opacity-30" onClick={onClose}></div>
       <div className="bg-white z-10 p-6 rounded-lg w-[400px] relative">
         <h2 className="text-xl font-bold mb-4">Edit Nested Details</h2>
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-1 text-left">
           
           <div>
             <label>Salary:</label>
