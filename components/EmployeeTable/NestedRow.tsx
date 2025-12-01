@@ -14,13 +14,26 @@ export default function NestedRow({ employee, onUpdate }: Props) {
   const [editOpen, setEditOpen] = useState(false);
 
   return (
-    <div className="flex items-center justify-between text-sm gap-4">
-      <span>Salary: {employee.salary}</span>
-      <span>City: {employee.city}</span>
-      <span>Phone: {employee.phone}</span>
-      <span>Hobby: {employee.hobby}</span>
-      <span>DOB: {employee.dob}</span>
-      <button className="text-blue-500 text-center font-5xl cursor-button" onClick={() => setEditOpen(true)}><FiEdit /></button>
+    <>
+      <div className="contents text-sm">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div>{employee.salary}</div>
+        <div></div>
+        <div>{employee.hobby}</div>
+        <div>{employee.city}</div>
+        <div>{employee.phone}</div>
+        <div>{employee.dob}</div>
+        <button
+          className="text-blue-500 cursor-pointer flex justify-center"
+          onClick={() => setEditOpen(true)}
+        >
+          <FiEdit />
+        </button>
+      </div>
 
       {editOpen && (
         <NestedEditModal
@@ -29,6 +42,6 @@ export default function NestedRow({ employee, onUpdate }: Props) {
           onSave={onUpdate}
         />
       )}
-    </div>
+    </>
   );
 }

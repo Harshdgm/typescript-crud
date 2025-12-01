@@ -54,7 +54,7 @@ export default function ReusableTable<T extends { id: number }>({
             }}
           >
             {columns.map((col, colIndex) => {
-              let cellClasses = "p-2 border";
+              let cellClasses = "p-2 border overflow-hidden whitespace-nowrap text-ellipsis";
               if (colIndex === 0)
                 cellClasses += " rounded-tl-2xl rounded-bl-2xl";
               if (colIndex === columns.length - 1)
@@ -128,7 +128,9 @@ export default function ReusableTable<T extends { id: number }>({
             })}
           </div>
           {expandedId === item.id && renderNestedRow && (
-            <div className="p-3 bg-gray-100 border-t">{renderNestedRow(item)}</div>
+            <div className="m-1 p-3 border rounded-2xl grid" style={{gridTemplateColumns: `repeat(${columns.length}, minmax(0, 1fr))`}}>
+              {renderNestedRow(item)}
+            </div>
           )}
         </div>
       ))}

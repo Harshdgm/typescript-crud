@@ -7,16 +7,22 @@ import EditEmployeeModal from "./EditEmployeeModal";
 import NestedRow from "./NestedRow";
 import { calculateAge } from "@/utils/calculateAge";
 
+
 const employeeColumns: Column<EmployeeData>[] = [
   { key: "id", label: "ID" },
   { key: "name", label: "Name" },
   { key: "email", label: "Email" },
-  { key: "age", label:"Age" },
+  { key: "age", label: "Age" },
   { key: "role", label: "Role" },
-  { key: "salary", label:"Salary" },
+  { key: "salary", label: "Salary" },
   { key: "status", label: "Status", render: item => item.status },
+  { key: "hobby", label: "Hobby", render: () => "" },
+  { key: "city", label: "City", render: () => "" },
+  { key: "phone", label: "Phone", render: () => "" },
+  { key: "dob", label: "DOB", render: () => "" },
   { key: "actions", label: "Actions" },
 ];
+
 
 export default function EmployeeTable({ data }: { data: EmployeeData[] }) {
   const [employees, setEmployees] = useState<EmployeeData[]>([]);
@@ -50,7 +56,7 @@ export default function EmployeeTable({ data }: { data: EmployeeData[] }) {
 
   return (
     <div className="w-full overflow-x-auto">
-      <div className="min-w-[1080px]">
+      <div className="min-w-[1400px]">
         <ReusableTable<EmployeeData>
           data={employees}
           columns={employeeColumns}
