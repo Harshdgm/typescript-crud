@@ -19,7 +19,9 @@ export default function EditUserModal({ user, onClose, onSave }: Props) {
     id: "",
     email: "",
     phone: "",
-    address: "",
+    city:"",
+    state:"",
+    country:"",
     image: "",
     hobby: "",
   });

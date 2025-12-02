@@ -1,3 +1,4 @@
+
 import { UserData, UserError } from "@/types/user";
 import { MAX_ID_DIGITS, MAX_PHONE_DIGITS, IMAGE_URL_REGEX } from "@/utils/constant";
 
@@ -5,8 +6,10 @@ export function validateRow(row: UserData,existingRows: UserData[]=[]): UserErro
   const errors: UserError = {
     id: "",
     email: "",
-    phone: "",
-    address: "",
+    phone: "",  
+    city:"",
+    state:"",
+    country:"",
     image: "",
     hobby: "",
   };
@@ -35,6 +38,18 @@ export function validateRow(row: UserData,existingRows: UserData[]=[]): UserErro
 
   if (!row.address) {
     errors.address = "Address is required";
+  }
+
+  if (!row.city) {
+    errors.city = "city is required";
+  }
+
+  if (!row.state) {
+    errors.state = "state is required";
+  }
+
+  if (!row.country) {
+    errors.country = "country is required";
   }
 
   if (!row.image) {

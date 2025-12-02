@@ -10,7 +10,9 @@ export type UserData = {
   id: number;
   email: string;
   phone: number;
-  address: string;
+  city: string;
+  state: string;
+  country: string;
   image: string;
   hobby: string;
 };
@@ -19,7 +21,9 @@ export type UserError = {
   id: string;
   email: string;
   phone: string;
-  address: string;
+  city: string;
+  state: string;
+  country: string;
   image: string;
   hobby: string;
 };

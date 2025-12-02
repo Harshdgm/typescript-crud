@@ -3,6 +3,7 @@
 import { FiMinusCircle } from "react-icons/fi";
 import { UserData, UserError } from "@/types/user";
 import { MAX_PHONE_DIGITS } from "@/utils/constant";
+import { cityData } from "@/utils/locationData";
 
 type Props = {
   index: number;
@@ -53,12 +54,47 @@ export default function UserRow({ index, user, errors, onChange, onRemove }: Pro
       <div>
         <input
           type="text"
-          placeholder="Address"
+          placeholder="City"
           className="border p-1 rounded w-full"
-          value={user.address}
-          onChange={(e) => onChange(index, "address", e.target.value)}
+          value={user.city}
+          onChange={(e) => {
+          const input = e.target.value;
+          const cityKey = input.trim().toLowerCase().replace(/\s+/g, "");
+
+
+           // Option C: if city not found, keep state/country empty (readOnly)
+            if (cityData[cityKey]) {
+            onChange(index, "city", input);
+            onChange(index, "state", cityData[cityKey].state);
+            onChange(index, "country", cityData[cityKey].country);
+            } else {
+            onChange(index, "city", input);
+            onChange(index, "state", "");
+            onChange(index, "country", "");
+            }
+            }}
+          />
+          {errors.city && <p className="text-red-500 text-sm">{errors.city}</p>}
+        </div>
+
+      <div>
+        <input
+          type="text"
+          placeholder="State"
+          className="border p-1 rounded w-full bg-gray-100"
+          value={user.state}
+          readOnly
         />
-        {errors.address && <p className="text-red-500 text-sm">{errors.address}</p>}
+      </div>
+
+      <div>
+        <input
+          type="text"
+          placeholder="Country"
+          className="border p-1 rounded w-full bg-gray-100"
+          value={user.country}
+          readOnly
+        />
       </div>
 
       <div>

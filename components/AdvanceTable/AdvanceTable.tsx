@@ -11,7 +11,11 @@ const userColumns: Column<UserData>[] = [
   { key: "id", label: "ID" },
   { key: "email", label: "Email" },
   { key: "phone", label: "Phone" },
-  { key: "address", label: "Address", render: (item) => toCamelCase(item.address ?? "") },
+  {
+    key: "address",
+    label: "Address",
+    render: (item) => `${item.city}${item.state ? ", " + item.state : ""}${item.country ? ", " + item.country : ""}`,
+  },
   { key: "image", label: "Image", isImage: true },
   { key: "hobby", label: "Hobby", render: (item) => toCamelCase(item.hobby ?? "") },
   { key: "actions", label: "Actions" },

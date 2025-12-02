@@ -23,8 +23,8 @@ export default function AddUserModal({ existingRows, onAddUsers }: Props) {
 
   const openModal = () => {
     const firstId = getNextId();
-    setRows([{ id: firstId, email: "", phone: 0, address: "", image: "", hobby: "" },]);
-    setErrors([{ id: "", email: "", phone: "", address: "", image: "", hobby: "" },]);
+    setRows([{ id: firstId, email: "", phone: 0, city:"", state:"", country:"", image: "", hobby: "" },]);
+    setErrors([{ id: "", email: "", phone: "", city:"", state:"", country:"", image: "", hobby: "" },]);
     setShowModal(true);
   };
 
@@ -49,8 +49,8 @@ export default function AddUserModal({ existingRows, onAddUsers }: Props) {
 
   const addRow = () => {
     const nextId = getNextId(rows);
-    setRows([...rows,{ id: nextId, email: "", phone: 0, address: "", image: "", hobby: "" },]);
-    setErrors([...errors,{ id: "", email: "", phone: "", address: "", image: "", hobby: "" },]);};
+    setRows([...rows,{ id: nextId, email: "", phone: 0, city:"", state:"", country:"", image: "", hobby: "" },]);
+    setErrors([...errors,{ id: "", email: "", phone: "", city:"", state:"", country:"", image: "", hobby: "" },]);};
 
   const removeRow = (index: number) => {
     setRows(rows.filter((_, i) => i !== index));
