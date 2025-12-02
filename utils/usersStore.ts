@@ -47,9 +47,9 @@ export function initUsersFromAPI(apiUsers: UserData[]) {
   }
 }
 
-export function deleteUserById(id: number) {
-  cache = cache.filter((user) => user.id !== id);
-  sessionStorage.setItem(STORAGE_KEY, JSON.stringify(cache));
-  window.dispatchEvent(new Event("storage"));
-}
+// export function deleteUserById(id: number) {
+//   cache = cache.filter((user) => user.id !== id);
+//   sessionStorage.setItem(STORAGE_KEY, JSON.stringify(cache));
+//   window.dispatchEvent(new Event("storage"));
+// }
 

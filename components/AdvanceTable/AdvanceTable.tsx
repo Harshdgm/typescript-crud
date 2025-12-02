@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { UserData } from "@/types/user";
-import { deleteUserById } from "@/utils/usersStore";
+// import { deleteUserById } from "@/utils/usersStore";
 import ReusableTable, { Column } from "@/common/ReusableTable";
 import EditUserModal from "@/components/AdvanceTable/EditUserModal";
 import { toCamelCase } from "@/utils/toCamelCase";
@@ -37,13 +37,15 @@ export default function AdvanceTable({ data }: { data: UserData[] }) {
   const handleEdit = (user: UserData) => setSelectedUser(user);
 
   const handleDelete = (user: UserData) => {
-    const newUsers = users.filter((u) => u.id !== user.id);
+    let newUsers = users.filter((u) => u.id !== user.id);
+    newUsers = newUsers.sort((a, b) => a.id - b.id);
+    newUsers = newUsers.map((u, index) => ({...u,id: index + 1}));
     setUsers(newUsers);
-    deleteUserById(user.id); 
+    sessionStorage.setItem("usersData", JSON.stringify(newUsers));
   };
 
   const handleSave = (updatedUser: UserData) => {
-    const newUsers = users.map((u) => (u.id === updatedUser.id ? updatedUser : u));
+    const newUsers = users.map((u) =>u.id === updatedUser.id ? updatedUser : u);
     setUsers(newUsers);
     setSelectedUser(null);
   };
