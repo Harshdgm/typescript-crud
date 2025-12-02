@@ -12,38 +12,45 @@ type Props = {
 };
 
 export default function AddUserModal({ existingRows, onAddUsers }: Props) {
-    const [showModal, setShowModal] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
-    const [rows, setRows] = useState<UserData[]>([
-        { id: 0, email: "", phone: 0, address: "", image: "", hobby: "" },
-    ]);
+  const getNextId = (extraRows: UserData[] = []) => {
+    const ids1 = existingRows.length ? existingRows.map((u) => u.id) : [0];
+    const ids2 = extraRows.length ? extraRows.map((u) => u.id) : [0];
 
-    const [errors, setErrors] = useState<UserError[]>([
-    { id: "", email: "", phone: "", address: "", image: "", hobby: "" }
-    ]);
+    return Math.max(...ids1, ...ids2) + 1;
+  };
 
+  const openModal = () => {
+    const firstId = getNextId();
+    setRows([{ id: firstId, email: "", phone: 0, address: "", image: "", hobby: "" },]);
+    setErrors([{ id: "", email: "", phone: "", address: "", image: "", hobby: "" },]);
+    setShowModal(true);
+  };
 
-    const handleChange = (
-        index: number,
-        field: keyof UserData,
-        value: string | number
-        ) => {
-        const newRows = [...rows];
+  const [rows, setRows] = useState<UserData[]>([]);
+  const [errors, setErrors] = useState<UserError[]>([]);
 
-        if (field === "id" || field === "phone") {
-            newRows[index][field] = Number(value) as UserData[typeof field];
-        } 
-        else {
-            newRows[index][field] = String(value) as UserData[typeof field];
-        }
-        setRows(newRows);
-        };
+  const handleChange = (
+    index: number,
+    field: keyof UserData,
+    value: string | number
+  ) => {
+    const updatedRows = [...rows];
+
+    if (field === "id" || field === "phone") {
+      updatedRows[index][field] = Number(value) as UserData[typeof field];
+    } else {
+      updatedRows[index][field] = String(value) as UserData[typeof field];
+    }
+    setRows(updatedRows);
+  };
 
 
   const addRow = () => {
-    setRows([...rows, { id: 0, email: "", phone: 0, address: "", image: "", hobby: "" }]);
-    setErrors([...errors, { id: "", email: "", phone: "", address: "", image: "", hobby: "" }]);
-  };
+    const nextId = getNextId(rows);
+    setRows([...rows,{ id: nextId, email: "", phone: 0, address: "", image: "", hobby: "" },]);
+    setErrors([...errors,{ id: "", email: "", phone: "", address: "", image: "", hobby: "" },]);};
 
   const removeRow = (index: number) => {
     setRows(rows.filter((_, i) => i !== index));
@@ -51,19 +58,15 @@ export default function AddUserModal({ existingRows, onAddUsers }: Props) {
   };
 
   const handleSubmit = () => {
-   const newErrors = rows.map((row) => validateRow(row, existingRows));
+    const newErrors = rows.map((row) => validateRow(row, existingRows));
     setErrors(newErrors);
 
     const hasErrors = newErrors.some((e) =>
-    Object.values(e).some((msg) => msg !== "")
+      Object.values(e).some((msg) => msg !== "")
     );
 
     if (hasErrors) return;
-
     onAddUsers(rows);
-
-    setRows([{ id: 0, email: "", phone: 0, address: "", image: "", hobby: "" }]);
-    setErrors([{ id: "", email: "", phone: "", address: "", image: "", hobby: "" }]);
     setShowModal(false);
   };
 
@@ -71,7 +74,7 @@ export default function AddUserModal({ existingRows, onAddUsers }: Props) {
     <div className="mb-4">
       <div className="flex items-center justify-between">
         <h1 className="text-lg font-bold mb-4">Advanced Users Table</h1>
-        <button onClick={() => setShowModal(true)} className="bg-blue-500 text-white px-4 py-2 rounded text-sm">
+        <button onClick={openModal} className="bg-blue-500 text-white px-4 py-2 rounded text-sm">
           Add Data
         </button>
       </div>
@@ -95,7 +98,7 @@ export default function AddUserModal({ existingRows, onAddUsers }: Props) {
 
           <div className="flex gap-2 mb-2 ml-6">
             <button onClick={addRow} className="flex items-center gap-1 text-green-500 text-sm cursor-pointer">
-              <CiCirclePlus className="" /> Add Row
+              <CiCirclePlus /> Add Row
             </button>
           </div>
 
@@ -103,6 +106,7 @@ export default function AddUserModal({ existingRows, onAddUsers }: Props) {
             <button onClick={() => setShowModal(false)} className="px-2 py-1 bg-gray-300 rounded text-sm">
               Cancel
             </button>
+
             <button onClick={handleSubmit} className="px-2 py-1 bg-blue-500 text-white rounded text-sm">
               Submit
             </button>

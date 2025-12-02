@@ -2,7 +2,7 @@
 
 import { FiMinusCircle } from "react-icons/fi";
 import { UserData, UserError } from "@/types/user";
-import { MAX_ID_DIGITS, MAX_PHONE_DIGITS } from "@/utils/constant";
+import { MAX_PHONE_DIGITS } from "@/utils/constant";
 
 type Props = {
   index: number;
@@ -14,17 +14,13 @@ type Props = {
 
 export default function UserRow({ index, user, errors, onChange, onRemove }: Props) {
   return (
-    <div className="grid grid-cols-7 gap-2 items-start text-sm">
+    <div className="grid grid-cols-7 gap-2 items-start text-sm mb-2">
       <div>
-        <input
+       <input
           type="text"
-          placeholder="ID"
-          className="border p-1 rounded w-full"
-          value={user.id === 0 ? "" : user.id}
-          onChange={(e) => {
-            const val = e.target.value.replace(/\D/g, "").slice(0, MAX_ID_DIGITS);
-            onChange(index, "id", val ? Number(val) : 0);
-          }}
+          className="border p-1 rounded w-full bg-gray-100 cursor-not-allowed"
+          value={user.id}
+          readOnly
         />
         {errors.id && <p className="text-red-500 text-sm">{errors.id}</p>}
       </div>
