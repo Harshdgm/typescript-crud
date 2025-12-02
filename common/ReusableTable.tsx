@@ -36,7 +36,7 @@ export default function ReusableTable<T extends { id: number }>({
     <div className="overflow-x-auto text-center">
       <div className="grid mb-2" style={{ gridTemplateColumns: `repeat(${columns.length}, minmax(0, 1fr))` }}>
         {columns.map((col, idx) => {
-          let classes = "p-2 font-bold bg-gray-100 border border-black";
+          let classes = "p-2 font-bold bg-gray-100 border border-black text-sm";
 
           if (idx === 0) classes += " rounded-tl-2xl rounded-bl-2xl";
           if (idx === columns.length - 1) classes += " rounded-tr-2xl rounded-br-2xl";
@@ -46,7 +46,7 @@ export default function ReusableTable<T extends { id: number }>({
       </div>
 
       {data.map((item, rowIndex) => (
-        <div key={item.id} className={`mb-1 rounded-2xl overflow-hidden ${rowIndex % 2 === 0 ? "" : "bg-gray-100"}`}>
+        <div key={item.id} className={`mb-1 rounded-2xl overflow-hidden text-sm ${rowIndex % 2 === 0 ? "" : "bg-gray-100"}`}>
           <div
             className="grid"
             style={{
