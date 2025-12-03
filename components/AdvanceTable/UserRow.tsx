@@ -2,7 +2,7 @@
 
 import { FiMinusCircle } from "react-icons/fi";
 import { UserData, UserError, DateRangeData, ImageType } from "@/types/user";
-import { MAX_PHONE_DIGITS } from "@/utils/constant";
+import { MAX_PHONE_DIGITS } from "@/constant/validation";
 import { cityData } from "@/utils/locationData";
 import DateRangeInput from "./DateRangeInput";
 import { fileToBase64 } from "@/utils/fileToBase64";

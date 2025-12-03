@@ -1,33 +1,30 @@
-
 import { UserData, UserError } from "@/types/user";
-import { MAX_ID_DIGITS, MAX_PHONE_DIGITS, IMAGE_URL_REGEX } from "@/utils/constant";
+import { MAX_ID_DIGITS, MAX_PHONE_DIGITS, IMAGE_URL_REGEX, EMAIL_REGEX } from "@/constant/validation";
 
-export function validateRow(row: UserData,existingRows: UserData[]=[]): UserError {
+export function validateRow(row: UserData, existingRows: UserData[] = []): UserError {
   const errors: UserError = {
     id: "",
     email: "",
-    phone: "",  
-    city:"",
-    state:"",
-    country:"",
+    phone: "",
+    city: "",
+    state: "",
+    country: "",
     image: "",
     hobby: "",
-    dateRange:"",
+    dateRange: "",
   };
-
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
   if (!row.id) {
     errors.id = "ID is required";
   } else if (row.id.toString().length > MAX_ID_DIGITS) {
     errors.id = `Max ${MAX_ID_DIGITS} digits allowed only`;
-  }else if (existingRows.some(u => u.id === row.id)) {
+  } else if (existingRows.some(u => u.id === row.id)) {
     errors.id = "ID already exists"; 
   }
 
   if (!row.email) {
     errors.email = "Email is required";
-  } else if (!emailRegex.test(row.email)) {
+  } else if (!EMAIL_REGEX.test(row.email)) {
     errors.email = "Invalid email";
   }
 
@@ -40,6 +37,7 @@ export function validateRow(row: UserData,existingRows: UserData[]=[]): UserErro
   if (!row.city) errors.city = "City is required";
   // if (!row.state) errors.state = "State is required";
   // if (!row.country) errors.country = "Country is required";
+
 
   if (!row.image) {
     errors.image = "Image is required";
@@ -57,7 +55,6 @@ export function validateRow(row: UserData,existingRows: UserData[]=[]): UserErro
   } else if (row.hobby.some(h => /[0-9]/.test(h))) {
     errors.hobby = "Hobbies cannot contain numbers";
   }
-
 
   if (!row.dateRange) {
     errors.dateRange = "Date range is required";

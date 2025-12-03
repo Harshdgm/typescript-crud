@@ -39,18 +39,15 @@ export default function EditUserModal({ user, onClose, onSave }: Props) {
     dateRange: "",
   });
 
-  // Generic handleChange
   const handleChange = <K extends keyof UserData>(key: K, value: UserData[K]) => {
     setEditValues((prev) => ({ ...prev, [key]: value }));
     setErrors((prev) => ({ ...prev, [key]: "" }));
   };
 
-  // Helper specifically for DateRangeInput
   const handleDateRangeChange = (range: DateRangeData) => {
     handleChange("dateRange", range);
   };
 
-  // Helper specifically for HobbySelector
   const handleHobbyChange = (hobby: string[]) => {
     handleChange("hobby", hobby);
   };
@@ -73,9 +70,7 @@ export default function EditUserModal({ user, onClose, onSave }: Props) {
       <div className="bg-white z-10 rounded-lg shadow-lg w-full max-w-4xl overflow-y-auto max-h-[95vh] p-6">
         <h2 className="text-2xl font-bold mb-6 text-center">Edit User</h2>
 
-        {/* Responsive two-column layout */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Email */}
           <div>
             <label className="block font-medium mb-1">Email</label>
             <input
@@ -89,7 +84,6 @@ export default function EditUserModal({ user, onClose, onSave }: Props) {
             {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
           </div>
 
-          {/* Phone */}
           <div>
             <label className="block font-medium mb-1">Phone</label>
             <input
@@ -103,7 +97,6 @@ export default function EditUserModal({ user, onClose, onSave }: Props) {
             {errors.phone && <p className="text-red-500 text-sm mt-1">{errors.phone}</p>}
           </div>
 
-          {/* City */}
           <div>
             <label className="block font-medium mb-1">City</label>
             <input
@@ -131,7 +124,6 @@ export default function EditUserModal({ user, onClose, onSave }: Props) {
             {errors.city && <p className="text-red-500 text-sm mt-1">{errors.city}</p>}
           </div>
 
-          {/* State */}
           <div>
             <label className="block font-medium mb-1">State</label>
             <input
@@ -142,7 +134,6 @@ export default function EditUserModal({ user, onClose, onSave }: Props) {
             />
           </div>
 
-          {/* Country */}
           <div>
             <label className="block font-medium mb-1">Country</label>
             <input
@@ -153,7 +144,6 @@ export default function EditUserModal({ user, onClose, onSave }: Props) {
             />
           </div>
 
-          {/* Date Range */}
           <div className="md:col-span-2">
             <label className="block font-medium mb-1">Date Range</label>
             <DateRangeInput
@@ -167,7 +157,6 @@ export default function EditUserModal({ user, onClose, onSave }: Props) {
             {errors.dateRange && <p className="text-red-500 text-sm mt-1">{errors.dateRange}</p>}
           </div>
 
-          {/* Image */}
           <div className="md:col-span-2">
             <label className="block font-medium mb-1">Image</label>
             <input
@@ -196,7 +185,6 @@ export default function EditUserModal({ user, onClose, onSave }: Props) {
             {errors.image && <p className="text-red-500 text-sm mt-1">{errors.image}</p>}
           </div>
 
-          {/* Hobbies */}
           <div className="md:col-span-2">
             <label className="block font-medium mb-1">Hobbies</label>
             <HobbySelector
@@ -207,7 +195,6 @@ export default function EditUserModal({ user, onClose, onSave }: Props) {
           </div>
         </div>
 
-        {/* Buttons */}
         <div className="mt-6 flex justify-end gap-3">
           <button
             className="bg-gray-300 px-5 py-2 rounded-md hover:bg-gray-400"

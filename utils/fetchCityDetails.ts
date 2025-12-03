@@ -1,3 +1,5 @@
+import { MAP_API } from "@/constant/mapApi";
+
 export interface CityInfo {
   city: string;
   state: string;
@@ -7,9 +9,7 @@ export interface CityInfo {
 export async function fetchCityDetails(cityName: string): Promise<CityInfo | null> {
   if (!cityName) return null;
 
-  const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
-    cityName
-  )}`;
+  const url = `${MAP_API.BASE_URL}?format=json&q=${encodeURIComponent(cityName)}`;
 
   try {
     const res = await fetch(url, {

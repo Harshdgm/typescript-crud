@@ -47,7 +47,6 @@ export type EmployeeError = {
   role:string;
   status: string; 
   action: string;
-
   salary?: number | string;
   city?: string;
   phone?: string;
@@ -63,7 +62,6 @@ export type EmployeeData = {
   role: string;
   status: "Active" | "Inactive";
   action: boolean;
-
   salary?: number | string;
   city?: string;
   phone?: string;

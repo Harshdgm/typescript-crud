@@ -2,8 +2,9 @@
 
 import { useSyncExternalStore } from "react";
 import { EmployeeData } from "@/types/user";
+import { STORAGE_KEYS } from "@/constant/storageKeys"; 
 
-const STORAGE_KEY = "employeesData";
+const STORAGE_KEY = STORAGE_KEYS.EMPLOYEES; 
 
 let cache: EmployeeData[] = [];
 const EMPTY: EmployeeData[] = [];
@@ -17,7 +18,7 @@ function getServerSnapshot(): EmployeeData[] {
 }
 
 function subscribe(callback: () => void) {
-  if (typeof window === "undefined") return () => {}; 
+  if (typeof window === "undefined") return () => {};
 
   const handleStorage = () => {
     const data = sessionStorage.getItem(STORAGE_KEY);
@@ -47,8 +48,8 @@ export function initUsersFromAPI(apiUsers: EmployeeData[]) {
   if (cache.length === 0 && typeof window !== "undefined") {
     cache = apiUsers.map(emp => ({
       ...emp,
-      status: emp.status === "Active" ? "Active" : "Inactive", 
-      action: !!emp.action, 
+      status: emp.status === "Active" ? "Active" : "Inactive",
+      action: !!emp.action,
     }));
     sessionStorage.setItem(STORAGE_KEY, JSON.stringify(cache));
     window.dispatchEvent(new Event("storage"));
@@ -56,7 +57,7 @@ export function initUsersFromAPI(apiUsers: EmployeeData[]) {
 }
 
 export function deleteUserById(id: number) {
-  cache = cache.filter((user) => user.id !== id);
+  cache = cache.filter(user => user.id !== id);
   if (typeof window !== "undefined") {
     sessionStorage.setItem(STORAGE_KEY, JSON.stringify(cache));
     window.dispatchEvent(new Event("storage"));
