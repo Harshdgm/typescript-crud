@@ -25,7 +25,7 @@ export default function UserRow({ index, user, errors, onChange, onRemove }: Pro
   const [editValues, setEditValues] = useState<UserData>({ ...user });
 
   return (
-    <div className="grid grid-cols-7 gap-2 items-start text-sm mb-2">
+    <div className="grid grid-cols-8 gap-2 items-start text-sm mb-2">
       <div>
         <input
           type="text"
@@ -134,7 +134,7 @@ export default function UserRow({ index, user, errors, onChange, onRemove }: Pro
         {errors.image && <p className="text-red-500 text-sm">{errors.image}</p>}
       </div>
 
-      <div>
+      <div className="col-span-2">
         <HobbySelector
             value={editValues.hobby || []}  
             onChange={(val) => {
