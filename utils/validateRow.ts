@@ -34,10 +34,13 @@ export function validateRow(row: UserData, existingRows: UserData[] = []): UserE
     errors.phone = `Phone must be ${MAX_PHONE_DIGITS} digits`;
   }
 
-  if (!row.city) errors.city = "City is required";
+  if (!row.city) {
+    errors.city = "City is required";
+  }else {
+  errors.city = "";
+}
   // if (!row.state) errors.state = "State is required";
   // if (!row.country) errors.country = "Country is required";
-
 
   if (!row.image) {
     errors.image = "Image is required";
@@ -51,10 +54,13 @@ export function validateRow(row: UserData, existingRows: UserData[] = []): UserE
   }
 
   if (!row.hobby || row.hobby.length === 0) {
-    errors.hobby = "At least one hobby is required";
-  } else if (row.hobby.some(h => /[0-9]/.test(h))) {
-    errors.hobby = "Hobbies cannot contain numbers";
-  }
+  errors.hobby = "At least one hobby is required";
+} else if (row.hobby.some(h => /[0-9]/.test(h))) {
+  errors.hobby = "Hobbies cannot contain numbers";
+} else {
+  errors.hobby = ""; 
+}
+
 
   if (!row.dateRange) {
     errors.dateRange = "Date range is required";

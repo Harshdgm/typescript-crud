@@ -13,6 +13,7 @@ type Props = {
 
 export default function AddUserModal({ existingRows, onAddUsers }: Props) {
   const [showModal, setShowModal] = useState(false);
+ 
 
   const getNextId = (extraRows: UserData[] = []) => {
     const ids1 = existingRows.length ? existingRows.map((u) => u.id) : [0];
@@ -43,35 +44,42 @@ export default function AddUserModal({ existingRows, onAddUsers }: Props) {
 
   const [rows, setRows] = useState<UserData[]>([]);
   const [errors, setErrors] = useState<UserError[]>([]);
+  const [submitted, setSubmitted] = useState(false);
 
- const handleChange = (
+const handleChange = (
   index: number,
   field: keyof UserData,
   value: string | number | DateRangeData | ImageType | string[]
-    ) => {
-      const updatedRows = [...rows];
+) => {
+  const updatedRows = [...rows];
 
-      switch (field) {
-        case "id":
-        case "phone":
-          updatedRows[index][field] = Number(value) as number;
-          break;
-        case "hobby":
-          updatedRows[index][field] = value as string[];
-          break;
-        case "dateRange":
-          updatedRows[index][field] = value as DateRangeData;
-          break;
-        case "image":
-          updatedRows[index][field] = value as ImageType;
-          break;
-        default:
-          updatedRows[index][field] = value as string;
-          break;
-      }
+  switch (field) {
+    case "id":
+    case "phone":
+      updatedRows[index][field] = Number(value) as number;
+      break;
+    case "hobby":
+      updatedRows[index][field] = value as string[];
+      break;
+    case "dateRange":
+      updatedRows[index][field] = value as DateRangeData;
+      break;
+    case "image":
+      updatedRows[index][field] = value as ImageType;
+      break;
+    default:
+      updatedRows[index][field] = value as string;
+      break;
+  }
 
-      setRows(updatedRows);
-    };
+  setRows(updatedRows);
+
+  if (submitted) {
+    const updatedErrors = [...errors];
+    updatedErrors[index] = validateRow(updatedRows[index], existingRows);
+    setErrors(updatedErrors);
+  }
+  };
 
   const addRow = () => {
   const nextId = getNextId(rows);
@@ -112,7 +120,9 @@ export default function AddUserModal({ existingRows, onAddUsers }: Props) {
     setErrors(errors.filter((_, i) => i !== index));
   };
 
-  const handleSubmit = () => {
+ const handleSubmit = () => {
+  setSubmitted(true); 
+
     const newErrors = rows.map((row) => validateRow(row, existingRows));
     setErrors(newErrors);
 
