@@ -26,7 +26,6 @@ export default function UserRow({ index, user, errors, onChange, onRemove }: Pro
 
   return (
     <div className="grid grid-cols-7 gap-2 items-start text-sm mb-2">
-      {/* ID */}
       <div>
         <input
           type="text"
@@ -37,7 +36,6 @@ export default function UserRow({ index, user, errors, onChange, onRemove }: Pro
         {errors.id && <p className="text-red-500 text-sm">{errors.id}</p>}
       </div>
 
-      {/* Email */}
       <div>
         <input
           type="email"
@@ -49,7 +47,6 @@ export default function UserRow({ index, user, errors, onChange, onRemove }: Pro
         {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
       </div>
 
-      {/* Phone */}
       <div>
         <input
           type="text"
@@ -64,7 +61,6 @@ export default function UserRow({ index, user, errors, onChange, onRemove }: Pro
         {errors.phone && <p className="text-red-500 text-sm">{errors.phone}</p>}
       </div>
 
-      {/* City */}
       <div>
         <input
           type="text"
@@ -89,7 +85,6 @@ export default function UserRow({ index, user, errors, onChange, onRemove }: Pro
         {errors.city && <p className="text-red-500 text-sm">{errors.city}</p>}
       </div>
 
-      {/* State */}
       <div>
         <input
           type="text"
@@ -100,7 +95,6 @@ export default function UserRow({ index, user, errors, onChange, onRemove }: Pro
         />
       </div>
 
-      {/* Country */}
       <div>
         <input
           type="text"
@@ -111,7 +105,6 @@ export default function UserRow({ index, user, errors, onChange, onRemove }: Pro
         />
       </div>
 
-      {/* DateRange */}
       <div className="col-span-2">
         <DateRangeInput
           value={
@@ -126,7 +119,6 @@ export default function UserRow({ index, user, errors, onChange, onRemove }: Pro
         {errors.dateRange && <p className="text-red-500 text-sm">{errors.dateRange}</p>}
       </div>
 
-      {/* Image */}
       <div>
         <input
           type="file"
@@ -142,19 +134,17 @@ export default function UserRow({ index, user, errors, onChange, onRemove }: Pro
         {errors.image && <p className="text-red-500 text-sm">{errors.image}</p>}
       </div>
 
-      {/* Hobby */}
       <div>
         <HobbySelector
-            value={editValues.hobby || []}   // array of selected hobbies
+            value={editValues.hobby || []}  
             onChange={(val) => {
               setEditValues((prev) => ({ ...prev, hobby: val }));
-              onChange(index, "hobby", val);  // update parent
+              onChange(index, "hobby", val);
             }}
           />
           {errors.hobby && <p className="text-red-500 text-sm">{errors.hobby}</p>}
       </div>
 
-      {/* Remove button */}
       <button className="text-red-500 text-xl" onClick={() => onRemove(index)}>
         <FiMinusCircle />
       </button>

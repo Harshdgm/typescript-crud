@@ -34,7 +34,7 @@ export type UserError = {
   city: string;
   state: string;
   country: string;
-  image: ImageType;
+  image: string;
   hobby: string;
   dateRange?: string;
 };

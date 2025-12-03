@@ -54,7 +54,7 @@ export default function ReusableTable<T extends { id: number }>({
             }}
           >
             {columns.map((col, colIndex) => {
-              let cellClasses = "p-2 border overflow-hidden whitespace-nowrap text-ellipsis";
+              let cellClasses = "p-2 border max-w-[200px] overflow-x-auto whitespace-nowrap no-scrollbar";
               if (colIndex === 0)
                 cellClasses += " rounded-tl-2xl rounded-bl-2xl";
               if (colIndex === columns.length - 1)

@@ -41,29 +41,19 @@ export function validateRow(row: UserData,existingRows: UserData[]=[]): UserErro
   //   errors.address = "Address is required";
   // }
 
-  if (!row.city) {
-    errors.city = "city is required";
-  }
+  if (!row.city) errors.city = "City is required";
+  if (!row.state) errors.state = "State is required";
+  if (!row.country) errors.country = "Country is required";
 
-  if (!row.state) {
-    errors.state = "state is required";
-  }
-
-  if (!row.country) {
-    errors.country = "country is required";
-  }
-
-  if (!row.image) {
-    errors.image = "Image URL is required";
-  } else {
+  if (row.image) {
     const isBase64 = row.image.startsWith("data:image/");
     const isUrl = IMAGE_URL_REGEX.test(row.image);
+
     if (!isBase64 && !isUrl) {
       errors.image = "Invalid image format";
     }
   }
 
-  // Hobby validation for string[]
   if (!row.hobby || row.hobby.length === 0) {
     errors.hobby = "At least one hobby is required";
   } else if (row.hobby.some(h => /[0-9]/.test(h))) {
@@ -72,10 +62,12 @@ export function validateRow(row: UserData,existingRows: UserData[]=[]): UserErro
 
 
   if (!row.dateRange) {
-      errors.dateRange = "Date range is required";
-    } else if (row.dateRange.startDate > row.dateRange.endDate) {
-      errors.dateRange = "Start date cannot be after end date";
-    }
+    errors.dateRange = "Date range is required";
+  } else if (!row.dateRange.startDate || !row.dateRange.endDate) {
+    errors.dateRange = "Both start & end dates are required";
+  } else if (row.dateRange.startDate > row.dateRange.endDate) {
+    errors.dateRange = "Start date cannot be after end date";
+  }
 
   return errors;
 }

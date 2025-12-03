@@ -20,9 +20,9 @@ const userColumns: Column<UserData>[] = [
   key: "dateRange",
   label: "Date Range",
   render: (item) =>
-    item.dateRange
-      ? `${new Date(item.dateRange.startDate).toLocaleDateString()} - ${new Date(item.dateRange.endDate).toLocaleDateString()}`
-        : ""
+  item.dateRange
+    ? `${new Date(item.dateRange.startDate).toLocaleString()} - ${new Date(item.dateRange.endDate).toLocaleString()}`
+    : ""
   },
   { key: "image", label: "Image", isImage: true },
   { key: "hobby", label: "Hobby", render: (item) => toCamelCase(Array.isArray(item.hobby) ? item.hobby.join(", ") : item.hobby ?? "")  },
