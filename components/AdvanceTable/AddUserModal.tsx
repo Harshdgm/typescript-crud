@@ -1,6 +1,6 @@
 "use client";
 
-import { UserData, UserError } from "@/types/user";
+import { UserData, UserError, DateRangeData, ImageType } from "@/types/user";
 import { useState } from "react";
 import UserRow from "./UserRow";
 import { CiCirclePlus } from "react-icons/ci";
@@ -23,7 +23,7 @@ export default function AddUserModal({ existingRows, onAddUsers }: Props) {
 
   const openModal = () => {
     const firstId = getNextId();
-    setRows([{ id: firstId, email: "", phone: 0, city:"", state:"", country:"", image: "", hobby: "" },]);
+    setRows([{ id: firstId, email: "", phone: 0,address:"", city:"", state:"", country:"",dateRange:"", image: "", hobby: "" },]);
     setErrors([{ id: "", email: "", phone: "", city:"", state:"", country:"", image: "", hobby: "" },]);
     setShowModal(true);
   };
@@ -32,24 +32,24 @@ export default function AddUserModal({ existingRows, onAddUsers }: Props) {
   const [errors, setErrors] = useState<UserError[]>([]);
 
   const handleChange = (
-    index: number,
-    field: keyof UserData,
-    value: string | number
-  ) => {
-    const updatedRows = [...rows];
+  index: number,
+  field: keyof UserData,
+  value: string | number | DateRangeData | ImageType
+) => {
+  const updatedRows = [...rows];
 
-    if (field === "id" || field === "phone") {
-      updatedRows[index][field] = Number(value) as UserData[typeof field];
-    } else {
-      updatedRows[index][field] = String(value) as UserData[typeof field];
-    }
-    setRows(updatedRows);
-  };
+  if (field === "id" || field === "phone") {
+    updatedRows[index][field] = Number(value) as UserData[typeof field];
+  } else {
+    updatedRows[index][field] = value as UserData[typeof field];
+  }
 
+  setRows(updatedRows);
+};
 
   const addRow = () => {
     const nextId = getNextId(rows);
-    setRows([...rows,{ id: nextId, email: "", phone: 0, city:"", state:"", country:"", image: "", hobby: "" },]);
+    setRows([...rows,{ id: nextId, email: "", phone: 0, address:"", city:"", state:"", country:"", image: "", hobby: "" },]);
     setErrors([...errors,{ id: "", email: "", phone: "", city:"", state:"", country:"", image: "", hobby: "" },]);};
 
   const removeRow = (index: number) => {

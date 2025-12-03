@@ -6,15 +6,25 @@ export interface User {
   isNew: boolean;
 }
 
+export type DateRangeData = {
+  startDate: Date;
+  endDate: Date;
+  key?: string;
+};
+
+export type ImageType = `data:image/${string};base64,${string}` | string;
+
 export type UserData = {
   id: number;
   email: string;
   phone: number;
   city: string;
+  address: string;
   state: string;
   country: string;
-  image: string;
+  image: ImageType;
   hobby: string;
+  dateRange?: DateRangeData;
 };
 
 export type UserError = {
@@ -24,8 +34,9 @@ export type UserError = {
   city: string;
   state: string;
   country: string;
-  image: string;
+  image: ImageType;
   hobby: string;
+  dateRange?: DateRangeData;
 };
 
 export type EmployeeError = {

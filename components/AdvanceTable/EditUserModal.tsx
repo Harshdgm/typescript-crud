@@ -84,7 +84,7 @@ export default function EditUserModal({ user, onClose, onSave }: Props) {
             {errors.phone && <p className="text-red-500 text-sm">{errors.phone}</p>}
           </div>
 
-          <div>
+          {/* <div>
             <label>Address:</label>
             <input
               type="text"
@@ -95,7 +95,7 @@ export default function EditUserModal({ user, onClose, onSave }: Props) {
               }`}
             />
             {errors.address && <p className="text-red-500 text-sm">{errors.address}</p>}
-          </div>
+          </div> */}
 
           <div>
             <label>Image URL:</label>

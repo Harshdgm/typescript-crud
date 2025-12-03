@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { UserData } from "@/types/user";
+import { UserData,DateRangeData } from "@/types/user";
 // import { deleteUserById } from "@/utils/usersStore";
 import ReusableTable, { Column } from "@/common/ReusableTable";
 import EditUserModal from "@/components/AdvanceTable/EditUserModal";
@@ -15,6 +15,14 @@ const userColumns: Column<UserData>[] = [
     key: "address",
     label: "Address",
     render: (item) => `${item.city}${item.state ? ", " + item.state : ""}${item.country ? ", " + item.country : ""}`,
+  },
+  {
+  key: "dateRange",
+  label: "Date Range",
+  render: (item) =>
+    item.dateRange
+      ? `${new Date(item.dateRange.startDate).toLocaleDateString()} - ${new Date(item.dateRange.endDate).toLocaleDateString()}`
+        : ""
   },
   { key: "image", label: "Image", isImage: true },
   { key: "hobby", label: "Hobby", render: (item) => toCamelCase(item.hobby ?? "") },

@@ -6,7 +6,6 @@ const HOBBY_OPTIONS = [
   "Brain Games",
   "Playing with Pet",
   "Sleeping",
-  "Custom",
 ] as const;
 
 type HobbyOption = typeof HOBBY_OPTIONS[number];
@@ -18,7 +17,7 @@ interface HobbySelectorProps {
 
 export default function HobbySelector({ value, onChange }: HobbySelectorProps) {
   const [mode, setMode] = useState<"select" | "custom">("select");
-  const [customValue, setCustomValue] = useState("");
+
 
   useEffect(() => {
     if (!value) {
@@ -39,19 +38,18 @@ export default function HobbySelector({ value, onChange }: HobbySelectorProps) {
 
     if (selected === "Custom") {
       setMode("custom");
-      setCustomValue(value || "");
     } else {
       setMode("select");
       onChange(selected);
     }
   };
 
-  const handleCustomInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const input = e.target.value;
-    setCustomValue(input);
-    onChange(input);
-  };
+  const removeOptions =()=>{
+    setMode("select");
+    onChange("");
+  }
 
+ 
   return (
     <div>
       {mode === "select" && (
@@ -65,22 +63,13 @@ export default function HobbySelector({ value, onChange }: HobbySelectorProps) {
           </option>
 
           {HOBBY_OPTIONS.map((hobby) => (
-            <option key={hobby} value={hobby}>
+            <option key={hobby} value={hobby} onChange={removeOptions}>
               {hobby}
             </option>
           ))}
         </select>
       )}
 
-      {mode === "custom" && (
-        <input
-          type="text"
-          className="border rounded p-2 w-full"
-          placeholder="Enter your hobby"
-          value={customValue}
-          onChange={handleCustomInput}
-        />
-      )}
     </div>
   );
 }

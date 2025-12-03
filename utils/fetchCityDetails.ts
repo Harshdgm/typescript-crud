@@ -1,5 +1,3 @@
-// utils/fetchCityDetails.ts
-
 export interface CityInfo {
   city: string;
   state: string;
@@ -16,7 +14,7 @@ export async function fetchCityDetails(cityName: string): Promise<CityInfo | nul
   try {
     const res = await fetch(url, {
       headers: {
-        "User-Agent": "YourAppNameHere", // required by Nominatim
+        "User-Agent": "CRUD", 
       },
     });
 

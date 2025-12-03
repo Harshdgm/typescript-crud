@@ -1,5 +1,5 @@
 
-import { UserData, UserError } from "@/types/user";
+import { UserData, UserError,DateRangeData, ImageType } from "@/types/user";
 import { MAX_ID_DIGITS, MAX_PHONE_DIGITS, IMAGE_URL_REGEX } from "@/utils/constant";
 
 export function validateRow(row: UserData,existingRows: UserData[]=[]): UserError {
@@ -12,6 +12,7 @@ export function validateRow(row: UserData,existingRows: UserData[]=[]): UserErro
     country:"",
     image: "",
     hobby: "",
+   // dateRange: "",
   };
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -36,9 +37,9 @@ export function validateRow(row: UserData,existingRows: UserData[]=[]): UserErro
     errors.phone = `Phone must be ${MAX_PHONE_DIGITS} digits`;
   }
 
-  if (!row.address) {
-    errors.address = "Address is required";
-  }
+  // if (!row.address) {
+  //   errors.address = "Address is required";
+  // }
 
   if (!row.city) {
     errors.city = "city is required";
@@ -54,8 +55,12 @@ export function validateRow(row: UserData,existingRows: UserData[]=[]): UserErro
 
   if (!row.image) {
     errors.image = "Image URL is required";
-  } else if (!IMAGE_URL_REGEX.test(row.image)) {
-    errors.image = "Invalid image URL";
+  } else {
+    const isBase64 = row.image.startsWith("data:image/");
+    const isUrl = IMAGE_URL_REGEX.test(row.image);
+    if (!isBase64 && !isUrl) {
+      errors.image = "Invalid image format";
+    }
   }
 
   if (!row.hobby) {
@@ -63,6 +68,12 @@ export function validateRow(row: UserData,existingRows: UserData[]=[]): UserErro
   } else if (/[0-9]/.test(row.hobby)) {
     errors.hobby = "Hobby cannot contain numbers";
   }
+
+  if (!row.dateRange) {
+  errors.dateRange = "Date range is required";
+} else if (row.dateRange.startDate > row.dateRange.endDate) {
+  errors.dateRange = "Start date cannot be after end date";
+}
 
   return errors;
 }
