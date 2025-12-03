@@ -145,20 +145,13 @@ export default function UserRow({ index, user, errors, onChange, onRemove }: Pro
       {/* Hobby */}
       <div>
         <HobbySelector
-          value={editValues.hobby}
-          onChange={(val) => setEditValues((prev) => ({ ...prev, hobby: val }))}
-        />
-        <input
-          type="text"
-          placeholder="Hobby"
-          className="border p-2 rounded w-full"
-          value={user.hobby}
-          onChange={(e) => {
-            const val = e.target.value.replace(/[^a-zA-Z\s]/g, "");
-            onChange(index, "hobby", val);
-          }}
-        />
-        {errors.hobby && <p className="text-red-500 text-sm">{errors.hobby}</p>}
+            value={editValues.hobby || []}   // array of selected hobbies
+            onChange={(val) => {
+              setEditValues((prev) => ({ ...prev, hobby: val }));
+              onChange(index, "hobby", val);  // update parent
+            }}
+          />
+          {errors.hobby && <p className="text-red-500 text-sm">{errors.hobby}</p>}
       </div>
 
       {/* Remove button */}

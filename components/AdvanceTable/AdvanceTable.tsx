@@ -25,7 +25,7 @@ const userColumns: Column<UserData>[] = [
         : ""
   },
   { key: "image", label: "Image", isImage: true },
-  { key: "hobby", label: "Hobby", render: (item) => toCamelCase(item.hobby ?? "") },
+  { key: "hobby", label: "Hobby", render: (item) => toCamelCase(Array.isArray(item.hobby) ? item.hobby.join(", ") : item.hobby ?? "")  },
   { key: "actions", label: "Actions" },
 ];
 

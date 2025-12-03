@@ -25,18 +25,19 @@ export default function DateRangeInput({ value, onChange }: Props) {
       hour12: true,
     });
 
+  const handleTimeChange = (key: "startDate" | "endDate", e: React.ChangeEvent<HTMLInputElement>) => {
+    const [h, m] = e.target.value.split(":").map(Number);
+    const newDate = new Date(value[key]);
+    newDate.setHours(h, m);
+    onChange({ ...value, [key]: newDate });
+  };
+
   return (
     <div className="relative">
       <input
         type="text"
         readOnly
-        value={
-          value.startDate && value.endDate
-            ? `${formatDateTime(value.startDate)} - ${formatDateTime(
-                value.endDate
-              )}`
-            : ""
-        }
+        value={value.startDate && value.endDate ? `${formatDateTime(value.startDate)} - ${formatDateTime(value.endDate)}` : ""}
         onClick={() => setShow(!show)}
         className="border p-2 rounded w-full cursor-pointer"
       />
@@ -45,20 +46,34 @@ export default function DateRangeInput({ value, onChange }: Props) {
         <div className="absolute z-50 bg-white shadow-lg p-2">
           <DateRangePicker
             ranges={[value]}
-            showSelectionPreview
+          
             moveRangeOnFirstSelection={false}
             months={1}
             direction="horizontal"
             onChange={(ranges: RangeKeyDict) => {
-              if (ranges.selection) {
-                onChange({
-                  startDate: ranges.selection.startDate,
-                  endDate: ranges.selection.endDate,
-                  key: "selection",
-                });
-              }
-            }}
+                  if (ranges.selection?.startDate && ranges.selection?.endDate) {
+                    onChange({
+                      startDate: ranges.selection.startDate,
+                      endDate: ranges.selection.endDate,
+                      key: "selection",
+                    });
+                  }}}
           />
+
+          <div className="flex gap-2 mt-2">
+            {(["startDate", "endDate"] as const).map((key) => (
+              <div key={key}>
+                <label className="text-sm">{key === "startDate" ? "Start Time:" : "End Time:"}</label>
+                <input
+                  type="time"
+                  value={`${value[key].getHours().toString().padStart(2, "0")}:${value[key].getMinutes().toString().padStart(2, "0")}`}
+                  onChange={(e) => handleTimeChange(key, e)}
+                  className="border p-1 rounded"
+                />
+              </div>
+            ))}
+          </div>
+
           <button
             className="mt-2 px-4 py-1 bg-blue-500 text-white rounded"
             onClick={() => setShow(false)}

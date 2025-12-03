@@ -23,7 +23,20 @@ export default function AddUserModal({ existingRows, onAddUsers }: Props) {
 
   const openModal = () => {
     const firstId = getNextId();
-    setRows([{ id: firstId, email: "", phone: 0,address:"", city:"", state:"", country:"",dateRange:"", image: "", hobby: "" },]);
+    setRows([
+      {
+        id: firstId,
+        email: "",
+        phone: 0,
+        address: "",
+        city: "",
+        state: "",
+        country: "",
+        dateRange: { startDate: new Date(), endDate: new Date(), key: "selection" },
+        image: "",
+        hobby: [],
+      },
+    ]);
     setErrors([{ id: "", email: "", phone: "", city:"", state:"", country:"", image: "", hobby: "" },]);
     setShowModal(true);
   };
@@ -34,7 +47,7 @@ export default function AddUserModal({ existingRows, onAddUsers }: Props) {
   const handleChange = (
   index: number,
   field: keyof UserData,
-  value: string | number | DateRangeData | ImageType
+  value: string | number | DateRangeData | ImageType | string[]
 ) => {
   const updatedRows = [...rows];
 
@@ -81,7 +94,7 @@ export default function AddUserModal({ existingRows, onAddUsers }: Props) {
 
       {showModal && (
         <div className="border border-gray-200 p-2 rounded-md my-2">
-          <div className="p-4 rounded-lg w-full max-w-full max-h-[90vh] overflow-y-auto">
+          <div className="p-4 rounded-lg w-full max-w-full max-h-[90vh] ">
             <h2 className="text-base font-bold mb-4">Add Users</h2>
 
             {rows.map((row, index) => (

@@ -12,7 +12,7 @@ export function validateRow(row: UserData,existingRows: UserData[]=[]): UserErro
     country:"",
     image: "",
     hobby: "",
-   // dateRange: "",
+    dateRange:"",
   };
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -63,17 +63,19 @@ export function validateRow(row: UserData,existingRows: UserData[]=[]): UserErro
     }
   }
 
-  if (!row.hobby) {
-    errors.hobby = "Hobby is required";
-  } else if (/[0-9]/.test(row.hobby)) {
-    errors.hobby = "Hobby cannot contain numbers";
+  // Hobby validation for string[]
+  if (!row.hobby || row.hobby.length === 0) {
+    errors.hobby = "At least one hobby is required";
+  } else if (row.hobby.some(h => /[0-9]/.test(h))) {
+    errors.hobby = "Hobbies cannot contain numbers";
   }
 
+
   if (!row.dateRange) {
-  errors.dateRange = "Date range is required";
-} else if (row.dateRange.startDate > row.dateRange.endDate) {
-  errors.dateRange = "Start date cannot be after end date";
-}
+      errors.dateRange = "Date range is required";
+    } else if (row.dateRange.startDate > row.dateRange.endDate) {
+      errors.dateRange = "Start date cannot be after end date";
+    }
 
   return errors;
 }

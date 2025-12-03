@@ -125,11 +125,9 @@ export default function EditUserModal({ user, onClose, onSave }: Props) {
 
           <div>
           <HobbySelector
-              value={editValues.hobby}
-              onChange={(val) =>
-                setEditValues((prev) => ({ ...prev, hobby: val }))
-              }
-          />
+              value={editValues.hobby || []}   // default to empty array
+              onChange={(val) => handleChange("hobby", val)}
+            />
            {errors.hobby && <p className="text-red-500 text-sm">{errors.hobby}</p>}
           </div>
         </div>

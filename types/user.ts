@@ -23,7 +23,7 @@ export type UserData = {
   state: string;
   country: string;
   image: ImageType;
-  hobby: string;
+  hobby: string[];
   dateRange?: DateRangeData;
 };
 
@@ -36,7 +36,7 @@ export type UserError = {
   country: string;
   image: ImageType;
   hobby: string;
-  dateRange?: DateRangeData;
+  dateRange?: string;
 };
 
 export type EmployeeError = {
