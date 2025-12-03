@@ -6,6 +6,9 @@ import { validateRow } from "@/utils/validateRow";
 import Image from "next/image";
 import HobbySelector from "./HobbySelector";
 import { DateRangePicker } from "react-date-range";
+import { cityData } from "@/utils/locationData";
+import { fileToBase64 } from "@/utils/fileToBase64";
+import DateRangeInput from "./DateRangeInput";
 
 type Props = {
   user: UserData;
@@ -14,10 +17,17 @@ type Props = {
 };
 
 export default function EditUserModal({ user, onClose, onSave }: Props) {
-  const [editValues, setEditValues] = useState<UserData>({ ...user });
-
-  const [previewImage, setPreviewImage] = useState<string>(user.image); // <--- added
-  const [imageFile, setImageFile] = useState<File | null>(null); // <--- added
+  // const [editValues, setEditValues] = useState<UserData>({ ...user });
+   const [editValues, setEditValues] = useState<UserData>({
+      ...user,
+      dateRange: user.dateRange
+        ? {
+            startDate: new Date(user.dateRange.startDate),
+            endDate: new Date(user.dateRange.endDate),
+            key: "selection",
+          }
+        : undefined,
+    });
 
   const [errors, setErrors] = useState<UserError>({
     id: "",
@@ -26,7 +36,7 @@ export default function EditUserModal({ user, onClose, onSave }: Props) {
     city: "",
     state: "",
     country: "",
-    image: "",     // now optional
+    image: "",
     hobby: "",
     dateRange: "",
   });
@@ -36,22 +46,6 @@ export default function EditUserModal({ user, onClose, onSave }: Props) {
     setErrors((prev) => ({ ...prev, [key]: "" }));
   };
 
-  // -----------------------------
-  // 🟦 HANDLE IMAGE UPLOAD
-  // -----------------------------
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    setImageFile(file);
-    const url = URL.createObjectURL(file);
-    setPreviewImage(url);
-    setErrors((prev) => ({ ...prev, image: "" }));
-  };
-
-  // -----------------------------
-  // 🟦 SAVE CHANGES
-  // -----------------------------
   const handleSave = () => {
     const validationErrors = validateRow(editValues);
     const hasError = Object.values(validationErrors).some((v) => v !== "");
@@ -61,22 +55,7 @@ export default function EditUserModal({ user, onClose, onSave }: Props) {
       return;
     }
 
-    // if user uploaded a new file, convert to base64
-    if (imageFile) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const updatedUser = {
-          ...editValues,
-          image: reader.result as string, // base64 image
-        };
-        onSave(updatedUser);
-      };
-      reader.readAsDataURL(imageFile);
-    } else {
-      // user did not upload, keep old image
-      onSave({ ...editValues });
-    }
-
+    onSave({ ...editValues });
     onClose();
   };
 
@@ -88,8 +67,6 @@ export default function EditUserModal({ user, onClose, onSave }: Props) {
         <h2 className="text-xl font-bold mb-4">Edit User</h2>
 
         <div className="flex flex-col gap-4">
-
-          {/* Email */}
           <div>
             <label>Email:</label>
             <input
@@ -101,111 +78,128 @@ export default function EditUserModal({ user, onClose, onSave }: Props) {
             {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
           </div>
 
-          {/* Phone */}
           <div>
             <label>Phone:</label>
             <input
               type="text"
               value={editValues.phone}
-              onChange={(e) => handleChange("phone", e.target.value)}
+              onChange={(e) => handleChange("phone", Number(e.target.value))}
               className={`border p-2 rounded w-full ${errors.phone ? "border-red-500" : ""}`}
             />
             {errors.phone && <p className="text-red-500 text-sm">{errors.phone}</p>}
           </div>
 
-          {/* City */}
+          {/* CITY (no numbers, auto-fill state/country) */}
           <div>
             <label>City:</label>
             <input
               type="text"
               value={editValues.city}
-              onChange={(e) => handleChange("city", e.target.value)}
+              onChange={(e) => {
+                const input = e.target.value;
+
+                // ❌ Prevent numbers
+                if (/\d/.test(input)) return;
+
+                const cityKey = input.trim().toLowerCase().replace(/\s+/g, "");
+
+                if (cityData[cityKey]) {
+                  handleChange("city", input);
+                  handleChange("state", cityData[cityKey].state);
+                  handleChange("country", cityData[cityKey].country);
+                } else {
+                  handleChange("city", input);
+                  handleChange("state", "");
+                  handleChange("country", "");
+                }
+              }}
               className={`border p-2 rounded w-full ${errors.city ? "border-red-500" : ""}`}
             />
             {errors.city && <p className="text-red-500 text-sm">{errors.city}</p>}
           </div>
 
-          {/* State */}
+          {/* STATE */}
           <div>
             <label>State:</label>
             <input
               type="text"
               value={editValues.state}
-              onChange={(e) => handleChange("state", e.target.value)}
-              className={`border p-2 rounded w-full ${errors.state ? "border-red-500" : ""}`}
+              readOnly
+              className="border p-2 rounded w-full bg-gray-100"
             />
-            {errors.state && <p className="text-red-500 text-sm">{errors.state}</p>}
           </div>
 
-          {/* Country */}
+          {/* COUNTRY */}
           <div>
             <label>Country:</label>
             <input
               type="text"
               value={editValues.country}
-              onChange={(e) => handleChange("country", e.target.value)}
-              className={`border p-2 rounded w-full ${errors.country ? "border-red-500" : ""}`}
+              readOnly
+              className="border p-2 rounded w-full bg-gray-100"
             />
-            {errors.country && <p className="text-red-500 text-sm">{errors.country}</p>}
           </div>
 
-          {/* Date Range */}
-          <div>
+         <div>
             <label>Date Range:</label>
-            <DateRangePicker
-              ranges={[
-                {
-                  startDate: new Date(editValues.dateRange?.startDate || new Date()),
-                  endDate: new Date(editValues.dateRange?.endDate || new Date()),
+            <DateRangeInput
+                value={{
+                  startDate: new Date(editValues.dateRange?.startDate),
+                  endDate: new Date(editValues.dateRange?.endDate),
                   key: "selection",
-                },
-              ]}
-              onChange={(ranges) => {
-                const r = ranges.selection;
-                handleChange("dateRange", {
-                  startDate: r.startDate!,
-                  endDate: r.endDate!,
-                  key: "selection",
-                });
-              }}
-            />
+                }}
+                onChange={(range) => handleChange("dateRange", range)}
+              />
             {errors.dateRange && <p className="text-red-500 text-sm">{errors.dateRange}</p>}
           </div>
 
-          {/* Hobby */}
+
+          {/* IMAGE FILE UPLOAD (MANDATORY) */}
           <div>
-            <label>Hobby:</label>
+            <label>Image:</label>
+            <input
+              type="file"
+              accept="image/png, image/jpeg"
+              onChange={async (e) => {
+                if (!e.target.files?.[0]) return;
+
+                const base64 = await fileToBase64(e.target.files[0]);
+                handleChange("image", base64);
+              }}
+              className={`border p-2 rounded w-full ${errors.image ? "border-red-500" : ""}`}
+            />
+
+            {/* Show existing preview */}
+            {editValues.image && (
+              <div className="mt-2 w-20 h-20 relative border rounded overflow-hidden">
+                <Image
+                  src={editValues.image}
+                  alt="preview"
+                  fill
+                  sizes="80px"
+                  className="object-cover"
+                />
+              </div>
+            )}
+
+            {errors.image && <p className="text-red-500 text-sm">{errors.image}</p>}
+          </div>
+
+          {/* HOBBY SELECTOR */}
+          <div>
             <HobbySelector
               value={editValues.hobby || []}
               onChange={(val) => handleChange("hobby", val)}
             />
             {errors.hobby && <p className="text-red-500 text-sm">{errors.hobby}</p>}
           </div>
-
-          {/* Image Upload */}
-          <div>
-            <label>Image (optional):</label>
-            <input type="file" accept="image/*" onChange={handleImageUpload} />
-
-            {previewImage && (
-              <div className="mt-2 w-24 h-24 relative border rounded overflow-hidden">
-                <Image
-                  src={previewImage}
-                  alt="preview"
-                  fill
-                  sizes="96px"
-                  className="object-cover"
-                />
-              </div>
-            )}
-          </div>
-
         </div>
 
         <div className="mt-5 flex justify-end gap-2">
           <button className="bg-gray-300 px-4 py-2 rounded" onClick={onClose}>
             Cancel
           </button>
+
           <button className="bg-blue-500 text-white px-4 py-2 rounded" onClick={handleSave}>
             Save
           </button>

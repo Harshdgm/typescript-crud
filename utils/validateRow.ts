@@ -1,5 +1,5 @@
 
-import { UserData, UserError,DateRangeData, ImageType } from "@/types/user";
+import { UserData, UserError } from "@/types/user";
 import { MAX_ID_DIGITS, MAX_PHONE_DIGITS, IMAGE_URL_REGEX } from "@/utils/constant";
 
 export function validateRow(row: UserData,existingRows: UserData[]=[]): UserError {
@@ -37,15 +37,13 @@ export function validateRow(row: UserData,existingRows: UserData[]=[]): UserErro
     errors.phone = `Phone must be ${MAX_PHONE_DIGITS} digits`;
   }
 
-  // if (!row.address) {
-  //   errors.address = "Address is required";
-  // }
-
   if (!row.city) errors.city = "City is required";
-  if (!row.state) errors.state = "State is required";
-  if (!row.country) errors.country = "Country is required";
+  // if (!row.state) errors.state = "State is required";
+  // if (!row.country) errors.country = "Country is required";
 
-  if (row.image) {
+  if (!row.image) {
+    errors.image = "Image is required";
+  } else {
     const isBase64 = row.image.startsWith("data:image/");
     const isUrl = IMAGE_URL_REGEX.test(row.image);
 
