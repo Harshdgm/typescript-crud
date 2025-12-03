@@ -11,16 +11,17 @@ type Props = {
 };
 
 export default function NestedEditModal({ employee, onClose, onSave }: Props) {
-  const [values, setValues] = useState<EmployeeData>({ ...employee });
+  const [values, setValues] = useState<EmployeeData>({ ...employee  , hobby: employee.hobby || [],});
   const [errors, setErrors] = useState<EmployeeError>({
     id: "", name: "", email: "", role: "", status: "", action: "",
     salary: "", city: "", phone: "", hobby: "", dob: "", age: 0
   });
 
   const handleChange = <K extends keyof EmployeeData>(key: K, value: EmployeeData[K]) => {
-    setValues(prev => ({ ...prev, [key]: value }));
-    setErrors(prev => ({ ...prev, [key]: "" }));
-  };
+  setValues(prev => ({ ...prev, [key]: value }));
+  setErrors(prev => ({ ...prev, [key]: "" } as EmployeeError));  
+};
+
 
   const handleSave = () => {
     const validationErrors: EmployeeError = { ...errors };
@@ -84,8 +85,8 @@ export default function NestedEditModal({ employee, onClose, onSave }: Props) {
           <div>
             <label>Hobby:</label>
             <HobbySelector
-              value={values.hobby || ""}
-              onChange={(val) => handleChange("hobby", val)}
+              value={values.hobby || []}
+              onChange={(val: string[]) => handleChange("hobby", val)}
             />
             {errors.hobby && <p className="text-red-500 text-sm">{errors.hobby}</p>}
           </div>

@@ -67,7 +67,7 @@ export type EmployeeData = {
   salary?: number | string;
   city?: string;
   phone?: string;
-  hobby?: string;
+  hobby?: string[];
   dob?: string;
 };
 
