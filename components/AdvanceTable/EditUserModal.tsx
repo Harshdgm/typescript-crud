@@ -5,10 +5,9 @@ import { UserData, UserError } from "@/types/user";
 import { validateRow } from "@/utils/validateRow";
 import Image from "next/image";
 import HobbySelector from "./HobbySelector";
-import { DateRangePicker } from "react-date-range";
+import DateRangeInput from "./DateRangeInput";
 import { cityData } from "@/utils/locationData";
 import { fileToBase64 } from "@/utils/fileToBase64";
-import DateRangeInput from "./DateRangeInput";
 
 type Props = {
   user: UserData;
@@ -17,17 +16,16 @@ type Props = {
 };
 
 export default function EditUserModal({ user, onClose, onSave }: Props) {
-  // const [editValues, setEditValues] = useState<UserData>({ ...user });
-   const [editValues, setEditValues] = useState<UserData>({
-      ...user,
-      dateRange: user.dateRange
-        ? {
-            startDate: new Date(user.dateRange.startDate),
-            endDate: new Date(user.dateRange.endDate),
-            key: "selection",
-          }
-        : undefined,
-    });
+  const [editValues, setEditValues] = useState<UserData>({
+    ...user,
+    dateRange: user.dateRange
+      ? {
+          startDate: new Date(user.dateRange.startDate),
+          endDate: new Date(user.dateRange.endDate),
+          key: "selection",
+        }
+      : undefined,
+  });
 
   const [errors, setErrors] = useState<UserError>({
     id: "",
@@ -49,60 +47,62 @@ export default function EditUserModal({ user, onClose, onSave }: Props) {
   const handleSave = () => {
     const validationErrors = validateRow(editValues);
     const hasError = Object.values(validationErrors).some((v) => v !== "");
-
     if (hasError) {
       setErrors(validationErrors);
       return;
     }
-
     onSave({ ...editValues });
     onClose();
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div className="absolute inset-0 bg-black opacity-30" onClick={onClose}></div>
 
-      <div className="bg-white z-10 p-6 rounded-lg w-[430px] relative overflow-y-auto max-h-[95vh]">
-        <h2 className="text-xl font-bold mb-4">Edit User</h2>
+      <div className="bg-white z-10 rounded-lg shadow-lg w-full max-w-4xl overflow-y-auto max-h-[95vh] p-6">
+        <h2 className="text-2xl font-bold mb-6 text-center">Edit User</h2>
 
-        <div className="flex flex-col gap-4">
+        {/* Two-column layout on md+, single column on small screens */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Email */}
           <div>
-            <label>Email:</label>
+            <label className="block font-medium mb-1">Email</label>
             <input
               type="text"
               value={editValues.email}
               onChange={(e) => handleChange("email", e.target.value)}
-              className={`border p-2 rounded w-full ${errors.email ? "border-red-500" : ""}`}
+              className={`w-full border p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 ${
+                errors.email ? "border-red-500" : "border-gray-300"
+              }`}
             />
-            {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
+            {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
           </div>
 
+          {/* Phone */}
           <div>
-            <label>Phone:</label>
+            <label className="block font-medium mb-1">Phone</label>
             <input
               type="text"
               value={editValues.phone}
               onChange={(e) => handleChange("phone", Number(e.target.value))}
-              className={`border p-2 rounded w-full ${errors.phone ? "border-red-500" : ""}`}
+              className={`w-full border p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 ${
+                errors.phone ? "border-red-500" : "border-gray-300"
+              }`}
             />
-            {errors.phone && <p className="text-red-500 text-sm">{errors.phone}</p>}
+            {errors.phone && <p className="text-red-500 text-sm mt-1">{errors.phone}</p>}
           </div>
 
-          {/* CITY (no numbers, auto-fill state/country) */}
+          {/* City */}
           <div>
-            <label>City:</label>
+            <label className="block font-medium mb-1">City</label>
             <input
               type="text"
               value={editValues.city}
               onChange={(e) => {
                 const input = e.target.value;
-
-                // ❌ Prevent numbers
                 if (/\d/.test(input)) return;
 
                 const cityKey = input.trim().toLowerCase().replace(/\s+/g, "");
-
                 if (cityData[cityKey]) {
                   handleChange("city", input);
                   handleChange("state", cityData[cityKey].state);
@@ -113,65 +113,66 @@ export default function EditUserModal({ user, onClose, onSave }: Props) {
                   handleChange("country", "");
                 }
               }}
-              className={`border p-2 rounded w-full ${errors.city ? "border-red-500" : ""}`}
+              className={`w-full border p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 ${
+                errors.city ? "border-red-500" : "border-gray-300"
+              }`}
             />
-            {errors.city && <p className="text-red-500 text-sm">{errors.city}</p>}
+            {errors.city && <p className="text-red-500 text-sm mt-1">{errors.city}</p>}
           </div>
 
-          {/* STATE */}
+          {/* State */}
           <div>
-            <label>State:</label>
+            <label className="block font-medium mb-1">State</label>
             <input
               type="text"
               value={editValues.state}
               readOnly
-              className="border p-2 rounded w-full bg-gray-100"
+              className="w-full border p-2 rounded-md bg-gray-100"
             />
           </div>
 
-          {/* COUNTRY */}
+          {/* Country */}
           <div>
-            <label>Country:</label>
+            <label className="block font-medium mb-1">Country</label>
             <input
               type="text"
               value={editValues.country}
               readOnly
-              className="border p-2 rounded w-full bg-gray-100"
+              className="w-full border p-2 rounded-md bg-gray-100"
             />
           </div>
 
-         <div>
-            <label>Date Range:</label>
+          {/* Date Range */}
+          <div className="md:col-span-2">
+            <label className="block font-medium mb-1">Date Range</label>
             <DateRangeInput
-                value={{
-                  startDate: new Date(editValues.dateRange?.startDate),
-                  endDate: new Date(editValues.dateRange?.endDate),
-                  key: "selection",
-                }}
-                onChange={(range) => handleChange("dateRange", range)}
-              />
-            {errors.dateRange && <p className="text-red-500 text-sm">{errors.dateRange}</p>}
+              value={{
+                startDate: new Date(editValues.dateRange?.startDate),
+                endDate: new Date(editValues.dateRange?.endDate),
+                key: "selection",
+              }}
+              onChange={(range) => handleChange("dateRange", range)}
+            />
+            {errors.dateRange && <p className="text-red-500 text-sm mt-1">{errors.dateRange}</p>}
           </div>
 
-
-          {/* IMAGE FILE UPLOAD (MANDATORY) */}
-          <div>
-            <label>Image:</label>
+          {/* Image Upload */}
+          <div className="md:col-span-2">
+            <label className="block font-medium mb-1">Image</label>
             <input
               type="file"
               accept="image/png, image/jpeg"
               onChange={async (e) => {
                 if (!e.target.files?.[0]) return;
-
                 const base64 = await fileToBase64(e.target.files[0]);
                 handleChange("image", base64);
               }}
-              className={`border p-2 rounded w-full ${errors.image ? "border-red-500" : ""}`}
+              className={`w-full border p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 ${
+                errors.image ? "border-red-500" : "border-gray-300"
+              }`}
             />
-
-            {/* Show existing preview */}
             {editValues.image && (
-              <div className="mt-2 w-20 h-20 relative border rounded overflow-hidden">
+              <div className="mt-2 w-28 h-28 relative border rounded-lg overflow-hidden">
                 <Image
                   src={editValues.image}
                   alt="preview"
@@ -181,26 +182,32 @@ export default function EditUserModal({ user, onClose, onSave }: Props) {
                 />
               </div>
             )}
-
-            {errors.image && <p className="text-red-500 text-sm">{errors.image}</p>}
+            {errors.image && <p className="text-red-500 text-sm mt-1">{errors.image}</p>}
           </div>
 
-          {/* HOBBY SELECTOR */}
-          <div>
+          {/* Hobby Selector */}
+          <div className="md:col-span-2">
+            <label className="block font-medium mb-1">Hobbies</label>
             <HobbySelector
               value={editValues.hobby || []}
               onChange={(val) => handleChange("hobby", val)}
             />
-            {errors.hobby && <p className="text-red-500 text-sm">{errors.hobby}</p>}
+            {errors.hobby && <p className="text-red-500 text-sm mt-1">{errors.hobby}</p>}
           </div>
         </div>
 
-        <div className="mt-5 flex justify-end gap-2">
-          <button className="bg-gray-300 px-4 py-2 rounded" onClick={onClose}>
+        {/* Buttons */}
+        <div className="mt-6 flex justify-end gap-3">
+          <button
+            className="bg-gray-300 px-5 py-2 rounded-md hover:bg-gray-400"
+            onClick={onClose}
+          >
             Cancel
           </button>
-
-          <button className="bg-blue-500 text-white px-4 py-2 rounded" onClick={handleSave}>
+          <button
+            className="bg-blue-500 text-white px-5 py-2 rounded-md hover:bg-blue-600"
+            onClick={handleSave}
+          >
             Save
           </button>
         </div>
