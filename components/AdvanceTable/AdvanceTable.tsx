@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { UserData,DateRangeData } from "@/types/user";
+import { UserData } from "@/types/user";
 // import { deleteUserById } from "@/utils/usersStore";
 import ReusableTable, { Column } from "@/common/ReusableTable";
 import EditUserModal from "@/components/AdvanceTable/EditUserModal";

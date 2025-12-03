@@ -8,6 +8,8 @@ const HOBBY_OPTIONS = [
   "Brain Games",
   "Playing with Pet",
   "Sleeping",
+  "Swimming",
+  "Drawing"
 ] as const;
 
 type HobbyOption = typeof HOBBY_OPTIONS[number];

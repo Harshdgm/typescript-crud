@@ -1,7 +1,7 @@
 "use client";
 
 import { FiMinusCircle } from "react-icons/fi";
-import { UserData, UserError } from "@/types/user";
+import { UserData, UserError, DateRangeData, ImageType } from "@/types/user";
 import { MAX_PHONE_DIGITS } from "@/utils/constant";
 import { cityData } from "@/utils/locationData";
 import DateRangeInput from "./DateRangeInput";
@@ -10,16 +10,16 @@ import HobbySelector from "./HobbySelector";
 import { useState } from "react";
 
 type Props = {
-  index: number;
   user: UserData;
   errors: UserError;
+  index: number;
   onChange: (
     index: number,
     field: keyof UserData,
-    value: string | number | UserData["dateRange"]
-  ) => void;
+    value: string | number | DateRangeData | ImageType | string[]
+  ) => void; 
   onRemove: (index: number) => void;
-};
+}
 
 export default function UserRow({ index, user, errors, onChange, onRemove }: Props) {
   const [editValues, setEditValues] = useState<UserData>({ ...user });

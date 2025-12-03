@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { UserData, UserError } from "@/types/user";
+import { UserData, UserError, DateRangeData, ImageType } from "@/types/user";
 import { validateRow } from "@/utils/validateRow";
 import Image from "next/image";
 import HobbySelector from "./HobbySelector";
@@ -39,9 +39,20 @@ export default function EditUserModal({ user, onClose, onSave }: Props) {
     dateRange: "",
   });
 
+  // Generic handleChange
   const handleChange = <K extends keyof UserData>(key: K, value: UserData[K]) => {
     setEditValues((prev) => ({ ...prev, [key]: value }));
     setErrors((prev) => ({ ...prev, [key]: "" }));
+  };
+
+  // Helper specifically for DateRangeInput
+  const handleDateRangeChange = (range: DateRangeData) => {
+    handleChange("dateRange", range);
+  };
+
+  // Helper specifically for HobbySelector
+  const handleHobbyChange = (hobby: string[]) => {
+    handleChange("hobby", hobby);
   };
 
   const handleSave = () => {
@@ -62,7 +73,7 @@ export default function EditUserModal({ user, onClose, onSave }: Props) {
       <div className="bg-white z-10 rounded-lg shadow-lg w-full max-w-4xl overflow-y-auto max-h-[95vh] p-6">
         <h2 className="text-2xl font-bold mb-6 text-center">Edit User</h2>
 
-        {/* Two-column layout on md+, single column on small screens */}
+        {/* Responsive two-column layout */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Email */}
           <div>
@@ -147,16 +158,16 @@ export default function EditUserModal({ user, onClose, onSave }: Props) {
             <label className="block font-medium mb-1">Date Range</label>
             <DateRangeInput
               value={{
-                startDate: new Date(editValues.dateRange?.startDate),
-                endDate: new Date(editValues.dateRange?.endDate),
+                startDate: editValues.dateRange?.startDate || new Date(),
+                endDate: editValues.dateRange?.endDate || new Date(),
                 key: "selection",
               }}
-              onChange={(range) => handleChange("dateRange", range)}
+              onChange={handleDateRangeChange}
             />
             {errors.dateRange && <p className="text-red-500 text-sm mt-1">{errors.dateRange}</p>}
           </div>
 
-          {/* Image Upload */}
+          {/* Image */}
           <div className="md:col-span-2">
             <label className="block font-medium mb-1">Image</label>
             <input
@@ -165,7 +176,7 @@ export default function EditUserModal({ user, onClose, onSave }: Props) {
               onChange={async (e) => {
                 if (!e.target.files?.[0]) return;
                 const base64 = await fileToBase64(e.target.files[0]);
-                handleChange("image", base64);
+                handleChange("image", base64 as ImageType);
               }}
               className={`w-full border p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 ${
                 errors.image ? "border-red-500" : "border-gray-300"
@@ -185,12 +196,12 @@ export default function EditUserModal({ user, onClose, onSave }: Props) {
             {errors.image && <p className="text-red-500 text-sm mt-1">{errors.image}</p>}
           </div>
 
-          {/* Hobby Selector */}
+          {/* Hobbies */}
           <div className="md:col-span-2">
             <label className="block font-medium mb-1">Hobbies</label>
             <HobbySelector
               value={editValues.hobby || []}
-              onChange={(val) => handleChange("hobby", val)}
+              onChange={handleHobbyChange}
             />
             {errors.hobby && <p className="text-red-500 text-sm mt-1">{errors.hobby}</p>}
           </div>

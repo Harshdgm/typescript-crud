@@ -44,26 +44,68 @@ export default function AddUserModal({ existingRows, onAddUsers }: Props) {
   const [rows, setRows] = useState<UserData[]>([]);
   const [errors, setErrors] = useState<UserError[]>([]);
 
-  const handleChange = (
+ const handleChange = (
   index: number,
   field: keyof UserData,
   value: string | number | DateRangeData | ImageType | string[]
-) => {
-  const updatedRows = [...rows];
+    ) => {
+      const updatedRows = [...rows];
 
-  if (field === "id" || field === "phone") {
-    updatedRows[index][field] = Number(value) as UserData[typeof field];
-  } else {
-    updatedRows[index][field] = value as UserData[typeof field];
-  }
+      switch (field) {
+        case "id":
+        case "phone":
+          updatedRows[index][field] = Number(value) as number;
+          break;
+        case "hobby":
+          updatedRows[index][field] = value as string[];
+          break;
+        case "dateRange":
+          updatedRows[index][field] = value as DateRangeData;
+          break;
+        case "image":
+          updatedRows[index][field] = value as ImageType;
+          break;
+        default:
+          updatedRows[index][field] = value as string;
+          break;
+      }
 
-  setRows(updatedRows);
-};
+      setRows(updatedRows);
+    };
 
   const addRow = () => {
-    const nextId = getNextId(rows);
-    setRows([...rows,{ id: nextId, email: "", phone: 0, address:"", city:"", state:"", country:"", image: "", hobby: "" },]);
-    setErrors([...errors,{ id: "", email: "", phone: "", city:"", state:"", country:"", image: "", hobby: "" },]);};
+  const nextId = getNextId(rows);
+  setRows([
+    ...rows,
+    {
+      id: nextId,
+      email: "",
+      phone: 0,
+      address: "",
+      city: "",
+      state: "",
+      country: "",
+      image: "",
+      hobby: [], 
+      dateRange: { startDate: new Date(), endDate: new Date(), key: "selection" },
+    },
+    ]);
+
+    setErrors([
+      ...errors,
+      {
+        id: "",
+        email: "",
+        phone: "",
+        city: "",
+        state: "",
+        country: "",
+        image: "",
+        hobby: "", 
+        dateRange: "",
+      },
+    ]);
+  };
 
   const removeRow = (index: number) => {
     setRows(rows.filter((_, i) => i !== index));
