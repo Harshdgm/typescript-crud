@@ -145,7 +145,7 @@ export default function UserRow({ index, user, errors, onChange, onRemove }: Pro
           {errors.hobby && <p className="text-red-500 text-sm">{errors.hobby}</p>}
       </div>
 
-      <button className="text-red-500 text-xl" onClick={() => onRemove(index)}>
+      <button className="text-red-500 text-xl mt-2" onClick={() => onRemove(index)}>
         <FiMinusCircle />
       </button>
     </div>

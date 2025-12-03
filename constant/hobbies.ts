@@ -65,7 +65,6 @@ export const HOBBY_OPTIONS = [
   "Web Development",
   "App Development",
   "Robotics",
-  "3D Printing",
   "Astronomy",
   "Astrology",
   "Volunteering",
