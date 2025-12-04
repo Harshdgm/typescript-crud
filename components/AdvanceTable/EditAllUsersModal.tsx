@@ -158,14 +158,15 @@ export default function EditAllUsersPanel({ users, onClose, onSave }: Props) {
         ))}
       </div>
 
-      <div className="mt-6 flex justify-end gap-3">
-        <button
-          className="bg-green-600 text-white px-5 py-2 rounded-md"
-          onClick={addNewUser}
-        >
-          Add New User
-        </button>
+     <div className="mt-6 flex justify-between items-center">
+      <button
+        className="bg-green-600 text-white px-5 py-2 rounded-md"
+        onClick={addNewUser}
+      >
+        Add New User
+      </button>
 
+      <div className="flex gap-3">
         <button className="bg-gray-300 px-5 py-2 rounded-md" onClick={onClose}>
           Cancel
         </button>
@@ -177,6 +178,8 @@ export default function EditAllUsersPanel({ users, onClose, onSave }: Props) {
           Save All
         </button>
       </div>
+    </div>
+
     </div>
   );
 }

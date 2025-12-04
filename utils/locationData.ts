@@ -22,4 +22,10 @@ export const cityData: Record<string, CityInfo> = {
     delhi: { state: "Delhi", country: "India" },
     london: { state: "England", country: "UK" },
     newyork: { state: "New York", country: "USA" },
+    jaipur:{ state: "Rajasthan", country: "India" },
+    lucknow:{ state: "Uttar Pradesh", country: "India" },
+    udaipur:{ state: "Rajasthan", country: "India" },
+    navimumnbai:{ state: "Maharashtra", country: "India" },
+    vashi:{ state: "Maharashtra", country: "India" },
+    bornston:{ state: "England", country: "UK" },
 };

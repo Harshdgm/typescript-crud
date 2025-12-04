@@ -7,7 +7,7 @@ import { cityData } from "@/utils/locationData";
 import DateRangeInput from "./DateRangeInput";
 import { fileToBase64 } from "@/utils/fileToBase64";
 import HobbySelector from "./HobbySelector";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 type Props = {
   user: UserData;
@@ -23,6 +23,10 @@ type Props = {
 
 export default function UserRow({ index, user, errors, onChange, onRemove }: Props) {
   const [editValues, setEditValues] = useState<UserData>({ ...user });
+
+  useEffect(() => {
+    setEditValues({ ...user });
+  }, [user]);
 
   return (
     <div className="grid grid-cols-8 gap-2 items-start text-sm mb-2">

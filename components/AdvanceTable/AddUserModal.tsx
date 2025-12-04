@@ -39,6 +39,7 @@ export default function AddUserModal({ existingRows, onAddUsers }: Props) {
       },
     ]);
     setErrors([{ id: "", email: "", phone: "", city:"", state:"", country:"", image: "", hobby: "" },]);
+    setSubmitted(false);
     setShowModal(true);
   };
 
