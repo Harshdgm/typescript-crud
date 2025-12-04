@@ -24,7 +24,7 @@ export type UserData = {
   country: string;
   image: ImageType;
   hobby: string[];
-  dateRange?: DateRangeData;
+  dateRange?: DateRangeData | null;
 };
 
 export type UserError = {

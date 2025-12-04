@@ -2,12 +2,18 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { UserData, UserError, ImageType } from "@/types/user";
+import {
+  UserData,
+  UserError,
+  ImageType,
+  DateRangeData,
+} from "@/types/user";
 import { validateRow } from "@/utils/validateRow";
 import HobbySelector from "./HobbySelector";
 import DateRangeInput from "./DateRangeInput";
 import { cityData } from "@/utils/locationData";
 import { fileToBase64 } from "@/utils/fileToBase64";
+import { RiDeleteBin6Line } from "react-icons/ri";
 
 type Props = {
   users: UserData[];
@@ -15,27 +21,51 @@ type Props = {
   onSave: (updated: UserData[]) => void;
 };
 
-export default function EditAllUsersPanel({ users, onClose, onSave }: Props) {
+export default function EditAllUsersPanel({
+  users,
+  onClose,
+  onSave,
+}: Props) {
   const [rows, setRows] = useState<UserData[]>(
     users.map((u) => ({
       ...u,
       dateRange: u.dateRange
-        ? {
+        ? ({
             startDate: new Date(u.dateRange.startDate),
             endDate: new Date(u.dateRange.endDate),
-            key: "selection",
-          }
-        : undefined,
+            key: u.dateRange.key ?? "selection",
+          } satisfies DateRangeData)
+        : null,
     }))
   );
 
   const [errors, setErrors] = useState<Record<number, UserError>>({});
 
-  const updateField = (index: number, key: keyof UserData, value: any) => {
-    const updated = [...rows];
-    updated[index][key] = value;
+  const deleteRow = (index: number) => {
+    const newRows = rows
+      .filter((_, i) => i !== index)
+      .map((u, idx) => ({ ...u, id: idx + 1 })); 
 
-    setRows(updated);
+    setRows(newRows);
+
+    const newErrors: Record<number, UserError> = {};
+    newRows.forEach((_, idx) => {
+      newErrors[idx] = errors[idx] ?? {};
+    });
+    setErrors(newErrors);
+  };
+
+  const updateField = <K extends keyof UserData>(
+    index: number,
+    key: K,
+    value: UserData[K]
+  ) => {
+    setRows((prev) => {
+      const updated = [...prev];
+      updated[index] = { ...updated[index], [key]: value };
+      return updated;
+    });
+
     setErrors((prev) => ({
       ...prev,
       [index]: { ...prev[index], [key]: "" },
@@ -62,25 +92,28 @@ export default function EditAllUsersPanel({ users, onClose, onSave }: Props) {
 
   return (
     <div className="bg-white p-6 rounded-lg shadow-md border mb-8">
-
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-bold">Edit All Users</h2>
 
-        <button
-          className="bg-gray-300 px-4 py-2 rounded-md"
-          onClick={onClose}
-        >
+        <button className="bg-gray-300 px-4 py-2 rounded-md" onClick={onClose}>
           Close
         </button>
       </div>
 
       <div className="space-y-10">
         {rows.map((row, i) => (
-          <div key={row.id} className="border p-4 rounded-xl">
+          <div key={row.id} className="border p-4 rounded-xl relative">
+            <button
+              onClick={() => deleteRow(i)}
+              className="absolute top-3 right-3 text-red-500 hover:text-red-700"
+              title="Delete User"
+            >
+              <RiDeleteBin6Line size={24} />
+            </button>
+
             <h3 className="font-bold text-lg mb-3">User #{row.id}</h3>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-
               <div>
                 <label>Email</label>
                 <input
@@ -97,7 +130,9 @@ export default function EditAllUsersPanel({ users, onClose, onSave }: Props) {
                 <label>Phone</label>
                 <input
                   value={row.phone}
-                  onChange={(e) => updateField(i, "phone", Number(e.target.value))}
+                  onChange={(e) =>
+                    updateField(i, "phone", Number(e.target.value))
+                  }
                   className="w-full border p-2 rounded-md"
                 />
                 {errors[i]?.phone && (
@@ -150,10 +185,12 @@ export default function EditAllUsersPanel({ users, onClose, onSave }: Props) {
               </div>
 
               <div className="md:col-span-2">
-                <DateRangeInput
-                  value={row.dateRange!}
-                  onChange={(r) => updateField(i, "dateRange", r)}
-                />
+                {row.dateRange && (
+                  <DateRangeInput
+                    value={row.dateRange}
+                    onChange={(r) => updateField(i, "dateRange", r)}
+                  />
+                )}
               </div>
 
               <div className="md:col-span-2">
@@ -182,11 +219,10 @@ export default function EditAllUsersPanel({ users, onClose, onSave }: Props) {
 
               <div className="md:col-span-2">
                 <HobbySelector
-                  value={row.hobby || []}
+                  value={row.hobby ?? []}
                   onChange={(v) => updateField(i, "hobby", v)}
                 />
               </div>
-
             </div>
           </div>
         ))}
@@ -196,11 +232,13 @@ export default function EditAllUsersPanel({ users, onClose, onSave }: Props) {
         <button className="bg-gray-300 px-5 py-2 rounded-md" onClick={onClose}>
           Cancel
         </button>
-        <button className="bg-blue-500 text-white px-5 py-2 rounded-md" onClick={handleSave}>
+        <button
+          className="bg-blue-500 text-white px-5 py-2 rounded-md"
+          onClick={handleSave}
+        >
           Save All
         </button>
       </div>
-
     </div>
   );
 }
