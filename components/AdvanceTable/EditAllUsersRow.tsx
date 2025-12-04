@@ -54,7 +54,12 @@ export default function EditAllUserRow({
           <label>Phone</label>
           <input
             value={row.phone}
-            onChange={(e) => updateField(index, "phone", Number(e.target.value))}
+            onChange={(e) => {
+              const val = e.target.value;
+              if (!/^\d*$/.test(val)) return;
+              if (val.length > 10) return;
+              updateField(index, "phone", Number(val));
+            }}
             className="w-full border p-2 rounded-md"
           />
           {errors.phone && <p className="text-red-500 text-sm">{errors.phone}</p>}
@@ -102,24 +107,22 @@ export default function EditAllUserRow({
             className="w-full border p-2 bg-gray-100 rounded-md"
           />
         </div>
-
-        {/* <div className="lg:col-span-2 md:col-span-2 sm:col-span-2 col-span-1">
-          <label>Address</label>
-          <input
-            value={row.address}
-            readOnly
-           // onChange={(e) => updateField(index, "address", e.target.value)}
-            className="w-full border p-2 rounded-md"
-          />
-        </div> */}
-
+                                                                                            
         <div className="col-span-full">
-          {row.dateRange && (
-            <DateRangeInput
-              value={row.dateRange}
-              onChange={(r) => updateField(index, "dateRange", r)}
-            />
-          )}
+          <DateRangeInput
+            value={
+              row.dateRange ?? {
+                startDate: new Date(),
+                endDate: new Date(),
+                key: "selection",
+              }
+            }
+            onChange={(r) => updateField(index, "dateRange", r)}
+          />
+
+          {/* {errors.dateRange && (
+            <p className="text-red-500 text-sm">{errors.dateRange}</p>
+          )} */}
         </div>
 
         <div className="col-span-full">
@@ -133,6 +136,9 @@ export default function EditAllUserRow({
             }}
             className="w-full border p-2 rounded-md"
           />
+          {errors.image && (
+            <p className="text-red-500 text-sm">{errors.image}</p>
+          )}
 
           {row.image && (
             <div className="mt-2 w-28 h-28 relative border rounded-lg overflow-hidden">
@@ -146,6 +152,7 @@ export default function EditAllUserRow({
             value={row.hobby ?? []}
             onChange={(v) => updateField(index, "hobby", v)}
           />
+          {errors.hobby && <p className="text-red-500 text-sm">{errors.hobby}</p>}
         </div>
       </div>
     </div>

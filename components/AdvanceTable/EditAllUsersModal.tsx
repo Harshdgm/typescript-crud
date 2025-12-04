@@ -27,16 +27,59 @@ export default function EditAllUsersPanel({ users, onClose, onSave }: Props) {
 
   const [errors, setErrors] = useState<Record<number, UserError>>({});
 
+  const addNewUser = () => {
+    const newUser: UserData = {
+      id: rows.length + 1,
+      email: "",
+      phone: 0,
+      city: "",
+      state: "",
+      country: "",
+      address: "",
+      image: "",
+      hobby: [],
+      dateRange: null,
+    };
+
+    setRows((prev) => [...prev, newUser]);
+
+    setErrors((prev) => ({
+      ...prev,
+      [rows.length]: {
+        id: "",
+        email: "",
+        phone: "",
+        city: "",
+        state: "",
+        country: "",
+        image: "",
+        hobby: "",
+        dateRange: "",
+      },
+    }));
+  };
+
   const deleteRow = (index: number) => {
-    const updated = rows
+    const updatedRows = rows
       .filter((_, i) => i !== index)
       .map((u, idx) => ({ ...u, id: idx + 1 }));
 
-    setRows(updated);
+    setRows(updatedRows);
 
     const newErrors: Record<number, UserError> = {};
-    updated.forEach((_, idx) => {
-      newErrors[idx] = errors[idx] ?? {};
+
+    updatedRows.forEach((_, idx) => {
+      newErrors[idx] = errors[idx] ?? {
+        id: "",
+        email: "",
+        phone: "",
+        city: "",
+        state: "",
+        country: "",
+        image: "",
+        hobby: "",
+        dateRange: "",
+      };
     });
 
     setErrors(newErrors);
@@ -55,7 +98,10 @@ export default function EditAllUsersPanel({ users, onClose, onSave }: Props) {
 
     setErrors((prev) => ({
       ...prev,
-      [index]: { ...prev[index], [key]: "" },
+      [index]: {
+        ...prev[index],
+        [key]: "",
+      },
     }));
   };
 
@@ -64,10 +110,12 @@ export default function EditAllUsersPanel({ users, onClose, onSave }: Props) {
     let hasError = false;
 
     rows.forEach((row, i) => {
-      const e = validateRow(row);
-      validation[i] = e;
+      const err = validateRow(row);
+      validation[i] = err;
 
-      if (Object.values(e).some((v) => v)) hasError = true;
+      if (Object.values(err).some((v) => v !== "")) {
+        hasError = true;
+      }
     });
 
     if (hasError) {
@@ -82,7 +130,6 @@ export default function EditAllUsersPanel({ users, onClose, onSave }: Props) {
     <div className="bg-white p-6 rounded-lg shadow-md border mb-8">
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-bold">Edit All Users</h2>
-
         <button className="bg-gray-300 px-4 py-2 rounded-md" onClick={onClose}>
           Close
         </button>
@@ -94,7 +141,17 @@ export default function EditAllUsersPanel({ users, onClose, onSave }: Props) {
             key={row.id}
             row={row}
             index={index}
-            errors={errors[index] || {}}
+            errors={errors[index] || {
+              id: "",
+              email: "",
+              phone: "",
+              city: "",
+              state: "",
+              country: "",
+              image: "",
+              hobby: "",
+              dateRange: "",
+            }}
             deleteRow={deleteRow}
             updateField={updateField}
           />
@@ -102,9 +159,17 @@ export default function EditAllUsersPanel({ users, onClose, onSave }: Props) {
       </div>
 
       <div className="mt-6 flex justify-end gap-3">
+        <button
+          className="bg-green-600 text-white px-5 py-2 rounded-md"
+          onClick={addNewUser}
+        >
+          Add New User
+        </button>
+
         <button className="bg-gray-300 px-5 py-2 rounded-md" onClick={onClose}>
           Cancel
         </button>
+
         <button
           className="bg-blue-500 text-white px-5 py-2 rounded-md"
           onClick={handleSave}
