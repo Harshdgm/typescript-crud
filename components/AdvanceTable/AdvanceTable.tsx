@@ -5,6 +5,7 @@ import { UserData } from "@/types/user";
 import ReusableTable, { Column } from "@/common/ReusableTable";
 import EditUserModal from "@/components/AdvanceTable/EditUserModal";
 import { toCamelCase } from "@/utils/toCamelCase";
+import EditAllUsersModal from "./EditAllUsersModal";
 
 const userColumns: Column<UserData>[] = [
   { key: "id", label: "ID" },
@@ -31,6 +32,7 @@ const userColumns: Column<UserData>[] = [
 export default function AdvanceTable({ data }: { data: UserData[] }) {
   const [users, setUsers] = useState<UserData[]>([]); 
   const [selectedUser, setSelectedUser] = useState<UserData | null>(null);
+  const [editAll, setEditAll] = useState(false);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -63,6 +65,15 @@ export default function AdvanceTable({ data }: { data: UserData[] }) {
 
   return (
      <div className="w-full overflow-x-auto">
+      <div className="w-full flex justify-end mb-4">
+        <button
+          className="bg-green-600 text-white px-4 py-2 rounded-md"
+          onClick={() => setEditAll(true)}
+        >
+          Edit All Users
+        </button>
+      </div>
+
       <div className="min-w-[1080px]">
       <ReusableTable<UserData>
         data={users}
@@ -71,6 +82,17 @@ export default function AdvanceTable({ data }: { data: UserData[] }) {
         onDelete={handleDelete}
       />
       </div>
+
+      {editAll && (
+        <EditAllUsersModal
+          users={users}
+          onClose={() => setEditAll(false)}
+          onSave={(updatedList) => {
+            setUsers(updatedList);
+            setEditAll(false);
+          }}
+        />
+      )}
 
       {selectedUser && (
         <EditUserModal
