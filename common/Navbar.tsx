@@ -8,6 +8,7 @@ const Navbar = () => {
       <Link href="/" className="hover:underline hover:decoration-black decoration-2 underline-offset-2 transition-all">Home</Link>
       <Link href="/advance-crud" className="hover:underline hover:decoration-black decoration-2 underline-offset-2 transition-all">Advanced Users</Link>
       <Link href="/employee-crud" className="hover:underline hover:decoration-black decoration-2 underline-offset-2 transition-all">Employee Users</Link>
+      <Link href="/time-zone" className="hover:underline hover:decoration-black decoration-2 underline-offset-2 transition-all">TimeZone</Link>
     </nav>
   );
 };
