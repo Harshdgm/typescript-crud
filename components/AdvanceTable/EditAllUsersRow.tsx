@@ -119,10 +119,9 @@ export default function EditAllUserRow({
             }
             onChange={(r) => updateField(index, "dateRange", r)}
           />
-
-          {errors.dateRange && (
+          {/* {errors.dateRange && (
             <p className="text-red-500 text-sm">{errors.dateRange}</p>
-          )}
+          )} */}
         </div>
 
         <div className="col-span-full">

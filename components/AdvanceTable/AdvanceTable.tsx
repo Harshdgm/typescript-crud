@@ -23,11 +23,28 @@ const userColumns: Column<UserData>[] = [
     key: "dateRange",
     label: "Date Range",
     render: (item) =>
-      item.dateRange
-        ? `${new Date(item.dateRange.startDate).toLocaleString()} - ${new Date(
-            item.dateRange.endDate
-          ).toLocaleString()}`
-        : "",
+  item.dateRange
+    ? `${new Date(item.dateRange.startDate).toLocaleString("en-US", {
+        timeZone: "UTC",
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: true,
+      })} - ${new Date(item.dateRange.endDate).toLocaleString("en-US", {
+        timeZone: "UTC",
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: true,
+      })}`
+    : "",
+
   },
   { key: "image", label: "Image", isImage: true },
   {
