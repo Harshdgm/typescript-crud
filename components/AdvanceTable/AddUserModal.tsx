@@ -5,6 +5,7 @@ import { useState } from "react";
 import UserRow from "./UserRow";
 import { CiCirclePlus } from "react-icons/ci";
 import { validateRow } from "@/utils/validateRow";
+import getInitialDateRange from "@/utils/getInitialDateRange";
 
 type Props = {
   existingRows: UserData[];
@@ -14,7 +15,6 @@ type Props = {
 export default function AddUserModal({ existingRows, onAddUsers }: Props) {
   const [showModal, setShowModal] = useState(false);
  
-
   const getNextId = (extraRows: UserData[] = []) => {
     const ids1 = existingRows.length ? existingRows.map((u) => u.id) : [0];
     const ids2 = extraRows.length ? extraRows.map((u) => u.id) : [0];
@@ -33,7 +33,7 @@ export default function AddUserModal({ existingRows, onAddUsers }: Props) {
         city: "",
         state: "",
         country: "",
-        dateRange: { startDate: new Date(), endDate: new Date(), key: "selection" },
+        dateRange: getInitialDateRange(),
         image: "",
         hobby: [],
       },

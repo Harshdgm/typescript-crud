@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { UserData, UserError, DateRangeData } from "@/types/user";
 import { validateRow } from "@/utils/validateRow";
+import getInitialDateRange from "@/utils/getInitialDateRange";
 import EditAllUserRow from "./EditAllUsersRow";
 
 type Props = {
@@ -26,7 +27,7 @@ export default function EditAllUsersPanel({ users, onClose, onSave }: Props) {
   );
 
   const [errors, setErrors] = useState<Record<number, UserError>>({});
-
+ 
   const addNewUser = () => {
     const newUser: UserData = {
       id: rows.length + 1,
@@ -38,7 +39,7 @@ export default function EditAllUsersPanel({ users, onClose, onSave }: Props) {
       address: "",
       image: "",
       hobby: [],
-      dateRange: null,
+      dateRange: getInitialDateRange(),
     };
 
     setRows((prev) => [...prev, newUser]);
