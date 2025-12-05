@@ -1,8 +1,10 @@
 "use client";
 
-import { MapContainer, TileLayer, Marker, Polyline, Popup } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Polyline, Popup, LayersControl } from "react-leaflet";
 import L, { LatLngExpression } from "leaflet";
 import "leaflet/dist/leaflet.css";
+
+const { BaseLayer } = LayersControl;
 
 const defaultIcon = L.icon({
   iconUrl:
@@ -39,24 +41,40 @@ export default function CustomMap({
         zoom={zoom}
         style={{ height: "100%", width: "100%", borderRadius: "12px" }}
       >
-        <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-        <TileLayer url="https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}.png"/> {/* Dark theme */}
-        <TileLayer url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"/> {/* Light theme */}   
-        <TileLayer url="https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png"/> {/* Topographic theme */}
-        <TileLayer url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"/> {/* Satellite theme */}
-        <TileLayer url="https://{s}.tile.thunderforest.com/transport/{z}/{x}/{y}.png?apikey=YOUR_API_KEY"/> {/* Transport theme */}
-        <TileLayer url="https://{s}.tile.thunderforest.com/cycle/{z}/{x}/{y}.png?apikey=YOUR_API_KEY"/> {/* Cycle theme */} 
-        <TileLayer url="https://{s}.tile.thunderforest.com/landscape/{z}/{x}/{y}.png?apikey=YOUR_API_KEY"/> {/* Landscape theme */}   
-        <TileLayer url="https://{s}.tile.thunderforest.com/outdoors/{z}/{x}/{y}.png?apikey=YOUR_API_KEY"/> {/* Outdoors theme */} 
-        <TileLayer url="https://{s}.tile.thunderforest.com/pioneer/{z}/{x}/{y}.png?apikey=YOUR_API_KEY"/> {/* Pioneer theme */}
+        <LayersControl position="topright">
+          <BaseLayer checked name="Default">
+            <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+          </BaseLayer>
 
+          <BaseLayer name="Dark">
+            <TileLayer url="https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}.png" />
+          </BaseLayer>
 
-        <TileLayer url={`https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}`} attribution="Google Maps"/>
+          <BaseLayer name="Light">
+            <TileLayer url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png" />
+          </BaseLayer>
 
-        {/* lyrs=m → normal
-        lyrs=s → satellite
-        lyrs=p → terrain
-        lyrs=y → hybrid */}
+          <BaseLayer name="Topographic">
+            <TileLayer url="https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png" />
+          </BaseLayer>
+
+          <BaseLayer name="Google Normal">
+            <TileLayer url="https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}" />
+          </BaseLayer>
+
+          <BaseLayer name="Google Satellite">
+            <TileLayer url="https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}" />
+          </BaseLayer>
+
+          <BaseLayer name="Google Hybrid">
+            <TileLayer url="https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}" />
+          </BaseLayer>
+
+          <BaseLayer name="Google Terrain">
+            <TileLayer url="https://mt1.google.com/vt/lyrs=p&x={x}&y={y}&z={z}" />
+          </BaseLayer>
+
+        </LayersControl>
 
         <Marker position={markerLocation}>
           <Popup>Marker Location</Popup>
