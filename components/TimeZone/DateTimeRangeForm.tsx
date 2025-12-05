@@ -62,7 +62,7 @@ export default function DateTimeRangeForm({
             type="date"
             className="w-full p-2 border rounded-md text-gray-800"
             value={endDate}
-            min={startDate || undefined}   // ⬅ THIS prevents selecting before start date
+            min={startDate || undefined} 
             onChange={(e) => onEndDate(e.target.value as DateString)}
           />
 
