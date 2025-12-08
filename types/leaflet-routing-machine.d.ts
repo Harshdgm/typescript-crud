@@ -1,4 +1,3 @@
-// types/leaflet-routing-machine.d.ts
 import * as L from "leaflet";
 
 declare module "leaflet" {
