@@ -6,7 +6,8 @@ import "leaflet/dist/leaflet.css";
 import "leaflet-routing-machine";
 import { useEffect, useRef } from "react";
 import { DEFAULT_LEAFLET_ICON, TILE_LAYER_URLS } from "../../constant/mapApi";
-import "leaflet-routing-machine";
+import LRM from "leaflet-routing-machine";
+
 
 L.Marker.prototype.options.icon = DEFAULT_LEAFLET_ICON;
 
@@ -44,12 +45,16 @@ function Routing({ pathPoints }: { pathPoints: [number, number][] }) {
 
     routingRef.current = L.Routing.control({
       waypoints: pathPoints.map((p) => L.latLng(p[0], p[1])),
-      lineOptions: { styles: [{ color: "red", weight: 5 }] },
+      lineOptions: {
+        styles: [{ color: "red", weight: 5 }],
+        extendToWaypoints: false,
+        missingRouteTolerance: 0
+      },
       addWaypoints: false,
       draggableWaypoints: false,
       fitSelectedRoutes: true,
       showAlternatives: false,
-    }).addTo(map);
+    } as any).addTo(map);
 
     return () => {
       if (routingRef.current) map.removeControl(routingRef.current);
@@ -94,7 +99,7 @@ export default function CustomMap({ pathPoints = [] }: CustomMapProps) {
       {pathPoints.length > 1 && <Routing pathPoints={pathPoints} />}
     </MapContainer>
   );
-  
+
 }
 
 
