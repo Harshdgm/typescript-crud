@@ -1,7 +1,10 @@
+import MapData from '@/components/Map/MapData'
 import React from 'react'
 
-export default function page() {
+export default function mapData() {
   return (
-    <div>page</div>
+    <div>
+        <MapData />
+    </div>
   )
 }

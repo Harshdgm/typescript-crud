@@ -10,6 +10,7 @@ const Navbar = () => {
       <Link href="/employee-crud" className="hover:underline hover:decoration-black decoration-2 underline-offset-2 transition-all">Employee Users</Link>
       <Link href="/time-zone" className="hover:underline hover:decoration-black decoration-2 underline-offset-2 transition-all">TimeZone</Link>
       <Link href="/map" className="hover:underline hover:decoration-black decoration-2 underline-offset-2 transition-all">Map</Link>
+      <Link href="/map-data" className="hover:underline hover:decoration-black decoration-2 underline-offset-2 transition-all">Map-Data</Link>
     </nav>
   );
 };
