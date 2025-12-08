@@ -6,8 +6,6 @@ import "leaflet/dist/leaflet.css";
 import "leaflet-routing-machine";
 import { useEffect, useRef } from "react";
 import { DEFAULT_LEAFLET_ICON, TILE_LAYER_URLS } from "../../constant/mapApi";
-import LRM from "leaflet-routing-machine";
-
 
 L.Marker.prototype.options.icon = DEFAULT_LEAFLET_ICON;
 

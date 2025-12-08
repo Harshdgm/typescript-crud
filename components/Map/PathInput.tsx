@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { NOMINATIM_BASE_URL } from "@/constant/mapApi";
 
 interface PathInputProps {
   onPathChange: (path: [number, number][]) => void;
@@ -13,13 +14,13 @@ export default function PathInput({ onPathChange }: PathInputProps) {
  const fetchCoordinates = async (place: string) => {
     if (!place) return null;
 
-    const url = `https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${encodeURIComponent(place)}`;
+    const url = `${NOMINATIM_BASE_URL}format=json&limit=1&q=${encodeURIComponent(place)}`;
   
     const res = await fetch(url, {
         headers: {
         "User-Agent": "NextJS-Leaflet-App", 
         "Referer": window.location.origin,
-        },
+        },  
     });
 
     const data = await res.json();

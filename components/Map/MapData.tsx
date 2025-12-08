@@ -71,7 +71,7 @@ export default function MapData() {
       {distance && duration && (
         <div className='mb-2'>
           <p><b>Distance:</b> {distance.toFixed(2)} km</p>
-          <p><b>Duration:</b> {duration.toFixed(2)} minutes</p>
+          {/* <p><b>Duration:</b> {duration.toFixed(2)} minutes</p> */}
         </div>
       )}
 
