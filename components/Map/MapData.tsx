@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import RouteMap from './RouteMap';
+import { getGeocodeUrl, getRouteUrl } from '@/constant/mapData';
 
 export default function MapData() {
   const [start, setStart] = useState('');
@@ -13,9 +14,7 @@ export default function MapData() {
   const [duration, setDuration] = useState<number | null>(null);
 
   const geocode = async (location: string): Promise<[number, number]> => {
-    const res = await fetch(
-      `https://nominatim.openstreetmap.org/search?q=${location}&format=json`
-    );
+    const res = await fetch(getGeocodeUrl(location));
     const data = await res.json();
 
     return [parseFloat(data[0].lon), parseFloat(data[0].lat)];
@@ -28,7 +27,7 @@ export default function MapData() {
     setStartCoords(startC);
     setEndCoords(endC);
 
-    const routeURL = `https://router.project-osrm.org/route/v1/driving/${startC.join(',')};${endC.join(',')}?overview=full&geometries=geojson`;
+    const routeURL = getRouteUrl(startC, endC);
 
     const res = await fetch(routeURL);
     const json = await res.json();
@@ -37,38 +36,38 @@ export default function MapData() {
 
     setDistance(route.distance / 1000); // km
     setDuration(route.duration / 60); // min
-
     setRouteData(route.geometry);
   };
 
   return (
     <div className='p-20'>
       <h2>Route Planner</h2>
-    <div className='flex gap-10 align-center text-center '>
 
-      <input
-        type="text"
-        placeholder="Start location..."
-        value={start}
-        onChange={(e) => setStart(e.target.value)}
-        className="p-2 mb-10 border border-black"
-      />
+      <div className='flex gap-10 align-center text-center'>
+        <input
+          type="text"
+          placeholder="Start location..."
+          value={start}
+          onChange={(e) => setStart(e.target.value)}
+          className="p-2 mb-10 border border-black"
+        />
 
-      <input
-        type="text"
-        placeholder="End location..."
-        value={end}
-        onChange={(e) => setEnd(e.target.value)}
-        className="p-2  mb-10 border border-black"
-      />
+        <input
+          type="text"
+          placeholder="End location..."
+          value={end}
+          onChange={(e) => setEnd(e.target.value)}
+          className="p-2 mb-10 border border-black"
+        />
 
-       <button
-        onClick={handleSearch}
-        className="mb-10 bg-blue-600 text-white p-3 rounded-md hover:bg-blue-700 transition"
-      >
-        Find Route
-      </button>
-</div>
+        <button
+          onClick={handleSearch}
+          className="mb-10 bg-blue-600 text-white p-3 rounded-md hover:bg-blue-700 transition"
+        >
+          Find Route
+        </button>
+      </div>
+
       {distance && duration && (
         <div className='mb-2'>
           <p><b>Distance:</b> {distance.toFixed(2)} km</p>

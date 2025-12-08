@@ -4,6 +4,16 @@ import { useEffect, useRef } from 'react';
 import maplibregl, { Map } from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 
+import {
+  MAP_STYLE_URL,
+  MAP_DEFAULT_CENTER,
+  MAP_DEFAULT_ZOOM,
+  ROUTE_LAYER_ID,
+  ROUTE_SOURCE_ID,
+  ROUTE_LINE_COLOR,
+  ROUTE_LINE_WIDTH
+} from '@/constant/mapConfig';
+
 interface Props {
   start: [number, number] | null;
   end: [number, number] | null;
@@ -19,10 +29,9 @@ export default function RouteMap({ routeData }: Props) {
 
     mapRef.current = new maplibregl.Map({
       container: mapContainer.current,
-      style: 'https://tiles.openfreemap.org/styles/bright',
-      // style: 'https://basemaps.cartocdn.com/gl/positron-gl-style/style.json',
-      center: [72.5714, 23.0225],
-      zoom: 10,
+      style: MAP_STYLE_URL,
+      center: MAP_DEFAULT_CENTER,
+      zoom: MAP_DEFAULT_ZOOM,
     });
   }, []);
 
@@ -31,21 +40,21 @@ export default function RouteMap({ routeData }: Props) {
 
     const map = mapRef.current;
 
-    if (map.getLayer('routeLine')) map.removeLayer('routeLine');
-    if (map.getSource('routeSource')) map.removeSource('routeSource');
+    if (map.getLayer(ROUTE_LAYER_ID)) map.removeLayer(ROUTE_LAYER_ID);
+    if (map.getSource(ROUTE_SOURCE_ID)) map.removeSource(ROUTE_SOURCE_ID);
 
-    map.addSource('routeSource', {
+    map.addSource(ROUTE_SOURCE_ID, {
       type: 'geojson',
       data: routeData,
     });
 
     map.addLayer({
-      id: 'routeLine',
+      id: ROUTE_LAYER_ID,
       type: 'line',
-      source: 'routeSource',
+      source: ROUTE_SOURCE_ID,
       paint: {
-        'line-color': '#ff0000',
-        'line-width': 5,
+        'line-color': ROUTE_LINE_COLOR,
+        'line-width': ROUTE_LINE_WIDTH,
       },
     });
 
@@ -53,5 +62,5 @@ export default function RouteMap({ routeData }: Props) {
 
   return (
     <div ref={mapContainer} style={{ height: 500, width: '100%' }} />
-  )
+  );
 }
