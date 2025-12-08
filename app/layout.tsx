@@ -1,7 +1,8 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
-import Navbar from '@/common/Navbar'; // Import your separate Navbar
+import Navbar from '@/common/Navbar'; 
+import 'leaflet-routing-machine/dist/leaflet-routing-machine.css'
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
