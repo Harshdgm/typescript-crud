@@ -35,3 +35,10 @@ export const TOMTOM_API = {
   BASE_URL: "https://api.tomtom.com/routing/1/calculateRoute",
   KEY: "rMJqWNMRqGIjrmiTbg5LwkxQLooozBYP",
 };
+
+export const VEHICLE_SPEEDS: Record<string, number> = {
+  car: 50000,    
+  bike: 20000,   
+  truck: 40000,  
+  bus: 35000, 
+};

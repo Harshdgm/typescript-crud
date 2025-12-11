@@ -6,6 +6,7 @@ import "leaflet/dist/leaflet.css";
 import { useState } from "react";
 import { DEFAULT_LEAFLET_ICON, TILE_LAYER_URLS } from "../../constant/mapApi";
 import ORSRouting from "./ORSRouting";
+import MapWithVehicles from "./MapWithVehicles"; // NEW COMPONENT
 
 L.Marker.prototype.options.icon = DEFAULT_LEAFLET_ICON;
 
@@ -32,25 +33,24 @@ const layerList: Layer[] = [
 ];
 
 export default function CustomMap({ pathPoints = [], pathColor = "red" }: CustomMapProps) {
-  const center: [number, number] = pathPoints.length > 0 ? pathPoints[0] : [23.0225, 72.5714];
+  const center: [number, number] =
+    pathPoints.length > 0 ? pathPoints[0] : [23.0225, 72.5714];
+
   const [distance, setDistance] = useState<number | null>(null);
-  const [duration, setDuration] = useState<number | null>(null);
 
   return (
     <div className="relative w-full h-full">
-      {distance !== null && duration !== null && (
-        <div className="absolute top-3 right-20  bg-white shadow px-4 py-2 font-semibold z-9999">
-          {(distance / 1000).toFixed(2)} km •{' '}
-          {duration >= 60 * 60
-            ? `${Math.floor(duration / 60 / 60)} hr ${Math.floor((duration / 60) % 60)} min`
-            : `${Math.floor(duration / 60)} min`}
-                </div>
-      )}
+
+      {distance !== null && <MapWithVehicles distance={distance} />}
 
       <MapContainer center={center} zoom={8} style={{ height: "100%", width: "100%" }}>
         <LayersControl position="topright">
           {layerList.map((layer) => (
-            <LayersControl.BaseLayer key={layer.name} name={layer.name} checked={layer.checked}>
+            <LayersControl.BaseLayer
+              key={layer.name}
+              name={layer.name}
+              checked={layer.checked}
+            >
               <TileLayer url={layer.url} />
             </LayersControl.BaseLayer>
           ))}
@@ -66,15 +66,13 @@ export default function CustomMap({ pathPoints = [], pathColor = "red" }: Custom
             </Marker>
           </>
         )}
-
+        
         {pathPoints.length > 1 && (
           <ORSRouting
             key={pathColor}
             pathPoints={pathPoints}
             onDistance={(dist) => {
-              setDistance(dist);
-              //50 km/hr
-              setDuration(dist / 50000 * 3600); 
+              setDistance(dist); 
             }}
             color={pathColor}
           />
