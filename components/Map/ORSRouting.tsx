@@ -70,8 +70,7 @@ export default function ORSRouting({ pathPoints, onDistance, color }: ORSRouting
           polylinesRef.current.push(polyline);
 
           if (idx === 0) {
-            onDistance(route.properties.summary.distance);
-          }
+            onDistance(route.properties.summary.distance);}
         });
 
         const allCoords = polylinesRef.current.flatMap((p) =>
