@@ -71,7 +71,6 @@ export default function ORSRouting({ pathPoints, onDistance, color = "red" }: OR
           if (idx === 0) onDistance(route.properties.summary.distance);
         });
 
-        // Fit bounds
         const allCoords = polylinesRef.current.flatMap((p) => p.getLatLngs() as L.LatLng[]);
         map.fitBounds(L.latLngBounds(allCoords));
       } catch (err) {
