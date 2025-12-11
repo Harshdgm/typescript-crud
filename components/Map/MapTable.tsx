@@ -6,7 +6,7 @@ import "leaflet/dist/leaflet.css";
 import { useState } from "react";
 import { DEFAULT_LEAFLET_ICON, TILE_LAYER_URLS } from "../../constant/mapApi";
 import ORSRouting from "./ORSRouting";
-import MapWithVehicles from "./MapWithVehicles"; // NEW COMPONENT
+import MapWithVehicles from "./MapWithVehicles"; 
 
 L.Marker.prototype.options.icon = DEFAULT_LEAFLET_ICON;
 
@@ -22,11 +22,11 @@ interface Layer {
 }
 
 const layerList: Layer[] = [
-  { name: "Default", url: TILE_LAYER_URLS.DEFAULT, checked: true },
+  { name: "Default", url: TILE_LAYER_URLS.GOOGLE_NORMAL, checked: true },
+  { name: "Google Normal", url: TILE_LAYER_URLS.DEFAULT},
   { name: "Dark", url: TILE_LAYER_URLS.DARK },
   { name: "Light", url: TILE_LAYER_URLS.LIGHT },
   { name: "Topographic", url: TILE_LAYER_URLS.TOPOGRAPHIC },
-  { name: "Google Normal", url: TILE_LAYER_URLS.GOOGLE_NORMAL },
   { name: "Google Satellite", url: TILE_LAYER_URLS.GOOGLE_SATELLITE },
   { name: "Google Hybrid", url: TILE_LAYER_URLS.GOOGLE_HYBRID },
   { name: "Google Terrain", url: TILE_LAYER_URLS.GOOGLE_TERRAIN },

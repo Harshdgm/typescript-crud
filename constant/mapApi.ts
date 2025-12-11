@@ -11,6 +11,7 @@ export const NOMINATIM_BASE_URL = "https://nominatim.openstreetmap.org/search?";
 
 export const TILE_LAYER_URLS = {
   DEFAULT: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+  OSM_EN: "https://tiles.wmflabs.org/osm-intl/{z}/{x}/{y}.png",
   DARK: "https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}.png",
   LIGHT: "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
   TOPOGRAPHIC: "https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png",

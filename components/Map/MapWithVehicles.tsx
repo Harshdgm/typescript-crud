@@ -38,7 +38,7 @@ export default function MapWithVehicles({ distance }: MapWithVehiclesProps) {
 
   return (
     <>
-      <div className="absolute top-3 right-0 transform -translate-x-1/2 bg-white shadow px-6 py-3 font-semibold rounded z-[9999]">
+      <div className="absolute top-3 right-8 transform -translate-x-1/2 bg-white shadow px-6 py-3 font-semibold rounded z-[9999]">
         {(distance / 1000).toFixed(2)} km • {formatTime(durationByVehicle[selectedVehicle] || 0)}
       </div>
   
