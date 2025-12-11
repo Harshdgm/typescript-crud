@@ -5,6 +5,7 @@ import dynamic from "next/dynamic";
 import "leaflet/dist/leaflet.css";
 import PathInput from "@/components/Map/PathInput";
 import ShareLocation from "@/components/Map/ShareLocation";
+import ColorPicker from "@/components/Map/ColorPicker"; 
 
 const CustomMap = dynamic(() => import("@/components/Map/MapTable"), {
   ssr: false,
@@ -13,6 +14,7 @@ const CustomMap = dynamic(() => import("@/components/Map/MapTable"), {
 
 export default function MapPage() {
   const [pathPoints, setPathPoints] = useState<[number, number][]>([]);
+  const [pathColor, setPathColor] = useState<string>("red");
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -59,12 +61,15 @@ export default function MapPage() {
       <div className="absolute top-5 left-1/2 -translate-x-1/2 z-9999">
         <PathInput onPathChange={handlePathChange} />
       </div>
-      <CustomMap pathPoints={pathPoints} />
+      <CustomMap pathPoints={pathPoints} pathColor={pathColor} />
 
 
-      <div className="absolute bottom-5 left-5 z-9999">
-      <ShareLocation pathPoints={pathPoints} />
-    </div>
+      {pathPoints.length > 1 && (
+        <div className="absolute bottom-5 left-5 z-9999 flex flex-col gap-2">
+          <ColorPicker selectedColor={pathColor} onChange={setPathColor} />
+          <ShareLocation pathPoints={pathPoints} />
+        </div>
+      )}
 
     </div>
   );
