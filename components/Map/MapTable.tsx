@@ -1,11 +1,11 @@
 "use client";
 
-import { MapContainer, TileLayer, Marker, Popup, LayersControl, useMap } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup, LayersControl } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-import "leaflet-routing-machine";
-import { useEffect, useRef } from "react";
+import { useState } from "react";
 import { DEFAULT_LEAFLET_ICON, TILE_LAYER_URLS } from "../../constant/mapApi";
+import ORSRouting from "./ORSRouting";
 
 L.Marker.prototype.options.icon = DEFAULT_LEAFLET_ICON;
 
@@ -30,74 +30,50 @@ const layerList: Layer[] = [
   { name: "Google Terrain", url: TILE_LAYER_URLS.GOOGLE_TERRAIN },
 ];
 
-function Routing({ pathPoints }: { pathPoints: [number, number][] }) {
-  const map = useMap();
-  const routingRef = useRef<L.Routing.Control | null>(null);
-
-  useEffect(() => {
-    if (pathPoints.length < 2) return;
-
-    if (routingRef.current) {
-      map.removeControl(routingRef.current);
-    }
-
-    routingRef.current = L.Routing.control({
-      waypoints: pathPoints.map((p) => L.latLng(p[0], p[1])),
-      lineOptions: {
-        styles: [{ color: "red", weight: 5 }],
-        extendToWaypoints: false,
-        missingRouteTolerance: 0
-      },
-      addWaypoints: false,
-      draggableWaypoints: false,
-      fitSelectedRoutes: true,
-      showAlternatives: false,
-    } as any).addTo(map);
-
-    return () => {
-      if (routingRef.current) map.removeControl(routingRef.current);
-    };
-  }, [map, pathPoints]);
-
-  return null;
-}
-
 export default function CustomMap({ pathPoints = [] }: CustomMapProps) {
   const center: [number, number] = pathPoints.length > 0 ? pathPoints[0] : [23.0225, 72.5714];
+  const [distance, setDistance] = useState(0);
 
   return (
-    <MapContainer
-      center={center}
-      zoom={8}
-      style={{ height: "500px", width: "100%", borderRadius: "12px" }}
-    >
-      <LayersControl position="topright">
-        {layerList.map((layer) => (
-          <LayersControl.BaseLayer
-            key={layer.name}
-            name={layer.name}
-            checked={layer.checked}
-          >
-            <TileLayer url={layer.url} />
-          </LayersControl.BaseLayer>
-        ))}
-      </LayersControl>
-
-      {pathPoints.length > 0 && (
-        <>
-          <Marker position={pathPoints[0]}>
-            <Popup>Start</Popup>
-          </Marker>
-          <Marker position={pathPoints[pathPoints.length - 1]}>
-            <Popup>End</Popup>
-          </Marker>
-        </>
+    <div className="relative w-full h-full">
+      {distance > 0 && (
+        <div className="absolute top-5 right-5 z-50 bg-white shadow px-4 py-2 font-semibold">
+          {(distance / 1000).toFixed(2)} km
+        </div>
       )}
 
-      {pathPoints.length > 1 && <Routing pathPoints={pathPoints} />}
-    </MapContainer>
+      <MapContainer
+        center={center}
+        zoom={8}
+        style={{ height: "100%", width: "100%" }}
+      >
+        <LayersControl position="topright">
+          {layerList.map((layer) => (
+            <LayersControl.BaseLayer
+              key={layer.name}
+              name={layer.name}
+              checked={layer.checked}
+            >
+              <TileLayer url={layer.url} />
+            </LayersControl.BaseLayer>
+          ))}
+        </LayersControl>
+
+        {pathPoints.length > 0 && (
+          <>
+            <Marker position={pathPoints[0]}>
+              <Popup>Start</Popup>
+            </Marker>
+            <Marker position={pathPoints[pathPoints.length - 1]}>
+              <Popup>End</Popup>
+            </Marker>
+          </>
+        )}
+
+        {pathPoints.length > 1 && (
+          <ORSRouting pathPoints={pathPoints} onDistance={setDistance} />
+        )}
+      </MapContainer>
+    </div>
   );
-
 }
-
-

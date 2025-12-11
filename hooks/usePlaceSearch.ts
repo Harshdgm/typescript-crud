@@ -1,13 +1,21 @@
 "use client";
 
 import { useState } from "react";
+
+export interface Suggestion {
+  place_id: string;
+  display_name: string;
+  lat: string;
+  lon: string;
+}
+
 import { NOMINATIM_BASE_URL } from "@/constant/mapApi";
 
 export function usePlaceSearch() {
-  const [suggestions, setSuggestions] = useState<any[]>([]);
-  const [debounceTimer, setDebounceTimer] = useState<NodeJS.Timeout | null>(null);
+  const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
+  const [debounceTimer, setDebounceTimer] = useState<ReturnType<typeof setTimeout> | null>(null);
 
-  const fetchSuggestions = async (query: string) => {
+  const fetchSuggestions = async (query: string): Promise<Suggestion[]> => {
     if (!query.trim()) return [];
 
     const url = `${NOMINATIM_BASE_URL}format=json&q=${encodeURIComponent(
@@ -21,7 +29,8 @@ export function usePlaceSearch() {
       },
     });
 
-    return res.json();
+    const data: Suggestion[] = await res.json();
+    return data;
   };
 
   const handleSearchChange = (value: string) => {

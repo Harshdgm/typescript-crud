@@ -25,3 +25,8 @@ export const DEFAULT_LEAFLET_ICON = L.icon({
   iconSize: [25, 41],
   iconAnchor: [12, 41],
 });
+
+export const ORS_API = {
+  BASE_URL: "https://api.openrouteservice.org/v2/directions/driving-car",
+  KEY: "eyJvcmciOiI1YjNjZTM1OTc4NTExMTAwMDFjZjYyNDgiLCJpZCI6IjE0ZmM1NGQyZDNkOTRiNTQ5ZTg2ZDM3OTJmYTExYmEyIiwiaCI6Im11cm11cjY0In0=",
+};

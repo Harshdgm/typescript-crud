@@ -1,10 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import "leaflet/dist/leaflet.css";
 import PathInput from "@/components/Map/PathInput";
-//import CompanyMap from "@/components/Map/CompanyMap";
+import ShareLocation from "@/components/Map/ShareLocation";
 
 const CustomMap = dynamic(() => import("@/components/Map/MapTable"), {
   ssr: false,
@@ -14,17 +14,58 @@ const CustomMap = dynamic(() => import("@/components/Map/MapTable"), {
 export default function MapPage() {
   const [pathPoints, setPathPoints] = useState<[number, number][]>([]);
 
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+
+    const startLat = params.get("startLat");
+    const startLng = params.get("startLng");
+    const endLat = params.get("endLat");
+    const endLng = params.get("endLng");
+
+    const pts: [number, number][] = [];
+
+    if (startLat && startLng) pts.push([+startLat, +startLng]);
+    if (endLat && endLng) pts.push([+endLat, +endLng]);
+
+    if (pts.length > 0) setPathPoints(pts);
+  }, []);
+
+  const updateURLWithPoints = (points: [number, number][]) => {
+    if (!points || points.length === 0) {
+      window.history.replaceState({}, "", window.location.pathname);
+      return;
+    }
+
+    const params = new URLSearchParams();
+    params.set("startLat", String(points[0][0]));
+    params.set("startLng", String(points[0][1]));
+
+    if (points.length > 1) {
+      params.set("endLat", String(points[1][0]));
+      params.set("endLng", String(points[1][1]));
+    }
+
+    const newUrl = `${window.location.pathname}?${params.toString()}`;
+    window.history.replaceState({}, "", newUrl);
+  };
+
+  const handlePathChange = (pts: [number, number][]) => {
+    setPathPoints(pts);
+    updateURLWithPoints(pts);
+  };
 
   return (
-    <div className="p-10">
-      {/* <div>
-        <h1><CompanyMap /></h1>
-      </div> */}
-      <div className="">
-        <h1 className="text-xl font-semibold mb-4">Dynamic Path Map</h1>
-        <PathInput onPathChange={setPathPoints} />
-        <CustomMap pathPoints={pathPoints} />
+    <div className="relative w-screen h-screen">
+      <div className="absolute top-5 left-1/2 -translate-x-1/2 z-9999">
+        <PathInput onPathChange={handlePathChange} />
       </div>
+      <CustomMap pathPoints={pathPoints} />
+
+
+      <div className="absolute bottom-5 left-5 z-9999">
+      <ShareLocation pathPoints={pathPoints} />
     </div>
-  )
+
+    </div>
+  );
 }
