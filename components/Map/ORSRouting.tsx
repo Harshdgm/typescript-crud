@@ -4,26 +4,35 @@ import { useEffect, useRef } from "react";
 import L, { LatLngExpression } from "leaflet";
 import { useMap } from "react-leaflet";
 import axios from "axios";
-import { ORS_API } from "../../constant/mapApi";
+import polyline from "@mapbox/polyline";
+import { ORS_API } from "@/constant/mapApi";
 
-interface RouteProperties {
+interface ORSRoute {
   summary: {
     distance: number;
     duration: number;
   };
+  geometry: string;
+}
+
+interface ORSResponsePOST {
+  routes?: ORSRoute[];
 }
 
 interface RouteFeature {
-  type: "Feature";
   geometry: {
     type: "LineString";
     coordinates: [number, number][];
   };
-  properties: RouteProperties;
+  properties: {
+    summary: {
+      distance: number;
+    };
+  };
 }
 
-interface ORSResponse {
-  type: "FeatureCollection";
+interface ORSResponseGET {
+  type: string;
   features: RouteFeature[];
 }
 
@@ -33,7 +42,11 @@ interface ORSRoutingProps {
   color?: string;
 }
 
-export default function ORSRouting({ pathPoints, onDistance, color = "red" }: ORSRoutingProps) {
+export default function ORSRouting({
+  pathPoints,
+  onDistance,
+  color = "red",
+}: ORSRoutingProps) {
   const map = useMap();
   const polylinesRef = useRef<L.Polyline[]>([]);
 
@@ -48,38 +61,80 @@ export default function ORSRouting({ pathPoints, onDistance, color = "red" }: OR
         polylinesRef.current.forEach((poly) => map.removeLayer(poly));
         polylinesRef.current = [];
 
+        try {
+          const body = {
+            coordinates: [
+              [start[1], start[0]],
+              [end[1], end[0]],
+            ],
+            alternative_routes: { share_factor: 0.6, target_count: 3 },
+          };
+
+          const response = await axios.post<ORSResponsePOST>(ORS_API.BASE_URL, body, {
+            headers: {
+              Authorization: ORS_API.KEY,
+              "Content-Type": "application/json",
+            },
+          });
+
+          const routes = response.data.routes;
+
+          if (routes && routes.length > 0) {
+            routes.forEach((route, idx) => {
+              const coords: LatLngExpression[] = polyline
+                .decode(route.geometry)
+                .map(([lat, lng]) => [lat, lng]);
+
+              const poly = L.polyline(coords, {
+                color: idx === 0 ? color : "gray",
+                weight: idx === 0 ? 5 : 3,
+                opacity: idx === 0 ? 1 : 0.6,
+              }).addTo(map);
+
+              polylinesRef.current.push(poly);
+              if (idx === 0) onDistance(route.summary.distance);
+            });
+
+            const allCoords = polylinesRef.current.flatMap((p) => p.getLatLngs() as L.LatLng[]);
+            map.fitBounds(L.latLngBounds(allCoords));
+            return; 
+          }
+        } catch (err) {
+          console.warn("POST API failed, trying GET features API:", err);
+        }
+
+        // long distance ------
         const url = `${ORS_API.BASE_URL}?start=${start[1]},${start[0]}&end=${end[1]},${end[0]}&alternative_routes[share_factor]=0.6&alternative_routes[target_count]=3`;
-        const response = await axios.get<ORSResponse>(url, {
+        const responseGet = await axios.get<ORSResponseGET>(url, {
           headers: { Authorization: ORS_API.KEY },
         });
 
-        const routes = response.data.features;
-
-        routes.forEach((route, idx) => {
-          const coords: LatLngExpression[] = route.geometry.coordinates.map(
+        const features = responseGet.data.features;
+        features.forEach((feature, idx) => {
+          const coords: LatLngExpression[] = feature.geometry.coordinates.map(
             ([lng, lat]) => [lat, lng]
           );
 
-          const polyline = L.polyline(coords, {
+          const poly = L.polyline(coords, {
             color: idx === 0 ? color : "gray",
             weight: idx === 0 ? 5 : 3,
             opacity: idx === 0 ? 1 : 0.6,
           }).addTo(map);
 
-          polylinesRef.current.push(polyline);
-
-          if (idx === 0) onDistance(route.properties.summary.distance);
+          polylinesRef.current.push(poly);
+          if (idx === 0) onDistance(feature.properties.summary.distance);
         });
 
         const allCoords = polylinesRef.current.flatMap((p) => p.getLatLngs() as L.LatLng[]);
         map.fitBounds(L.latLngBounds(allCoords));
-      } catch (err) {
-        console.error("ORS Routing Error:", err);
+      } catch (error) {
+        console.error("ORS Routing Error:", error);
       }
     };
 
-    fetchAndDraw();
-  }, [map, pathPoints, color, onDistance]); 
+    void fetchAndDraw();
+  }, [map, pathPoints, color, onDistance]);
 
   return null;
 }
+

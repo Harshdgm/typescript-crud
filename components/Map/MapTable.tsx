@@ -4,7 +4,7 @@ import { MapContainer, TileLayer, Marker, Popup, LayersControl } from "react-lea
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { useState } from "react";
-import { TILE_LAYER_URLS } from "../../constant/mapApi";
+import { TILE_LAYER_URLS } from "@/constant/mapApi";
 import { DEFAULT_LEAFLET_ICON } from "@/constant/leafletClient";
 import ORSRouting from "./ORSRouting";
 import MapWithVehicles from "./MapWithVehicles"; 
