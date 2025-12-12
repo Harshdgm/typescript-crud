@@ -81,11 +81,8 @@ export default function CustomMap({ pathPoints = [], pathColor = "red" }: Custom
         )} */}
         {pathPoints.length > 1 && (
           <GraphHopperRouting
-            key={pathColor}
             pathPoints={pathPoints}
-            onDistance={(dist) => {
-              setDistance(dist);
-            }}
+            onDistance={(dist) => { setDistance(dist); }}
             color={pathColor}
           />
         )}

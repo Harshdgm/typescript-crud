@@ -12,7 +12,6 @@ export default function ColorPicker({ selectedColor, onChange }: ColorPickerProp
   const [open, setOpen] = useState(false);
   const wrapperRef = useRef<HTMLDivElement | null>(null);
 
-  // Close on outside click
   useEffect(() => {
     const handler = (e: MouseEvent) => {
       if (wrapperRef.current && !wrapperRef.current.contains(e.target as Node)) {
@@ -25,7 +24,6 @@ export default function ColorPicker({ selectedColor, onChange }: ColorPickerProp
 
   return (
     <div ref={wrapperRef} className="relative inline-block">
-      {/* Color circle */}
       <div
         className="w-8 h-8 rounded-full border cursor-pointer shadow-md"
         style={{ backgroundColor: selectedColor }}
