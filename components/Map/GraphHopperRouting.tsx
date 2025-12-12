@@ -55,7 +55,6 @@ export default function GraphHopperRouting({
 
     const fetchRoutes = async () => {
       try {
-        // Remove previous polylines
         polylinesRef.current.forEach((poly) => map.removeLayer(poly));
         polylinesRef.current = [];
 
@@ -73,8 +72,6 @@ export default function GraphHopperRouting({
           "alternative_route.max_share_factor": 0.6,
           points_encoded: true,
         };
-
-        console.log("GRAPH CALL:", body); // For debugging
 
         const response = await axios.post<GraphHopperResponse>(url, body);
         const routes = response.data.paths;
@@ -115,7 +112,6 @@ export default function GraphHopperRouting({
     fetchRoutes();
   }, [pathPoints, map, color]);
 
-  // Highlight selected route
   useEffect(() => {
     polylinesRef.current.forEach((poly, index) => {
       const isSelected = index === selectedRouteIndex;

@@ -1,8 +1,6 @@
-// import L from "leaflet";
-
-export const MAP_API = {
-  BASE_URL: "https://nominatim.openstreetmap.org/search",
-};
+// export const MAP_API = {
+//   BASE_URL: "https://nominatim.openstreetmap.org/search",
+// };
 
 export const MAP_EXAMPLE_LINK =
   "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3720.0462954935084!2d72.8685079!3d21.2351106!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be04f035606410b%3A0xfc5d05395aeb3f56!2sThe%20Moon%20Cafe!5e0!3m2!1sen!2sin!4v1709123456789";
@@ -20,12 +18,6 @@ export const TILE_LAYER_URLS = {
   GOOGLE_HYBRID: "https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}",
   GOOGLE_TERRAIN: "https://mt1.google.com/vt/lyrs=p&x={x}&y={y}&z={z}",
 };
-
-// export const DEFAULT_LEAFLET_ICON = L.icon({
-//   iconUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png",
-//   iconSize: [25, 41],
-//   iconAnchor: [12, 41],
-// });
 
 export const ORS_API = {
   BASE_URL: "https://api.openrouteservice.org/v2/directions/driving-car",
