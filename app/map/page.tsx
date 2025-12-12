@@ -6,6 +6,7 @@ import "leaflet/dist/leaflet.css";
 import PathInput from "@/components/Map/PathInput";
 import ShareLocation from "@/components/Map/ShareLocation";
 import ColorPicker from "@/components/Map/ColorPicker"; 
+import LiveLocation from "@/components/Map/LiveLocation";
 
 const CustomMap = dynamic(() => import("@/components/Map/MapTable"), {
   ssr: false,
@@ -63,13 +64,13 @@ export default function MapPage() {
       </div>
       <CustomMap pathPoints={pathPoints} pathColor={pathColor} />
 
-
-      {pathPoints.length > 1 && (
-        <div className="absolute top-1/2 -translate-y-1/2 left-5 z-9999 flex flex-col gap-3">
+      <div className="absolute top-1/2 -translate-y-1/2 left-3 z-9999 flex flex-col gap-3">
+        <LiveLocation onSelect={(coords) => handlePathChange([coords])} />
+        <ShareLocation pathPoints={pathPoints} />
+        {pathPoints.length > 1 && (
           <ColorPicker selectedColor={pathColor} onChange={setPathColor} />
-          <ShareLocation pathPoints={pathPoints} />
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }

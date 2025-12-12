@@ -84,8 +84,8 @@ export default function GraphHopperRouting({
             .map(([lat, lng]) => [lat, lng]);
 
           const polylineLayer = L.polyline(coords, {
-            color: index === 0 ? color : "gray",
-            weight: index === 0 ? 6 : 3,
+            color: index === 0 ? color : "black",
+            weight: index === 0 ? 6 : 6,
             opacity: index === 0 ? 1 : 0.4,
           }).addTo(map);
 

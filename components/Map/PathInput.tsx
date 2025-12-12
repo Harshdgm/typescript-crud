@@ -1,12 +1,13 @@
 "use client";
 
-import { useState, ChangeEvent } from "react";
+import { useState, useEffect, ChangeEvent } from "react";
 import {
   GEOAPIFY_GEOCODE_URL,
   GEOAPIFY_API_KEY,
 } from "@/constant/mapApi";
 import { usePlaceSearch } from "@/hooks/usePlaceSearch";
 import { FaMapPin, FaFlagCheckered } from "react-icons/fa";
+import { useLiveLocation } from "@/hooks/useLiveLocation";
 
 interface Suggestion {
   place_id: string;
@@ -23,6 +24,8 @@ export default function PathInput({ onPathChange }: PathInputProps) {
   const [startPlace, setStartPlace] = useState<string>("");
   const [endPlace, setEndPlace] = useState<string>("");
 
+  const { coords, error, fetchLiveLocation } = useLiveLocation();
+
   const {
     suggestions: startSuggestions,
     handleSearchChange: handleStartChange,
@@ -34,6 +37,12 @@ export default function PathInput({ onPathChange }: PathInputProps) {
     handleSearchChange: handleEndChange,
     clearSuggestions: clearEndSuggestions,
   } = usePlaceSearch();
+
+  useEffect(() => {
+    if (coords) {
+      setStartPlace(`${coords.lat}, ${coords.lon}`);
+    }
+  }, [coords]);
 
   const fetchCoordinates = async (
     place: string
@@ -77,8 +86,11 @@ export default function PathInput({ onPathChange }: PathInputProps) {
   return (
     <div className="w-full max-w-xl flex flex-col gap-3 mb-4">
       <div className="relative">
-        <div className="flex bg-white shadow rounded-full px-4 py-2 border">
-          <span className="text-gray-500 mr-3">
+        <div className="flex bg-white shadow rounded-full px-4 py-2 border items-center">
+          <span
+            className="text-gray-500 mr-3 cursor-pointer"
+            onClick={fetchLiveLocation} 
+          >
             <FaMapPin size={18} />
           </span>
           <input
@@ -150,6 +162,8 @@ export default function PathInput({ onPathChange }: PathInputProps) {
       >
         Show Path
       </button>
+
+      {error && <p className="text-red-600 text-sm mt-1">{error}</p>}
     </div>
   );
 }
