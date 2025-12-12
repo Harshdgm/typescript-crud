@@ -1,9 +1,12 @@
 "use client";
 
 import { useState, ChangeEvent } from "react";
-import { NOMINATIM_BASE_URL } from "@/constant/mapApi";
+import {
+  GEOAPIFY_GEOCODE_URL,
+  GEOAPIFY_API_KEY,
+} from "@/constant/mapApi";
 import { usePlaceSearch } from "@/hooks/usePlaceSearch";
-import { FaMapPin,FaFlagCheckered } from "react-icons/fa";
+import { FaMapPin, FaFlagCheckered } from "react-icons/fa";
 
 interface Suggestion {
   place_id: string;
@@ -37,15 +40,16 @@ export default function PathInput({ onPathChange }: PathInputProps) {
   ): Promise<[number, number] | null> => {
     if (!place) return null;
 
-    const url = `${NOMINATIM_BASE_URL}format=json&limit=1&q=${encodeURIComponent(
+    const url = `${GEOAPIFY_GEOCODE_URL}text=${encodeURIComponent(
       place
-    )}`;
+    )}&format=json&limit=1&apiKey=${GEOAPIFY_API_KEY}`;
 
     const res = await fetch(url);
-    const data: Suggestion[] = await res.json();
+    const result = await res.json();
 
-    if (data.length > 0) {
-      return [parseFloat(data[0].lat), parseFloat(data[0].lon)];
+    if (result.results && result.results.length > 0) {
+      const item = result.results[0];
+      return [item.lat, item.lon];
     }
     return null;
   };
@@ -74,7 +78,9 @@ export default function PathInput({ onPathChange }: PathInputProps) {
     <div className="w-full max-w-xl flex flex-col gap-3 mb-4">
       <div className="relative">
         <div className="flex bg-white shadow rounded-full px-4 py-2 border">
-          <span className="text-gray-500 mr-3"> <FaMapPin size={18} /></span>
+          <span className="text-gray-500 mr-3">
+            <FaMapPin size={18} />
+          </span>
           <input
             type="text"
             placeholder="Choose starting point"
@@ -86,6 +92,7 @@ export default function PathInput({ onPathChange }: PathInputProps) {
             className="w-full outline-none bg-transparent"
           />
         </div>
+
         {startSuggestions.length > 0 && (
           <ul className="absolute bg-white rounded-xl w-full mt-2 max-h-64 overflow-auto shadow-lg border z-30">
             {startSuggestions.map((item: Suggestion) => (
@@ -105,7 +112,9 @@ export default function PathInput({ onPathChange }: PathInputProps) {
 
       <div className="relative">
         <div className="flex items-center bg-white shadow rounded-full px-4 py-2 border">
-          <span className="text-gray-500 mr-3"><FaFlagCheckered size={18} /></span>
+          <span className="text-gray-500 mr-3">
+            <FaFlagCheckered size={18} />
+          </span>
           <input
             type="text"
             placeholder="Choose destination"
@@ -117,6 +126,7 @@ export default function PathInput({ onPathChange }: PathInputProps) {
             className="w-full outline-none bg-transparent"
           />
         </div>
+
         {endSuggestions.length > 0 && (
           <ul className="absolute bg-white rounded-xl w-full mt-2 max-h-64 overflow-auto shadow-lg border z-30">
             {endSuggestions.map((item: Suggestion) => (

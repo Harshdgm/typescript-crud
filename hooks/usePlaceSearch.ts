@@ -1,6 +1,10 @@
 "use client";
 
 import { useState } from "react";
+import {
+  GEOAPIFY_BASE_URL,
+  GEOAPIFY_API_KEY,
+} from "@/constant/mapApi";
 
 export interface Suggestion {
   place_id: string;
@@ -9,27 +13,41 @@ export interface Suggestion {
   lon: string;
 }
 
-import { NOMINATIM_BASE_URL } from "@/constant/mapApi";
+interface GeoapifyFeature {
+  place_id: string;
+  formatted: string;
+  lat: number;
+  lon: number;
+}
+
+interface GeoapifyResponse {
+  results: GeoapifyFeature[];
+}
 
 export function usePlaceSearch() {
   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
-  const [debounceTimer, setDebounceTimer] = useState<ReturnType<typeof setTimeout> | null>(null);
+  const [debounceTimer, setDebounceTimer] =
+    useState<ReturnType<typeof setTimeout> | null>(null);
 
   const fetchSuggestions = async (query: string): Promise<Suggestion[]> => {
     if (!query.trim()) return [];
 
-    const url = `${NOMINATIM_BASE_URL}format=json&q=${encodeURIComponent(
+    const url = `${GEOAPIFY_BASE_URL}text=${encodeURIComponent(
       query
-    )}&addressdetails=1&limit=5`;
+    )}&format=json&limit=5&apiKey=${GEOAPIFY_API_KEY}`;
 
-    const res = await fetch(url, {
-      headers: {
-        "User-Agent": "NextJS-Leaflet-App",
-        "Referer": typeof window !== "undefined" ? window.location.origin : "",
-      },
-    });
+    const res = await fetch(url);
+    const result: GeoapifyResponse = await res.json();
 
-    const data: Suggestion[] = await res.json();
+    if (!result.results) return [];
+
+    const data: Suggestion[] = result.results.map((item) => ({
+      place_id: item.place_id,
+      display_name: item.formatted,
+      lat: String(item.lat),
+      lon: String(item.lon),
+    }));
+
     return data;
   };
 

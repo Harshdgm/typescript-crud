@@ -40,3 +40,12 @@ export const GRAPH_HOPPER_API = {
   KEY: "024732a5-3224-4cf9-b33a-1b94d0f453e8",
   BASE_URL: "https://graphhopper.com/api/1/route",
 };
+
+export const OPEN_CAGE_API={
+  KEY:"6ffcf85faa9d41b283f62864428609c1",
+  BASE_URL: "https://api.opencagedata.com/geocode/v1/json",
+}
+
+export const GEOAPIFY_BASE_URL = "https://api.geoapify.com/v1/geocode/autocomplete?";
+export const GEOAPIFY_GEOCODE_URL = "https://api.geoapify.com/v1/geocode/search?";
+export const GEOAPIFY_API_KEY = '60680497a83a446ba6eee788ec8ffe7f';
