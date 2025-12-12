@@ -43,3 +43,8 @@ export const VEHICLE_SPEEDS: Record<string, number> = {
   truck: 40000,  
   bus: 35000, 
 };
+
+export const GRAPH_HOPPER_API = {
+  KEY: "024732a5-3224-4cf9-b33a-1b94d0f453e8",
+  BASE_URL: "https://graphhopper.com/api/1/route",
+};

@@ -6,8 +6,9 @@ import "leaflet/dist/leaflet.css";
 import { useState } from "react";
 import { TILE_LAYER_URLS } from "@/constant/mapApi";
 import { DEFAULT_LEAFLET_ICON } from "@/constant/leafletClient";
-import ORSRouting from "./ORSRouting";
+// import ORSRouting from "./ORSRouting";
 import MapWithVehicles from "./MapWithVehicles"; 
+import GraphHopperRouting from "./GraphHopperRouting";
 
 L.Marker.prototype.options.icon = DEFAULT_LEAFLET_ICON;
 
@@ -68,12 +69,22 @@ export default function CustomMap({ pathPoints = [], pathColor = "red" }: Custom
           </>
         )}
         
-        {pathPoints.length > 1 && (
+        {/* {pathPoints.length > 1 && (
           <ORSRouting
             key={pathColor}
             pathPoints={pathPoints}
             onDistance={(dist) => {
               setDistance(dist); 
+            }}
+            color={pathColor}
+          />
+        )} */}
+        {pathPoints.length > 1 && (
+          <GraphHopperRouting
+            key={pathColor}
+            pathPoints={pathPoints}
+            onDistance={(dist) => {
+              setDistance(dist);
             }}
             color={pathColor}
           />
