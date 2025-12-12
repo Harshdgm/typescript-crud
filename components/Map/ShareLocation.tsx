@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { SiTelegram } from "react-icons/si";
 
 interface ShareLocationProps {
   pathPoints: [number, number][];
@@ -47,9 +48,9 @@ export default function ShareLocation({ pathPoints, basePath }: ShareLocationPro
     <div className="relative">
       <button
         onClick={() => setOpen(!open)}
-        className="bg-blue-600 text-white px-4 py-2 rounded-full shadow-lg"
+        className="bg-white text-blue-600 rounded-full shadow-lg"
       >
-        Share
+          <SiTelegram size={35} />
       </button>
 
       {open && (

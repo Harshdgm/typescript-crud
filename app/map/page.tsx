@@ -65,12 +65,11 @@ export default function MapPage() {
 
 
       {pathPoints.length > 1 && (
-        <div className="absolute bottom-5 left-5 z-9999 flex flex-col gap-2">
+        <div className="absolute top-1/2 -translate-y-1/2 left-5 z-[9999] flex flex-col gap-3">
           <ColorPicker selectedColor={pathColor} onChange={setPathColor} />
           <ShareLocation pathPoints={pathPoints} />
         </div>
       )}
-
     </div>
   );
 }

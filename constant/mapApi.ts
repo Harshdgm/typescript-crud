@@ -1,4 +1,4 @@
-import L from "leaflet";
+// import L from "leaflet";
 
 export const MAP_API = {
   BASE_URL: "https://nominatim.openstreetmap.org/search",
@@ -21,11 +21,11 @@ export const TILE_LAYER_URLS = {
   GOOGLE_TERRAIN: "https://mt1.google.com/vt/lyrs=p&x={x}&y={y}&z={z}",
 };
 
-export const DEFAULT_LEAFLET_ICON = L.icon({
-  iconUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png",
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
-});
+// export const DEFAULT_LEAFLET_ICON = L.icon({
+//   iconUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png",
+//   iconSize: [25, 41],
+//   iconAnchor: [12, 41],
+// });
 
 export const ORS_API = {
   BASE_URL: "https://api.openrouteservice.org/v2/directions/driving-car",
@@ -38,7 +38,7 @@ export const TOMTOM_API = {
 };
 
 export const VEHICLE_SPEEDS: Record<string, number> = {
-  car: 50000,    
+  car: 45000,    
   bike: 20000,   
   truck: 40000,  
   bus: 35000, 
