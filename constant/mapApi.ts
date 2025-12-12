@@ -32,10 +32,10 @@ export const ORS_API = {
   KEY: "eyJvcmciOiI1YjNjZTM1OTc4NTExMTAwMDFjZjYyNDgiLCJpZCI6IjE0ZmM1NGQyZDNkOTRiNTQ5ZTg2ZDM3OTJmYTExYmEyIiwiaCI6Im11cm11cjY0In0=",
 };
 
-export const TOMTOM_API = {
-  BASE_URL: "https://api.tomtom.com/routing/1/calculateRoute",
-  KEY: "rMJqWNMRqGIjrmiTbg5LwkxQLooozBYP",
-};
+// export const TOMTOM_API = {
+//   BASE_URL: "https://api.tomtom.com/routing/1/calculateRoute",
+//   KEY: "rMJqWNMRqGIjrmiTbg5LwkxQLooozBYP",
+// };
 
 export const VEHICLE_SPEEDS: Record<string, number> = {
   car: 45000,    
