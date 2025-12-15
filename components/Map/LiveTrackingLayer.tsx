@@ -1,6 +1,7 @@
 "use client";
 
 import { Polyline, Marker } from "react-leaflet";
+import { TRUCK_ICON } from "@/constant/truckIcon";
 
 interface Props {
   completedPath: [number, number][];
@@ -33,7 +34,7 @@ export default function LiveTrackingLayer({
         />
       )}
 
-      <Marker position={currentPosition} />
+      <Marker position={currentPosition} icon={TRUCK_ICON}  />
     </>
   );
 }

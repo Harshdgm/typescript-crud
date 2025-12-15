@@ -10,19 +10,19 @@ import {
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { useState } from "react";
-
+import { useRouteTracking } from "@/hooks/useRouteTracking";
 import { TILE_LAYER_URLS } from "@/constant/mapApi";
 import { DEFAULT_LEAFLET_ICON } from "@/constant/leafletClient";
-
 import MapWithVehicles from "./MapWithVehicles";
 import GraphHopperRouting from "./GraphHopperRouting";
 import LiveTrackingLayer from "./LiveTrackingLayer";
-import { useRouteTracking } from "@/hooks/useRouteTracking";
+import StaticTrucks from "./StaticTrucks";
 
 L.Marker.prototype.options.icon = DEFAULT_LEAFLET_ICON;
 
 interface CustomMapProps {
   pathPoints?: [number, number][];
+  setPathPoints?: (points: [number, number][]) => void; 
   pathColor?: string;
 }
 
@@ -45,6 +45,7 @@ const layerList: Layer[] = [
 
 export default function CustomMap({
   pathPoints = [],
+  setPathPoints,
   pathColor = "red",
 }: CustomMapProps) {
   const center: [number, number] =
@@ -54,6 +55,14 @@ export default function CustomMap({
   const [routeCoords, setRouteCoords] = useState<[number, number][]>([]);
 
   const tracking = useRouteTracking(routeCoords, 2000);
+
+  const handleStaticTruckClick = (newStart: [number, number]) => {
+    if (pathPoints.length > 1 && setPathPoints) {
+      setPathPoints([newStart, pathPoints[1]]);
+      setRouteCoords([]);
+      setDistance(null);
+    }
+  };
 
   return (
     <div className="relative w-full h-full">
@@ -85,13 +94,19 @@ export default function CustomMap({
           </>
         )}
 
-         {/* <ORSRouting
+        {/* <ORSRouting
             key={pathColor}
             pathPoints={pathPoints}
             onDistance={(dist) => {
               setDistance(dist); 
             }}
             color={pathColor} /> */}
+        <StaticTrucks
+          endPoint={pathPoints.length > 1 ? pathPoints[1] : null}
+          startPoint={pathPoints[0] || null} 
+          onTruckClick={handleStaticTruckClick}
+        />
+
         {tracking.currentPosition && (
           <LiveTrackingLayer
             completedPath={tracking.completedPath}

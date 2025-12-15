@@ -62,7 +62,7 @@ export default function MapPage() {
       <div className="absolute top-5 left-1/2 -translate-x-1/2 z-9999">
         <PathInput onPathChange={handlePathChange} />
       </div>
-      <CustomMap pathPoints={pathPoints} pathColor={pathColor} />
+      <CustomMap pathPoints={pathPoints} setPathPoints={setPathPoints} pathColor={pathColor} />
 
       <div className="absolute top-1/2 -translate-y-1/2 left-3 z-9999 flex flex-col gap-3">
         <LiveLocation onSelect={(coords) => handlePathChange([coords])} />
