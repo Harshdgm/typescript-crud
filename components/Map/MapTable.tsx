@@ -1,14 +1,23 @@
 "use client";
 
-import { MapContainer, TileLayer, Marker, Popup, LayersControl } from "react-leaflet";
+import {
+  MapContainer,
+  TileLayer,
+  Marker,
+  Popup,
+  LayersControl,
+} from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { useState } from "react";
+
 import { TILE_LAYER_URLS } from "@/constant/mapApi";
 import { DEFAULT_LEAFLET_ICON } from "@/constant/leafletClient";
-// import ORSRouting from "./ORSRouting";
-import MapWithVehicles from "./MapWithVehicles"; 
+
+import MapWithVehicles from "./MapWithVehicles";
 import GraphHopperRouting from "./GraphHopperRouting";
+import LiveTrackingLayer from "./LiveTrackingLayer";
+import { useRouteTracking } from "@/hooks/useRouteTracking";
 
 L.Marker.prototype.options.icon = DEFAULT_LEAFLET_ICON;
 
@@ -25,7 +34,7 @@ interface Layer {
 
 const layerList: Layer[] = [
   { name: "Default", url: TILE_LAYER_URLS.GOOGLE_NORMAL, checked: true },
-  { name: "Google Normal", url: TILE_LAYER_URLS.DEFAULT},
+  { name: "Google Normal", url: TILE_LAYER_URLS.DEFAULT },
   { name: "Dark", url: TILE_LAYER_URLS.DARK },
   { name: "Light", url: TILE_LAYER_URLS.LIGHT },
   { name: "Topographic", url: TILE_LAYER_URLS.TOPOGRAPHIC },
@@ -34,15 +43,20 @@ const layerList: Layer[] = [
   { name: "Google Terrain", url: TILE_LAYER_URLS.GOOGLE_TERRAIN },
 ];
 
-export default function CustomMap({ pathPoints = [], pathColor = "red" }: CustomMapProps) {
+export default function CustomMap({
+  pathPoints = [],
+  pathColor = "red",
+}: CustomMapProps) {
   const center: [number, number] =
     pathPoints.length > 0 ? pathPoints[0] : [23.0225, 72.5714];
 
   const [distance, setDistance] = useState<number | null>(null);
+  const [routeCoords, setRouteCoords] = useState<[number, number][]>([]);
+
+  const tracking = useRouteTracking(routeCoords, 2000);
 
   return (
     <div className="relative w-full h-full">
-
       {distance !== null && <MapWithVehicles distance={distance} />}
 
       <MapContainer center={center} zoom={8} style={{ height: "100%", width: "100%" }}>
@@ -63,26 +77,34 @@ export default function CustomMap({ pathPoints = [], pathColor = "red" }: Custom
             <Marker position={pathPoints[0]}>
               <Popup>Start</Popup>
             </Marker>
-            <Marker position={pathPoints[pathPoints.length - 1]}>
-              <Popup>End</Popup>
-            </Marker>
+            {pathPoints.length > 1 && (
+              <Marker position={pathPoints[1]}>
+                <Popup>End</Popup>
+              </Marker>
+            )}
           </>
         )}
-        
-        {/* {pathPoints.length > 1 && (
-          <ORSRouting
+
+         {/* <ORSRouting
             key={pathColor}
             pathPoints={pathPoints}
             onDistance={(dist) => {
               setDistance(dist); 
             }}
-            color={pathColor}
+            color={pathColor} /> */}
+        {tracking.currentPosition && (
+          <LiveTrackingLayer
+            completedPath={tracking.completedPath}
+            activeSegment={tracking.activeSegment}
+            currentPosition={tracking.currentPosition}
           />
-        )} */}
+        )}
+
         {pathPoints.length > 1 && (
           <GraphHopperRouting
             pathPoints={pathPoints}
-            onDistance={(dist) => { setDistance(dist); }}
+            onDistance={setDistance}
+            onRouteReady={setRouteCoords}
             color={pathColor}
           />
         )}

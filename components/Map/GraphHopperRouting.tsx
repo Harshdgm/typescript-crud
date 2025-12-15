@@ -10,13 +10,13 @@ import { GRAPH_HOPPER_API } from "@/constant/mapApi";
 interface GraphHopperRoutingProps {
   pathPoints: [number, number][];
   onDistance: (distance: number) => void;
+  onRouteReady?: (coords: [number, number][]) => void;
   color?: string;
 }
 
 interface GraphHopperRoute {
   points: string;
   distance: number;
-  time: number;
 }
 
 interface GraphHopperResponse {
@@ -28,104 +28,83 @@ const GRAPH_HOPPER_KEY = GRAPH_HOPPER_API.KEY;
 export default function GraphHopperRouting({
   pathPoints,
   onDistance,
+  onRouteReady,
   color = "red",
 }: GraphHopperRoutingProps) {
   const map = useMap();
   const polylinesRef = useRef<L.Polyline[]>([]);
-  const routesRef = useRef<GraphHopperRoute[]>([]);
+  const routesRef = useRef<[number, number][][]>([]);
   const [selectedRouteIndex, setSelectedRouteIndex] = useState(0);
 
-  const fetchedOnce = useRef(false);
-
   useEffect(() => {
     if (pathPoints.length < 2) return;
-
-    fetchedOnce.current = false;
-
-  }, [pathPoints]);
-
-  useEffect(() => {
-    if (pathPoints.length < 2) return;
-
-    if (fetchedOnce.current) return; 
-    fetchedOnce.current = true;     
-
-    const start = pathPoints[0];
-    const end = pathPoints[pathPoints.length - 1];
 
     const fetchRoutes = async () => {
       try {
-        polylinesRef.current.forEach((poly) => map.removeLayer(poly));
+        polylinesRef.current.forEach((p) => map.removeLayer(p));
         polylinesRef.current = [];
+        routesRef.current = [];
 
         const url = `${GRAPH_HOPPER_API.BASE_URL}?key=${GRAPH_HOPPER_KEY}`;
 
         const body = {
           points: [
-            [start[1], start[0]],
-            [end[1], end[0]],
+            [pathPoints[0][1], pathPoints[0][0]],
+            [pathPoints[1][1], pathPoints[1][0]],
           ],
           profile: "car",
           algorithm: "alternative_route",
           "alternative_route.max_paths": 3,
-          "alternative_route.max_weight_factor": 1.4,
-          "alternative_route.max_share_factor": 0.6,
           points_encoded: true,
         };
 
-        const response = await axios.post<GraphHopperResponse>(url, body);
-        const routes = response.data.paths;
-
-        routesRef.current = routes;
+        const res = await axios.post<GraphHopperResponse>(url, body);
+        const routes = res.data.paths;
 
         routes.forEach((route, index) => {
-          const coords: LatLngExpression[] = polyline
+          const coords = polyline
             .decode(route.points)
-            .map(([lat, lng]) => [lat, lng]);
+            .map(([lat, lng]) => [lat, lng]) as [number, number][];
 
-          const polylineLayer = L.polyline(coords, {
+          routesRef.current.push(coords);
+
+          const poly = L.polyline(coords as LatLngExpression[], {
             color: index === 0 ? color : "black",
             weight: index === 0 ? 6 : 6,
-            opacity: index === 0 ? 1 : 0.4,
+            opacity: index === 0 ? 1 : 0.5,
           }).addTo(map);
 
-          polylineLayer.on("click", () => {
+          poly.on("click", () => {
             setSelectedRouteIndex(index);
             onDistance(route.distance);
+            onRouteReady?.(coords);
           });
 
-          polylinesRef.current.push(polylineLayer);
+          polylinesRef.current.push(poly);
 
-          if (index === 0) onDistance(route.distance);
+          if (index === 0) {
+            onDistance(route.distance);
+            onRouteReady?.(coords);
+          }
         });
 
-        const allCoords = polylinesRef.current.flatMap(
-          (p) => p.getLatLngs() as L.LatLng[]
-        );
-
-        map.fitBounds(L.latLngBounds(allCoords));
-      } catch (error) {
-        console.error("GraphHopper Routing Error:", error);
+        map.fitBounds(polylinesRef.current[0].getBounds());
+      } catch (err) {
+        console.error("GraphHopper error:", err);
       }
     };
 
     fetchRoutes();
-  }, [pathPoints, map, color]);
+  }, [pathPoints, map, color, onDistance, onRouteReady]);
 
   useEffect(() => {
-    polylinesRef.current.forEach((poly, index) => {
-      const isSelected = index === selectedRouteIndex;
+    polylinesRef.current.forEach((poly, idx) => {
       poly.setStyle({
-        color: isSelected ? color : "gray",
-        weight: isSelected ? 6 : 3,
-        opacity: isSelected ? 1 : 0.4,
+        color: idx === selectedRouteIndex ? color : "gray",
+        weight: idx === selectedRouteIndex ? 6 : 4,
+        opacity: idx === selectedRouteIndex ? 1 : 0.5,
       });
     });
-
-    const selectedRoute = routesRef.current[selectedRouteIndex];
-    if (selectedRoute) {
-      onDistance(selectedRoute.distance);
-    }
   }, [selectedRouteIndex, color]);
 
   return null;
