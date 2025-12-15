@@ -97,6 +97,7 @@ export default function CustomMap({
             completedPath={tracking.completedPath}
             activeSegment={tracking.activeSegment}
             currentPosition={tracking.currentPosition}
+            activeColor={pathColor}
           />
         )}
 

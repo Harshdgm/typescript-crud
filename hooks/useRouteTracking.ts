@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 
 export function useRouteTracking(
   route: [number, number][],
-  interval = 2000
+  interval = 3000
 ) {
   const [currentIndex, setCurrentIndex] = useState(0);
 
