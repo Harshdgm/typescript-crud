@@ -2,6 +2,7 @@
 
 import { Marker } from "react-leaflet";
 import { TRUCK_ICON } from "@/constant/truckIcon";
+import { useTrucks } from "@/hooks/useTruck";
 
 interface StaticTrucksProps {
   endPoint: [number, number] | null;
@@ -9,17 +10,16 @@ interface StaticTrucksProps {
   onTruckClick: (start: [number, number]) => void;
 }
 
-const STATIC_TRUCKS: [number, number][] = [
-  [23.025, 72.57],
-  [22.2410, 68.9680],
-  [22.3072, 73.1812],
-  [23.2411, 69.6669],
-];
+export default function StaticTrucks({
+  endPoint,
+  startPoint,
+  onTruckClick,
+}: StaticTrucksProps) {
+  const { trucks, loading } = useTrucks();
 
-export default function StaticTrucks({ endPoint, startPoint, onTruckClick }: StaticTrucksProps) {
-  if (!endPoint) return null;
+  if (!endPoint || loading) return null;
 
-  const visibleTrucks = STATIC_TRUCKS.filter(
+  const visibleTrucks = trucks.filter(
     (pos) => !(startPoint && pos[0] === startPoint[0] && pos[1] === startPoint[1])
   );
 
