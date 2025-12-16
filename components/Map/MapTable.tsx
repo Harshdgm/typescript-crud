@@ -11,13 +11,13 @@
   import "leaflet/dist/leaflet.css";
   import { useState } from "react";
   import { useRouteTracking } from "@/hooks/useRouteTracking";
+  import { useLabels } from "@/hooks/useLabels";
   import { TILE_LAYER_URLS } from "@/constant/mapApi";
   import { DEFAULT_LEAFLET_ICON } from "@/constant/leafletClient";
   import MapWithVehicles from "./MapWithVehicles";
   import GraphHopperRouting from "./GraphHopperRouting";
   import LiveTrackingLayer from "./LiveTrackingLayer";
   import StaticTrucks from "./StaticTrucks";
-  import { useLabels } from "@/hooks/useLabels";
   import PlaceImagePopup from "./PlaceImagePopup";
 
   L.Marker.prototype.options.icon = DEFAULT_LEAFLET_ICON;
