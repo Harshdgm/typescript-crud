@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { EmployeeData, EmployeeError } from "@/types/user";
 import HobbySelector from "@/components/AdvanceTable/HobbySelector";
+import { useLabels } from "@/hooks/useLabels";
 
 type Props = {
   employee: EmployeeData;
@@ -11,6 +12,7 @@ type Props = {
 };
 
 export default function NestedEditModal({ employee, onClose, onSave }: Props) {
+  const labels = useLabels();
   const [values, setValues] = useState<EmployeeData>({ ...employee  , hobby: employee.hobby || [],});
   const [errors, setErrors] = useState<EmployeeError>({
     id: "", name: "", email: "", role: "", status: "", action: "",
@@ -46,11 +48,11 @@ export default function NestedEditModal({ employee, onClose, onSave }: Props) {
     <div className="fixed inset-0 z-50 flex items-center justify-center">
       <div className="absolute inset-0 bg-black opacity-30" onClick={onClose}></div>
       <div className="bg-white z-10 p-6 rounded-lg w-[400px] relative">
-        <h2 className="text-xl font-bold mb-4">Edit Nested Details</h2>
+        <h2 className="text-xl font-bold mb-4">{labels.edit_nested_details}</h2>
         <div className="flex flex-col gap-1 text-left">
           
           <div>
-            <label>Salary:</label>
+            <label>{labels.salary}:</label>
             <input
               type="number"
               value={values.salary}
@@ -61,7 +63,7 @@ export default function NestedEditModal({ employee, onClose, onSave }: Props) {
           </div>
 
           <div>
-            <label>City:</label>
+            <label>{labels.city}:</label>
             <input
               type="text"
               value={values.city || ""}
@@ -72,7 +74,7 @@ export default function NestedEditModal({ employee, onClose, onSave }: Props) {
           </div>
 
           <div>
-            <label>Phone:</label>
+            <label>{labels.phone}:</label>
             <input
               type="text"
               value={values.phone || ""}
@@ -83,7 +85,7 @@ export default function NestedEditModal({ employee, onClose, onSave }: Props) {
           </div>
 
           <div>
-            <label>Hobby:</label>
+            <label>{labels.hobby}:</label>
             <HobbySelector
               value={values.hobby || []}
               onChange={(val: string[]) => handleChange("hobby", val)}
@@ -92,7 +94,7 @@ export default function NestedEditModal({ employee, onClose, onSave }: Props) {
           </div>
 
           <div>
-            <label>Date of Birth:</label>
+            <label>{labels.date_of_birth}:</label>
             <input
               type="date"
               value={values.dob || ""}
@@ -105,8 +107,8 @@ export default function NestedEditModal({ employee, onClose, onSave }: Props) {
         </div>
 
         <div className="mt-4 flex justify-end gap-2">
-          <button className="bg-gray-300 px-4 py-2 rounded" onClick={onClose}>Cancel</button>
-          <button className="bg-blue-500 text-white px-4 py-2 rounded" onClick={handleSave}>Save</button>
+          <button className="bg-gray-300 px-4 py-2 rounded" onClick={onClose}>{labels.cancel}</button>
+          <button className="bg-blue-500 text-white px-4 py-2 rounded" onClick={handleSave}>{labels.save}</button>
         </div>
       </div>
     </div>

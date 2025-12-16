@@ -2,6 +2,8 @@
 
 import React from "react";
 import { DateString, TimeString } from "@/types/dateType";
+import { useLabels } from "@/hooks/useLabels";
+
 
 interface Props {
   startDate: DateString | "";
@@ -28,6 +30,7 @@ export default function DateTimeRangeForm({
   onEndTime,
   onSubmit,
 }: Props) {
+  const labels = useLabels();
   return (
     <div className="col-span-2 bg-white p-8 rounded-xl border shadow-sm">
       <h2 className="text-xl font-semibold mb-6 text-gray-800">
@@ -36,7 +39,7 @@ export default function DateTimeRangeForm({
 
       <div className="grid grid-cols-2 gap-6 mb-8"> 
         <div>
-          <label className="block text-sm text-gray-600 mb-1">Start Date</label>
+          <label className="block text-sm text-gray-600 mb-1">{labels.start_date}</label>
           <input
             type="date"
             className="w-full p-2 border rounded-md text-gray-800"
@@ -45,7 +48,7 @@ export default function DateTimeRangeForm({
           />
 
           <label className="block text-sm text-gray-600 mt-4 mb-1">
-            Start Time (UTC)
+            {labels.start_time} (UTC)
           </label>
           <input
             type="time"
@@ -57,7 +60,7 @@ export default function DateTimeRangeForm({
 
     
         <div>
-          <label className="block text-sm text-gray-600 mb-1">End Date</label>
+          <label className="block text-sm text-gray-600 mb-1">{labels.end_date}</label>
           <input
             type="date"
             className="w-full p-2 border rounded-md text-gray-800"
@@ -67,7 +70,7 @@ export default function DateTimeRangeForm({
           />
 
           <label className="block text-sm text-gray-600 mt-4 mb-1">
-            End Time (UTC)
+            {labels.end_time} (UTC)
           </label>
           <input
             type="time"
@@ -82,7 +85,7 @@ export default function DateTimeRangeForm({
         onClick={onSubmit}
         className="bg-blue-600 text-white px-6 py-3 rounded-md font-medium hover:bg-blue-700 transition"
       >
-        OK
+        {labels.ok}
       </button>
     </div>
   );

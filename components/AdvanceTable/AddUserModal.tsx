@@ -6,6 +6,7 @@ import UserRow from "./UserRow";
 import { CiCirclePlus } from "react-icons/ci";
 import { validateRow } from "@/utils/validateRow";
 import getInitialDateRange from "@/utils/getInitialDateRange";
+import { useLabels } from "@/hooks/useLabels";
 
 type Props = {
   existingRows: UserData[];
@@ -14,6 +15,7 @@ type Props = {
 
 export default function AddUserModal({ existingRows, onAddUsers }: Props) {
   const [showModal, setShowModal] = useState(false);
+  const labels = useLabels();
  
   const getNextId = (extraRows: UserData[] = []) => {
     const ids1 = existingRows.length ? existingRows.map((u) => u.id) : [0];
@@ -139,16 +141,16 @@ const handleChange = (
   return (
     <div className="mb-4">
       <div className="flex items-center justify-between">
-        <h1 className="text-lg font-bold mb-4">Advanced Users Table</h1>
+        <h1 className="text-lg font-bold mb-4">{labels.advanced_users_table}</h1>
         <button onClick={openModal} className="bg-blue-500 text-white px-4 py-2 rounded text-sm">
-          Add Data
+          {labels.add_data}
         </button>
       </div>
 
       {showModal && (
         <div className="border border-gray-200 p-2 rounded-md my-2">
           <div className="p-4 rounded-lg w-full max-w-full max-h-[90vh] ">
-            <h2 className="text-base font-bold mb-4">Add Users</h2>
+            <h2 className="text-base font-bold mb-4">{labels.add_user}</h2>
 
             {rows.map((row, index) => (
               <UserRow
@@ -164,17 +166,17 @@ const handleChange = (
 
           <div className="flex gap-2 mb-2 ml-6">
             <button onClick={addRow} className="flex items-center gap-1 text-green-500 text-sm cursor-pointer">
-              <CiCirclePlus /> Add Row
+              <CiCirclePlus /> {labels.add_row}
             </button>
           </div>
 
           <div className="flex justify-end gap-2">
             <button onClick={() => setShowModal(false)} className="px-2 py-1 bg-gray-300 rounded text-sm">
-              Cancel
+             {labels.cancel}
             </button>
 
             <button onClick={handleSubmit} className="px-2 py-1 bg-blue-500 text-white rounded text-sm">
-              Submit
+              {labels.submit}
             </button>
           </div>
         </div>

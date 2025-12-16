@@ -1,5 +1,6 @@
 "use client";
 
+import { useLabels } from "@/hooks/useLabels";
 import { useState } from "react";
 import { FiShare2 } from "react-icons/fi";
 
@@ -11,6 +12,8 @@ interface ShareLocationProps {
 export default function ShareLocation({ pathPoints, basePath }: ShareLocationProps) {
   const [open, setOpen] = useState(false);
   const [copied, setCopied] = useState(false);
+
+  const labels = useLabels();
 
   const generateShareLink = () => {
     if (!pathPoints || pathPoints.length === 0) return "";
@@ -54,7 +57,7 @@ export default function ShareLocation({ pathPoints, basePath }: ShareLocationPro
       </button>
 
       {open && (
-        <div className="absolute bottom-14 left-0 bg-white shadow-xl p-4 rounded-xl w-72 border z-[9999]">
+        <div className="absolute bottom-14 left-0 bg-white shadow-xl p-4 rounded-xl w-72 border z-9999">
           <input
             type="text"
             readOnly
@@ -66,7 +69,7 @@ export default function ShareLocation({ pathPoints, basePath }: ShareLocationPro
             onClick={copyToClipboard}
             className="bg-blue-600 text-white px-4 py-2 rounded w-full mt-3"
           >
-            {copied ? "Copied!" : "Copy Link"}
+            {copied ? labels.copied : labels.copy_link}
           </button>
         </div>
       )}

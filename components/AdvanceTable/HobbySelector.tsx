@@ -6,6 +6,7 @@ import { RxCross2 } from "react-icons/rx";
 import { IoChevronDown, IoChevronUp } from "react-icons/io5";
 import { HOBBY_OPTIONS } from "@/constant/hobbies";
 import { sortHobbies } from "@/utils/sortHobbies";
+import { useLabels } from "@/hooks/useLabels";
 
 interface HobbySelectorProps {
   value: string[];
@@ -15,6 +16,7 @@ interface HobbySelectorProps {
 export default function HobbySelector({ value, onChange }: HobbySelectorProps) {
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
+  const labels = useLabels();
 
   const ref = useRef<HTMLDivElement>(null);
 
@@ -100,7 +102,7 @@ export default function HobbySelector({ value, onChange }: HobbySelectorProps) {
       {open && (
         <div className="absolute z-20 mt-1 w-full border bg-white rounded shadow max-h-60 overflow-auto">
           {filtered.length === 0 && (
-            <p className="text-center py-2 text-gray-500">No hobby found</p>
+            <p className="text-center py-2 text-gray-500">{labels.no_hobby_found}</p>
           )}
 
           {filtered.map((hobby) => {

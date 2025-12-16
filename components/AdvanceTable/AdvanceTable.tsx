@@ -1,69 +1,18 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { UserData } from "@/types/user";
 import ReusableTable, { Column } from "@/common/ReusableTable";
 import EditUserModal from "@/components/AdvanceTable/EditUserModal";
 import { toCamelCase } from "@/utils/toCamelCase";
+import { useLabels } from "@/hooks/useLabels";
 import EditAllUsersPanel from "./EditAllUsersModal";
-
-const userColumns: Column<UserData>[] = [
-  { key: "id", label: "ID" },
-  { key: "email", label: "Email" },
-  { key: "phone", label: "Phone" },
-  {
-    key: "address",
-    label: "Address",
-    render: (item) =>
-      `${item.city}${item.state ? ", " + item.state : ""}${
-        item.country ? ", " + item.country : ""
-      }`,
-  },
-  {
-    key: "dateRange",
-    label: "Date Range",
-    render: (item) =>
-  item.dateRange
-    ? `${new Date(item.dateRange.startDate).toLocaleString("en-US", {
-        timeZone: "UTC",
-        day: "2-digit",
-        month: "short",
-        year: "numeric",
-        hour: "2-digit",
-        minute: "2-digit",
-        second: "2-digit",
-        hour12: true,
-      })} - ${new Date(item.dateRange.endDate).toLocaleString("en-US", {
-        timeZone: "UTC",
-        day: "2-digit",
-        month: "short",
-        year: "numeric",
-        hour: "2-digit",
-        minute: "2-digit",
-        second: "2-digit",
-        hour12: true,
-      })}`
-    : "",
-
-  },
-  { key: "image", label: "Image", isImage: true },
-  {
-    key: "hobby",
-    label: "Hobby",
-    render: (item) =>
-      toCamelCase(
-        Array.isArray(item.hobby)
-          ? item.hobby.join(", ")
-          : item.hobby ?? ""
-      ),
-  },
-  { key: "actions", label: "Actions" },
-];
 
 export default function AdvanceTable({ data }: { data: UserData[] }) {
   const [users, setUsers] = useState<UserData[]>([]);
   const [selectedUser, setSelectedUser] = useState<UserData | null>(null);
   const [editAll, setEditAll] = useState(false);
+  const labels = useLabels();
 
   useEffect(() => {
     const saved = sessionStorage.getItem("usersData");
@@ -77,23 +26,73 @@ export default function AdvanceTable({ data }: { data: UserData[] }) {
   const handleEdit = (user: UserData) => setSelectedUser(user);
 
   const handleDelete = (user: UserData) => {
-    let newUsers = users.filter((u) => u.id !== user.id);
-
-    newUsers = newUsers
+    const newUsers = users
+      .filter((u) => u.id !== user.id)
       .sort((a, b) => a.id - b.id)
       .map((u, index) => ({ ...u, id: index + 1 }));
 
     setUsers(newUsers);
-    sessionStorage.setItem("usersData", JSON.stringify(newUsers));
   };
 
   const handleSave = (updated: UserData) => {
-    const newUsers = users.map((u) =>
-      u.id === updated.id ? updated : u
-    );
-    setUsers(newUsers);
+    setUsers(users.map((u) => (u.id === updated.id ? updated : u)));
     setSelectedUser(null);
   };
+
+  const userColumns: Column<UserData>[] = useMemo(
+    () => [
+      { key: "id", label: labels.id },
+      { key: "email", label: labels.email },
+      { key: "phone", label: labels.phone },
+      {
+        key: "address",
+        label: labels.address,
+        render: (item) =>
+          `${item.city}${item.state ? ", " + item.state : ""}${
+            item.country ? ", " + item.country : ""
+          }`,
+      },
+      {
+        key: "dateRange",
+        label: labels.date_range,
+        render: (item) =>
+          item.dateRange
+            ? `${new Date(item.dateRange.startDate).toLocaleString("en-US", {
+                timeZone: "UTC",
+                day: "2-digit",
+                month: "short",
+                year: "numeric",
+                hour: "2-digit",
+                minute: "2-digit",
+                second: "2-digit",
+                hour12: true,
+              })} - ${new Date(item.dateRange.endDate).toLocaleString("en-US", {
+                timeZone: "UTC",
+                day: "2-digit",
+                month: "short",
+                year: "numeric",
+                hour: "2-digit",
+                minute: "2-digit",
+                second: "2-digit",
+                hour12: true,
+              })}`
+            : "",
+      },
+      { key: "image", label: labels.image, isImage: true },
+      {
+        key: "hobby",
+        label: labels.hobby,
+        render: (item) =>
+          toCamelCase(
+            Array.isArray(item.hobby)
+              ? item.hobby.join(", ")
+              : item.hobby ?? ""
+          ),
+      },
+      { key: "actions", label: labels.actions },
+    ],
+    [labels]
+  );
 
   return (
     <div className="w-full overflow-x-auto">
@@ -103,7 +102,7 @@ export default function AdvanceTable({ data }: { data: UserData[] }) {
             className="bg-green-600 text-white px-4 py-2 rounded-md"
             onClick={() => setEditAll(true)}
           >
-            Edit All Users
+            {labels.all_edit_users}
           </button>
         </div>
       )}
@@ -127,7 +126,7 @@ export default function AdvanceTable({ data }: { data: UserData[] }) {
           onDelete={handleDelete}
         />
       </div>
-      
+
       {selectedUser && (
         <EditUserModal
           user={selectedUser}

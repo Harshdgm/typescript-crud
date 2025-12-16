@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { DateRangeData } from "@/types/user";
 import { DateRangePicker, RangeKeyDict } from "react-date-range";
+import { useLabels } from "@/hooks/useLabels";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 
@@ -13,6 +14,7 @@ type Props = {
 
 export default function DateRangeInput({ value, onChange }: Props) {
   const [show, setShow] = useState(false);
+  const labels = useLabels();
 
   const formatUTC = (date: Date) =>
     date.toLocaleString("en-US", {
@@ -31,9 +33,8 @@ export default function DateRangeInput({ value, onChange }: Props) {
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
     const [h, m] = e.target.value.split(":").map(Number);
-
     const d = new Date(value[key]);
-    d.setUTCHours(h, m); 
+    d.setUTCHours(h, m);
 
     onChange({
       ...value,
@@ -42,34 +43,34 @@ export default function DateRangeInput({ value, onChange }: Props) {
   };
 
   const handleRangeSelect = (ranges: RangeKeyDict) => {
-  const r = ranges.selection;
+    const r = ranges.selection;
 
-  if (r?.startDate && r?.endDate) {
-    const start = r.startDate;
-    const end = r.endDate;
+    if (r?.startDate && r?.endDate) {
+      const startUTC = new Date(
+        Date.UTC(
+          r.startDate.getFullYear(),
+          r.startDate.getMonth(),
+          r.startDate.getDate(),
+          0,0,0
+        )
+      );
 
-    const startUTC = new Date(Date.UTC(
-      start.getFullYear(),
-      start.getMonth(),
-      start.getDate(), 
-      0, 0, 0          
-    ));
+      const endUTC = new Date(
+        Date.UTC(
+          r.endDate.getFullYear(),
+          r.endDate.getMonth(),
+          r.endDate.getDate(),
+          23,59,59
+        )
+      );
 
-    const endUTC = new Date(Date.UTC(
-      end.getFullYear(),
-      end.getMonth(),
-      end.getDate(),
-      23, 59, 59  
-    ));
-
-    onChange({
-          startDate: startUTC,
-          endDate: endUTC,
-          key: "selection",
-        });
-      }
-    };
-
+      onChange({
+        startDate: startUTC,
+        endDate: endUTC,
+        key: "selection",
+      });
+    }
+  };
 
   return (
     <div className="relative">
@@ -99,7 +100,9 @@ export default function DateRangeInput({ value, onChange }: Props) {
             {(["startDate", "endDate"] as const).map((key) => (
               <div key={key}>
                 <label className="text-sm">
-                  {key === "startDate" ? "Start Time:" : "End Time:"}
+                  {key === "startDate"
+                    ? labels.start_time
+                    : labels.end_time}
                 </label>
                 <input
                   type="time"
@@ -121,7 +124,7 @@ export default function DateRangeInput({ value, onChange }: Props) {
             className="mt-2 px-4 py-1 bg-blue-500 text-white rounded"
             onClick={() => setShow(false)}
           >
-            Close
+            {labels.close}
           </button>
         </div>
       )}

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { EmployeeData } from "@/types/user";
 import { EmployeeError } from "@/types/user";
+import { useLabels } from "@/hooks/useLabels";
 
 type Props = {
   user: EmployeeData;
@@ -11,6 +12,7 @@ type Props = {
 };
 
 export default function EditEmployeeModal({ user, onClose, onSave }: Props) {
+  const labels = useLabels();
   const [editValues, setEditValues] = useState<EmployeeData>({
     ...user,
     status: user.status === "Active" ? "Active" : "Inactive",
@@ -71,11 +73,11 @@ export default function EditEmployeeModal({ user, onClose, onSave }: Props) {
       <div className="absolute inset-0 bg-black opacity-30" onClick={onClose}></div>
 
       <div className="bg-white z-10 p-6 rounded-lg w-[400px] relative">
-        <h2 className="text-xl font-bold mb-4">Edit Employee</h2>
+        <h2 className="text-xl font-bold mb-4">{labels.edit_employee}</h2>
 
         <div className="flex flex-col gap-3">
           <div>
-            <label>Name:</label>
+            <label>{labels.name}:</label>
             <input
               type="text"
               value={editValues.name}
@@ -86,7 +88,7 @@ export default function EditEmployeeModal({ user, onClose, onSave }: Props) {
           </div>
 
           <div>
-            <label>Email:</label>
+            <label>{labels.email}:</label>
             <input
               type="text"
               value={editValues.email}
@@ -97,22 +99,22 @@ export default function EditEmployeeModal({ user, onClose, onSave }: Props) {
           </div>
 
           <div>
-            <label>Role:</label>
+            <label>{labels.role}:</label>
             <select
               value={editValues.role}
               onChange={(e) => handleChange("role", e.target.value)}
               className={`border p-2 rounded w-full ${errors.role ? "border-red-500" : ""}`}
             >
-              <option value="">Select role</option>
-              <option value="Employee">Employee</option>
-              <option value="Admin">Admin</option>
-              <option value="User">User</option>
+              <option value="">{labels.select_role}</option>
+              <option value="Employee">{labels.employee}</option>
+              <option value="Admin">{labels.admin}</option>
+              <option value="User">{labels.user}</option>
             </select>
             {errors.role && <p className="text-red-500 text-sm">{errors.role}</p>}
           </div>
 
           <div className="flex items-center gap-3">
-            <label>Status:</label>
+            <label>{labels.status}:</label>
             <input
               type="checkbox"
               checked={editValues.status === "Active"}
@@ -124,7 +126,7 @@ export default function EditEmployeeModal({ user, onClose, onSave }: Props) {
           </div>
 
           <div className="flex items-center gap-3">
-            <label>Action Allowed:</label>
+            <label>{labels.action_allowed}:</label>
             <input
               type="checkbox"
               checked={editValues.action}
@@ -136,11 +138,11 @@ export default function EditEmployeeModal({ user, onClose, onSave }: Props) {
 
         <div className="mt-4 flex justify-end gap-2">
           <button className="bg-gray-300 px-4 py-2 rounded" onClick={onClose}>
-            Cancel
+            {labels.cancel}
           </button>
 
           <button className="bg-blue-500 text-white px-4 py-2 rounded" onClick={handleSave}>
-            Save
+            {labels.save}
           </button>
         </div>
       </div>

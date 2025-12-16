@@ -38,11 +38,11 @@ export default function MapWithVehicles({ distance }: MapWithVehiclesProps) {
 
   return (
     <>
-      <div className="absolute top-3 right-8 transform -translate-x-1/2 bg-white shadow px-6 py-3 font-semibold rounded z-[9999]">
+      <div className="absolute top-3 right-8 transform -translate-x-1/2 bg-white shadow px-6 py-3 font-semibold rounded z-9999">
         {(distance / 1000).toFixed(2)} km • {formatTime(durationByVehicle[selectedVehicle] || 0)}
       </div>
   
-      <div className="absolute top-1/2 right-5 transform -translate-y-1/2 p-4 flex flex-col gap-3 z-[9999]">
+      <div className="absolute top-1/2 right-5 transform -translate-y-1/2 p-4 flex flex-col gap-3 z-9999">
         {(Object.keys(VEHICLE_SPEEDS) as VehicleName[]).map((vehicle) => {
           const active = selectedVehicle === vehicle;
           return (

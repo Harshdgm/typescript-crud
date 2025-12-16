@@ -8,6 +8,7 @@ import DateRangeInput from "./DateRangeInput";
 import { fileToBase64 } from "@/utils/fileToBase64";
 import HobbySelector from "./HobbySelector";
 import { useState, useEffect } from "react";
+import { useLabels } from "@/hooks/useLabels";
 
 type Props = {
   user: UserData;
@@ -23,6 +24,7 @@ type Props = {
 
 export default function UserRow({ index, user, errors, onChange, onRemove }: Props) {
   const [editValues, setEditValues] = useState<UserData>({ ...user });
+  const labels = useLabels();
 
   useEffect(() => {
     setEditValues({ ...user });
@@ -43,7 +45,7 @@ export default function UserRow({ index, user, errors, onChange, onRemove }: Pro
       <div>
         <input
           type="email"
-          placeholder="Email"
+          placeholder={labels.email}
           className="border p-2 rounded w-full"
           value={user.email}
           onChange={(e) => onChange(index, "email", e.target.value)}
@@ -54,7 +56,7 @@ export default function UserRow({ index, user, errors, onChange, onRemove }: Pro
       <div>
         <input
           type="text"
-          placeholder="Phone"
+          placeholder={labels.phone}
           className="border p-2 rounded w-full"
           value={user.phone === 0 ? "" : user.phone}
           onChange={(e) => {
@@ -68,7 +70,7 @@ export default function UserRow({ index, user, errors, onChange, onRemove }: Pro
       <div>
         <input
           type="text"
-          placeholder="City"
+          placeholder={labels.city}
           className="border p-2 rounded w-full"
           value={user.city}
           onChange={(e) => {
@@ -92,7 +94,7 @@ export default function UserRow({ index, user, errors, onChange, onRemove }: Pro
       <div>
         <input
           type="text"
-          placeholder="State"
+          placeholder={labels.state}
           className="border p-2 rounded w-full bg-gray-100"
           value={user.state}
           readOnly
@@ -102,7 +104,7 @@ export default function UserRow({ index, user, errors, onChange, onRemove }: Pro
       <div>
         <input
           type="text"
-          placeholder="Country"
+          placeholder={labels.country}
           className="border p-2 rounded w-full bg-gray-100"
           value={user.country}
           readOnly

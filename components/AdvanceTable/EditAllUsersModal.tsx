@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { UserData, UserError, DateRangeData } from "@/types/user";
 import { validateRow } from "@/utils/validateRow";
+import { useLabels } from "@/hooks/useLabels";
 import getInitialDateRange from "@/utils/getInitialDateRange";
 import EditAllUserRow from "./EditAllUsersRow";
 
@@ -126,13 +127,14 @@ export default function EditAllUsersPanel({ users, onClose, onSave }: Props) {
 
     onSave(rows);
   };
+  const labels = useLabels();
 
   return (
     <div className="bg-white p-6 rounded-lg shadow-md border mb-8">
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold">Edit All Users</h2>
+        <h2 className="text-2xl font-bold">{labels.all_edit_users}</h2>
         <button className="bg-gray-300 px-4 py-2 rounded-md" onClick={onClose}>
-          Close
+          {labels.close}
         </button>
       </div>
 
@@ -164,19 +166,19 @@ export default function EditAllUsersPanel({ users, onClose, onSave }: Props) {
         className="bg-green-600 text-white px-5 py-2 rounded-md"
         onClick={addNewUser}
       >
-        Add New User
+        {labels.add_new_users}
       </button>
 
       <div className="flex gap-3">
         <button className="bg-gray-300 px-5 py-2 rounded-md" onClick={onClose}>
-          Cancel
+          {labels.cancel}
         </button>
 
         <button
           className="bg-blue-500 text-white px-5 py-2 rounded-md"
           onClick={handleSave}
         >
-          Save All
+          {labels.save_all}
         </button>
       </div>
     </div>

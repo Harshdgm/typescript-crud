@@ -17,6 +17,7 @@ import MapWithVehicles from "./MapWithVehicles";
 import GraphHopperRouting from "./GraphHopperRouting";
 import LiveTrackingLayer from "./LiveTrackingLayer";
 import StaticTrucks from "./StaticTrucks";
+import { useLabels } from "@/hooks/useLabels";
 
 L.Marker.prototype.options.icon = DEFAULT_LEAFLET_ICON;
 
@@ -32,27 +33,26 @@ interface Layer {
   checked?: boolean;
 }
 
-const layerList: Layer[] = [
-  { name: "Default", url: TILE_LAYER_URLS.GOOGLE_NORMAL, checked: true },
-  { name: "Google Normal", url: TILE_LAYER_URLS.DEFAULT },
-  { name: "Dark", url: TILE_LAYER_URLS.DARK },
-  { name: "Light", url: TILE_LAYER_URLS.LIGHT },
-  { name: "Topographic", url: TILE_LAYER_URLS.TOPOGRAPHIC },
-  { name: "Google Satellite", url: TILE_LAYER_URLS.GOOGLE_SATELLITE },
-  { name: "Google Hybrid", url: TILE_LAYER_URLS.GOOGLE_HYBRID },
-  { name: "Google Terrain", url: TILE_LAYER_URLS.GOOGLE_TERRAIN },
-];
-
 export default function CustomMap({
   pathPoints = [],
   setPathPoints,
   pathColor = "red",
 }: CustomMapProps) {
-  const center: [number, number] =
-    pathPoints.length > 0 ? pathPoints[0] : [23.0225, 72.5714];
-
+  const center: [number, number] = pathPoints.length > 0 ? pathPoints[0] : [23.0225, 72.5714];
+  const labels = useLabels();
   const [distance, setDistance] = useState<number | null>(null);
   const [routeCoords, setRouteCoords] = useState<[number, number][]>([]);
+
+  const layerList: Layer[] = [
+    { name: labels.layer_default, url: TILE_LAYER_URLS.GOOGLE_NORMAL, checked: true },
+    { name: labels.layer_google_normal, url: TILE_LAYER_URLS.DEFAULT },
+    { name: labels.layer_dark, url: TILE_LAYER_URLS.DARK },
+    { name: labels.layer_light, url: TILE_LAYER_URLS.LIGHT },
+    { name: labels.layer_topographic, url: TILE_LAYER_URLS.TOPOGRAPHIC },
+    { name: labels.layer_google_satellite, url: TILE_LAYER_URLS.GOOGLE_SATELLITE },
+    { name: labels.layer_google_hybrid, url: TILE_LAYER_URLS.GOOGLE_HYBRID },
+    { name: labels.layer_google_terrain, url: TILE_LAYER_URLS.GOOGLE_TERRAIN },
+  ];
 
   const tracking = useRouteTracking(routeCoords, 2000);
 
@@ -84,11 +84,11 @@ export default function CustomMap({
         {pathPoints.length > 0 && (
           <>
             <Marker position={pathPoints[0]}>
-              <Popup>Start</Popup>
+              <Popup>{labels.start}</Popup>
             </Marker>
             {pathPoints.length > 1 && (
               <Marker position={pathPoints[1]}>
-                <Popup>End</Popup>
+                <Popup>{labels.end}</Popup>
               </Marker>
             )}
           </>

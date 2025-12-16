@@ -2,6 +2,7 @@
 
 import React from "react";
 import { OutputRange } from "@/types/dateType";
+import { useLabels } from "@/hooks/useLabels";
 
 interface Props {
   outputLocal: OutputRange | null;
@@ -14,6 +15,7 @@ export default function OutputPreview({
   outputZone,
   selectedZone,
 }: Props) {
+  const labels = useLabels();
   if (!outputLocal || !outputZone) return null;
 
   return (
@@ -22,13 +24,13 @@ export default function OutputPreview({
 
       <div className="space-y-2 text-gray-800">
         <p>
-          <b>Local Time:</b>
+          <b>{labels.local_time}:</b>
           <br />
           {outputLocal.start} → {outputLocal.end}
         </p>
 
         <p className="mt-4">
-          <b>{selectedZone} Timezone:</b>
+          <b>{selectedZone} {labels.time_zone}:</b>
           <br />
           {outputZone.start} → {outputZone.end}
         </p>

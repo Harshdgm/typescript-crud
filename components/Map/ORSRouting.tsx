@@ -103,7 +103,6 @@ export default function ORSRouting({
           console.warn("POST API failed, trying GET features API:", err);
         }
 
-        // long distance ------
         const url = `${ORS_API.BASE_URL}?start=${start[1]},${start[0]}&end=${end[1]},${end[0]}&alternative_routes[share_factor]=0.6&alternative_routes[target_count]=3`;
         const responseGet = await axios.get<ORSResponseGET>(url, {
           headers: { Authorization: ORS_API.KEY },

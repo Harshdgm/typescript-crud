@@ -8,6 +8,7 @@ import {
 import { usePlaceSearch } from "@/hooks/usePlaceSearch";
 import { FaMapPin, FaFlagCheckered } from "react-icons/fa";
 import { useLiveLocation } from "@/hooks/useLiveLocation";
+import { useLabels } from "@/hooks/useLabels";
 
 interface Suggestion {
   place_id: string;
@@ -23,6 +24,7 @@ interface PathInputProps {
 export default function PathInput({ onPathChange }: PathInputProps) {
   const [startPlace, setStartPlace] = useState<string>("");
   const [endPlace, setEndPlace] = useState<string>("");
+  const labels = useLabels();
 
   const { coords, error, fetchLiveLocation } = useLiveLocation();
 
@@ -95,7 +97,7 @@ export default function PathInput({ onPathChange }: PathInputProps) {
           </span>
           <input
             type="text"
-            placeholder="Choose starting point"
+            placeholder={labels.choosing_starting_point}
             value={startPlace}
             onChange={(e: ChangeEvent<HTMLInputElement>) => {
               setStartPlace(e.target.value);
@@ -129,7 +131,7 @@ export default function PathInput({ onPathChange }: PathInputProps) {
           </span>
           <input
             type="text"
-            placeholder="Choose destination"
+            placeholder={labels.choose_destination}
             value={endPlace}
             onChange={(e: ChangeEvent<HTMLInputElement>) => {
               setEndPlace(e.target.value);
@@ -160,7 +162,7 @@ export default function PathInput({ onPathChange }: PathInputProps) {
         onClick={handleShowPath}
         className="bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-full shadow text-lg font-medium"
       >
-        Show Path
+        {labels.show_path}
       </button>
 
       {error && <p className="text-red-600 text-sm mt-1">{error}</p>}

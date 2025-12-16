@@ -8,6 +8,7 @@ import HobbySelector from "./HobbySelector";
 import DateRangeInput from "./DateRangeInput";
 import { cityData } from "@/utils/locationData";
 import { fileToBase64 } from "@/utils/fileToBase64";
+import { useLabels } from "@/hooks/useLabels";
 
 type Props = {
   user: UserData;
@@ -16,6 +17,7 @@ type Props = {
 };
 
 export default function EditUserModal({ user, onClose, onSave }: Props) {
+  const labels = useLabels();
   const [editValues, setEditValues] = useState<UserData>({
     ...user,
     dateRange: user.dateRange
@@ -68,11 +70,11 @@ export default function EditUserModal({ user, onClose, onSave }: Props) {
       <div className="absolute inset-0 bg-black opacity-30" onClick={onClose}></div>
 
       <div className="bg-white z-10 rounded-lg shadow-lg w-full max-w-4xl overflow-y-auto max-h-[95vh] p-6">
-        <h2 className="text-2xl font-bold mb-6 text-center">Edit User</h2>
+        <h2 className="text-2xl font-bold mb-6 text-center">{labels.edit_user}</h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <label className="block font-medium mb-1">Email</label>
+            <label className="block font-medium mb-1">{labels.email}</label>
             <input
               type="text"
               value={editValues.email}
@@ -85,7 +87,7 @@ export default function EditUserModal({ user, onClose, onSave }: Props) {
           </div>
 
           <div>
-            <label className="block font-medium mb-1">Phone</label>
+            <label className="block font-medium mb-1">{labels.email}</label>
             <input
               type="text"
               value={editValues.phone}
@@ -98,7 +100,7 @@ export default function EditUserModal({ user, onClose, onSave }: Props) {
           </div>
 
           <div>
-            <label className="block font-medium mb-1">City</label>
+            <label className="block font-medium mb-1">{labels.city}</label>
             <input
               type="text"
               value={editValues.city}
@@ -125,7 +127,7 @@ export default function EditUserModal({ user, onClose, onSave }: Props) {
           </div>
 
           <div>
-            <label className="block font-medium mb-1">State</label>
+            <label className="block font-medium mb-1">{labels.state}</label>
             <input
               type="text"
               value={editValues.state}
@@ -135,7 +137,7 @@ export default function EditUserModal({ user, onClose, onSave }: Props) {
           </div>
 
           <div>
-            <label className="block font-medium mb-1">Country</label>
+            <label className="block font-medium mb-1">{labels.country}</label>
             <input
               type="text"
               value={editValues.country}
@@ -145,7 +147,7 @@ export default function EditUserModal({ user, onClose, onSave }: Props) {
           </div>
 
           <div className="md:col-span-2">
-            <label className="block font-medium mb-1">Date Range</label>
+            <label className="block font-medium mb-1">{labels.date_range}</label>
             <DateRangeInput
               value={{
                 startDate: editValues.dateRange?.startDate || new Date(),
@@ -158,7 +160,7 @@ export default function EditUserModal({ user, onClose, onSave }: Props) {
           </div>
 
           <div className="md:col-span-2">
-            <label className="block font-medium mb-1">Image</label>
+            <label className="block font-medium mb-1">{labels.image}</label>
             <input
               type="file"
               accept="image/png, image/jpeg"
@@ -186,7 +188,7 @@ export default function EditUserModal({ user, onClose, onSave }: Props) {
           </div>
 
           <div className="md:col-span-2">
-            <label className="block font-medium mb-1">Hobbies</label>
+            <label className="block font-medium mb-1">{labels.hobby}</label>
             <HobbySelector
               value={editValues.hobby || []}
               onChange={handleHobbyChange}
@@ -200,13 +202,13 @@ export default function EditUserModal({ user, onClose, onSave }: Props) {
             className="bg-gray-300 px-5 py-2 rounded-md hover:bg-gray-400"
             onClick={onClose}
           >
-            Cancel
+            {labels.cancel}
           </button>
           <button
             className="bg-blue-500 text-white px-5 py-2 rounded-md hover:bg-blue-600"
             onClick={handleSave}
           >
-            Save
+            {labels.save}
           </button>
         </div>
       </div>

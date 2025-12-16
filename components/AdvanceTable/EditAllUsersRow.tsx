@@ -4,6 +4,7 @@ import Image from "next/image";
 import { UserData, UserError, ImageType } from "@/types/user";
 import { cityData } from "@/utils/locationData";
 import { fileToBase64 } from "@/utils/fileToBase64";
+import { useLabels } from "@/hooks/useLabels";
 import HobbySelector from "./HobbySelector";
 import DateRangeInput from "./DateRangeInput";
 import { RiDeleteBin6Line } from "react-icons/ri";
@@ -27,6 +28,7 @@ export default function EditAllUserRow({
   deleteRow,
   updateField,
 }: RowProps) {
+  const labels = useLabels();
   return (
     <div className="border p-4 rounded-xl relative">
       <button
@@ -41,7 +43,7 @@ export default function EditAllUserRow({
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
         <div>
-          <label>Email</label>
+          <label>{labels.email}</label>
           <input
             value={row.email}
             onChange={(e) => updateField(index, "email", e.target.value)}
@@ -51,7 +53,7 @@ export default function EditAllUserRow({
         </div>
 
         <div>
-          <label>Phone</label>
+          <label>{labels.phone}</label>
           <input
             value={row.phone}
             onChange={(e) => {
@@ -66,7 +68,7 @@ export default function EditAllUserRow({
         </div>
 
         <div>
-          <label>City</label>
+          <label>{labels.city}</label>
           <input
             value={row.city}
             onChange={(e) => {
@@ -91,7 +93,7 @@ export default function EditAllUserRow({
         </div>
 
         <div>
-          <label>State</label>
+          <label>{labels.state}</label>
           <input
             value={row.state}
             readOnly
@@ -100,7 +102,7 @@ export default function EditAllUserRow({
         </div>
 
         <div>
-          <label>Country</label>
+          <label>{labels.country}</label>
           <input
             value={row.country}
             readOnly
@@ -125,7 +127,7 @@ export default function EditAllUserRow({
         </div>
 
         <div className="col-span-full">
-          <label>Image</label>
+          <label>{labels.image}</label>
           <input
             type="file"
             onChange={async (e) => {
