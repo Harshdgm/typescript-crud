@@ -70,7 +70,9 @@
     "choose_destination": "Choose Destination",
     "show_path": "Show Path",
     "copied": "Copied!",
-    "copy_link": "Copy Link"
+    "copy_link": "Copy Link",
+    "loading_image": "Loading image",
+    "no_image_available": "No image available"
   },
   "gu": {
     "home": "હોમ",
@@ -143,7 +145,9 @@
     "choose_destination": "ગંતવ્ય પસંદ કરો",
     "show_path": "માર્ગ બતાવો",
     "copied": "નકલ થયું!",
-    "copy_link": "લિંક નકલ કરો"
+    "copy_link": "લિંક નકલ કરો",
+    "loading_image": "ચિત્ર લોડ થઈ રહ્યું છે",
+    "no_image_available": "ચિત્ર ઉપલબ્ધ નથી"
   },
   "hi": {
     "home": "होम",
@@ -216,7 +220,9 @@
     "choose_destination": "गंतव्य चुनें",
     "show_path": "पथ दिखाएँ",
     "copied": "कॉपी किया गया!",
-    "copy_link": "लिंक कॉपी करें"
+    "copy_link": "लिंक कॉपी करें",
+    "loading_image": "छवि लोड हो रही है",
+    "no_image_available": "कोई छवि उपलब्ध नहीं है"
   },
   "fr": {
     "home": "Accueil",
@@ -289,7 +295,9 @@
     "choose_destination": "Choisir la destination",
     "show_path": "Afficher le chemin",
     "copied": "Copié !",
-    "copy_link": "Copier le lien"
+    "copy_link": "Copier le lien",
+    "loading_image": "Chargement de l'image",
+    "no_image_available": "Aucune image disponible"
   },
   "es": {
     "home": "Inicio",
@@ -362,7 +370,9 @@
     "choose_destination": "Elegir destino",
     "show_path": "Mostrar ruta",
     "copied": "¡Copiado!",
-    "copy_link": "Copiar enlace"
+    "copy_link": "Copiar enlace",
+    "loading_image": "Cargando imagen",
+    "no_image_available": "Imagen no disponible"
   },
   "de": {
     "home": "Startseite",
@@ -435,7 +445,9 @@
     "choose_destination": "Ziel wählen",
     "show_path": "Route anzeigen",
     "copied": "Kopiert!",
-    "copy_link": "Link kopieren"
+    "copy_link": "Link kopieren",
+    "loading_image": "Bild wird geladen",
+    "no_image_available": "Kein Bild verfügbar"
   },
   "it": {
     "home": "Home",
@@ -508,7 +520,9 @@
     "choose_destination": "Scegli destinazione",
     "show_path": "Mostra percorso",
     "copied": "Copiato!",
-    "copy_link": "Copia link"
+    "copy_link": "Copia link",
+    "loading_image": "Caricamento immagine",
+    "no_image_available": "Nessuna immagine disponibile"
   },
   "pt": {
     "home": "Início",
@@ -581,7 +595,9 @@
     "choose_destination": "Escolher destino",
     "show_path": "Mostrar caminho",
     "copied": "Copiado!",
-    "copy_link": "Copiar link"
+    "copy_link": "Copiar link",
+    "loading_image": "Carregando imagem",
+    "no_image_available": "Nenhuma imagem disponível"
   },
   "ja": {
     "home": "ホーム",
@@ -654,7 +670,9 @@
     "choose_destination": "目的地を選択",
     "show_path": "経路を表示",
     "copied": "コピーしました！",
-    "copy_link": "リンクをコピー"
+    "copy_link": "リンクをコピー",
+    "loading_image": "画像を読み込み中",
+    "no_image_available": "画像がありません"
   },
   "zh": {
     "home": "首页",
@@ -727,6 +745,8 @@
     "choose_destination": "选择目的地",
     "show_path": "显示路径",
     "copied": "已复制！",
-    "copy_link": "复制链接"
+    "copy_link": "复制链接",
+    "loading_image": "正在加载图片",
+    "no_image_available": "没有可用的图片"
   }
 }

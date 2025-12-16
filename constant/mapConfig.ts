@@ -11,3 +11,5 @@ export const ROUTE_LAYER_ID = "routeLine";
 
 export const ROUTE_LINE_COLOR = "#ff0000";
 export const ROUTE_LINE_WIDTH = 5;
+
+export const WIKIPEDIA_API_BASE = "https://en.wikipedia.org/w/api.php?action=query";

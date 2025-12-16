@@ -71,12 +71,14 @@ export const useLabels = () => {
     layer_google_satellite: t("layer_google_satellite"),
     layer_google_hybrid: t("layer_google_hybrid"),
     layer_google_terrain: t("layer_google_terrain"),
-
     choosing_starting_point:t("choosing_starting_point"),
     choose_destination:t("choose_destination"),
     show_path:t("show_path"),
     copied:t("copied"),
-    copy_link:t("copy_link")
+    copy_link:t("copy_link"),
+
+    loading_image:t("loading_image"),
+    no_image_available:t("no_image_available")
 
   };
 };
