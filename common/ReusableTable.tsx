@@ -2,8 +2,7 @@
 
 import Image from "next/image";
 import { useState } from "react";
-import { FiEdit, FiChevronDown, FiChevronUp } from "react-icons/fi";
-import { RiDeleteBin6Line } from "react-icons/ri";
+import { FiEdit, FiChevronDown, FiChevronUp, RiDeleteBin6Line } from "@/icons/index";
 
 export type Column<T> = {
   key: keyof T | "actions";

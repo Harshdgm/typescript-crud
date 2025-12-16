@@ -7,7 +7,7 @@ import { fileToBase64 } from "@/utils/fileToBase64";
 import { useLabels } from "@/hooks/useLabels";
 import HobbySelector from "./HobbySelector";
 import DateRangeInput from "./DateRangeInput";
-import { RiDeleteBin6Line } from "react-icons/ri";
+import { RiDeleteBin6Line } from "@/icons/index";
 
 type RowProps = {
   row: UserData;

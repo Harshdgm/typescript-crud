@@ -3,7 +3,7 @@
 import { UserData, UserError, DateRangeData, ImageType } from "@/types/user";
 import { useState } from "react";
 import UserRow from "./UserRow";
-import { CiCirclePlus } from "react-icons/ci";
+import { CiCirclePlus } from "@/icons/index";
 import { validateRow } from "@/utils/validateRow";
 import getInitialDateRange from "@/utils/getInitialDateRange";
 import { useLabels } from "@/hooks/useLabels";

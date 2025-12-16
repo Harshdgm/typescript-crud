@@ -1,14 +1,14 @@
 "use client";
 
-import { FiMinusCircle } from "react-icons/fi";
+import { useState, useEffect } from "react";
 import { UserData, UserError, DateRangeData, ImageType } from "@/types/user";
 import { MAX_PHONE_DIGITS } from "@/constant/validation";
 import { cityData } from "@/utils/locationData";
 import DateRangeInput from "./DateRangeInput";
 import { fileToBase64 } from "@/utils/fileToBase64";
 import HobbySelector from "./HobbySelector";
-import { useState, useEffect } from "react";
 import { useLabels } from "@/hooks/useLabels";
+import { FiMinusCircle } from "@/icons/index";
 
 type Props = {
   user: UserData;

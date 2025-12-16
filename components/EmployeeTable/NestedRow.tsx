@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { EmployeeData } from "@/types/user";
 import NestedEditModal from "./NestedEditModal";
-import { FiEdit } from "react-icons/fi";
+import { FiEdit } from "@/icons/index";
 
 type Props = {
   employee: EmployeeData;

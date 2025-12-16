@@ -10,7 +10,7 @@ import {
   FaBus,
   FaBicycle,
   FaWalking,
-} from "react-icons/fa";
+} from "@/icons/index";
 
 interface MapWithVehiclesProps {
   distance: number | null;

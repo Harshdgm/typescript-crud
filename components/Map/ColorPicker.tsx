@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { HexColorPicker } from "react-colorful";
-import { FaPalette } from "react-icons/fa";
+import { FaPalette } from "@/icons/index";
 
 interface ColorPickerProps {
   selectedColor: string;

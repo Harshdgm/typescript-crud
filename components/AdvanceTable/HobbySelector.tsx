@@ -1,9 +1,7 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
-import { FiCheck } from "react-icons/fi";
-import { RxCross2 } from "react-icons/rx";
-import { IoChevronDown, IoChevronUp } from "react-icons/io5";
+import { FiCheck,RxCross2, IoChevronDown , IoChevronUp } from "@/icons/index";
 import { HOBBY_OPTIONS } from "@/constant/hobbies";
 import { sortHobbies } from "@/utils/sortHobbies";
 import { useLabels } from "@/hooks/useLabels";

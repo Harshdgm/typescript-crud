@@ -2,7 +2,7 @@
 
 import { useLabels } from "@/hooks/useLabels";
 import { useState } from "react";
-import { FiShare2 } from "react-icons/fi";
+import { FiShare2 } from "@/icons/index";
 
 interface ShareLocationProps {
   pathPoints: [number, number][];

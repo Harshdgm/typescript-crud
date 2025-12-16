@@ -6,7 +6,7 @@ import {
   GEOAPIFY_API_KEY,
 } from "@/constant/mapApi";
 import { usePlaceSearch } from "@/hooks/usePlaceSearch";
-import { FaMapPin, FaFlagCheckered } from "react-icons/fa";
+import { FaMapPin, FaFlagCheckered } from "@/icons/index";
 import { useLiveLocation } from "@/hooks/useLiveLocation";
 import { useLabels } from "@/hooks/useLabels";
 

@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect } from "react";
-import { FaCrosshairs } from "react-icons/fa";
 import { useLiveLocation } from "@/hooks/useLiveLocation";
+import { FaCrosshairs } from "@/icons/index";
 
 interface LiveLocationProps {
   onSelect: (coords: [number, number]) => void;
