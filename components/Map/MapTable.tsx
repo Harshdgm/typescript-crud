@@ -25,6 +25,7 @@ import { useMapEvents } from "react-leaflet";
 import { PlaceCategory } from "@/constant/placeCategories";
 import { getMarkerIcon } from "./placeMarkerIcons";
 import { getLiveCoordinates, Coordinates } from "@/utils/getLiveCoordinates";
+import { routeFromLiveToMarker } from "@/utils/mapUtils";
 
   L.Marker.prototype.options.icon = DEFAULT_LEAFLET_ICON;
 
@@ -50,17 +51,15 @@ import { getLiveCoordinates, Coordinates } from "@/utils/getLiveCoordinates";
     const [distance, setDistance] = useState<number | null>(null);
     const [routeCoords, setRouteCoords] = useState<[number, number][]>([]);
     const [liveCoords, setLiveCoords] = useState<[number, number] | null>(null);
-    const [selectedCategory, setSelectedCategory] = useState<PlaceCategory | null>(null);
-      // useState<PlaceCategory>(PLACE_CATEGORIES[0]);
+    const [selectedCategory, setSelectedCategory] = useState<PlaceCategory | null>(null); // useState<PlaceCategory>(PLACE_CATEGORIES[0]);
     const [clickCoords, setClickCoords] = useState<[number, number]>([23.0225, 72.5714]);
       
     useEffect(() => {
-  // Fetch live coordinates once when component mounts
       getLiveCoordinates()
         .then((coords: Coordinates) => {
           const live: [number, number] = [coords.lat, coords.lon];
           setLiveCoords(live);
-          setClickCoords(live); // update clickCoords with live location
+          setClickCoords(live); 
         })
         .catch((err) => console.error("Failed to get location:", err));
     }, []);
@@ -101,6 +100,10 @@ import { getLiveCoordinates, Coordinates } from "@/utils/getLiveCoordinates";
         });
         return null;
       }
+
+      const handlePlaceMarkerClick = (coords: [number, number]) => {
+          routeFromLiveToMarker(coords, setPathPoints);
+      };
 
     return (
       <div className="relative w-full h-full">
@@ -182,16 +185,18 @@ import { getLiveCoordinates, Coordinates } from "@/utils/getLiveCoordinates";
           )}
 
            {liveCoords && places.map((p) => (
-            <Marker
-              key={p.id}
-              position={[p.lat, p.lon]}
-              icon={getMarkerIcon(selectedCategory)}
-            >
-              <Popup>
-                <strong>{p.name}</strong>
-              </Popup>
-            </Marker>
-          ))}
+              <Marker
+                key={p.id}
+                position={[p.lat, p.lon]}
+                icon={getMarkerIcon(selectedCategory)}
+                eventHandlers={{
+                  click: () => handlePlaceMarkerClick([p.lat, p.lon]),
+                }} >
+                <Popup>
+                  <strong>{p.name}</strong>
+                </Popup>
+              </Marker>
+            ))}
         </MapContainer>
       </div>
     );
