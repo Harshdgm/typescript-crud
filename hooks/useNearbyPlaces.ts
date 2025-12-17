@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { GEOAPIFY_API_KEY } from "@/constant/mapApi";
+import { GEOAPIFY_API_KEY, GEOAPIFY_PLACES_URL } from "@/constant/mapApi";
 import { PlaceCategory } from "@/constant/placeCategories";
 
 export interface NearbyPlace {
@@ -42,8 +42,7 @@ export function useNearbyPlaces(
       const [lat, lon] = coords;
 
       try {
-        const url =
-          `https://api.geoapify.com/v2/places?` +
+        const url =`${GEOAPIFY_PLACES_URL}?` +
           `categories=${category.apiCategories}` +
           `&filter=circle:${lon},${lat},5000` +
           `&limit=50` +

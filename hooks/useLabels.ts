@@ -76,7 +76,6 @@ export const useLabels = () => {
     show_path:t("show_path"),
     copied:t("copied"),
     copy_link:t("copy_link"),
-
     loading_image:t("loading_image"),
     no_image_available:t("no_image_available")
 

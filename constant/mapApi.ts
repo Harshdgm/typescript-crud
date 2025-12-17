@@ -21,7 +21,7 @@ export const TILE_LAYER_URLS = {
 
 export const ORS_API = {
   BASE_URL: "https://api.openrouteservice.org/v2/directions/driving-car",
-  KEY: "eyJvcmciOiI1YjNjZTM1OTc4NTExMTAwMDFjZjYyNDgiLCJpZCI6IjE0ZmM1NGQyZDNkOTRiNTQ5ZTg2ZDM3OTJmYTExYmEyIiwiaCI6Im11cm11cjY0In0=",
+  KEY: process.env.NEXT_PUBLIC_ORS_API_KEY || "",
 };
 
 // export const TOMTOM_API = {
@@ -42,12 +42,12 @@ export const GRAPH_HOPPER_API = {
 };
 
 export const OPEN_CAGE_API={
-  KEY:"6ffcf85faa9d41b283f62864428609c1",
+  KEY: process.env.NEXT_PUBLIC_OPENCAGE_API_KEY || "",
   BASE_URL: "https://api.opencagedata.com/geocode/v1/json",
 }
 
 export const GEOAPIFY_BASE_URL = "https://api.geoapify.com/v1/geocode/autocomplete?";
 export const GEOAPIFY_GEOCODE_URL = "https://api.geoapify.com/v1/geocode/search?";
-export const GEOAPIFY_API_KEY = '60680497a83a446ba6eee788ec8ffe7f';
+export const GEOAPIFY_API_KEY = process.env.NEXT_PUBLIC_GEOAPIFY_API_KEY || "";
 export const GEOAPIFY_REVERSE_URL = "https://api.geoapify.com/v1/geocode/reverse?";
 export const GEOAPIFY_PLACES_URL = "https://api.geoapify.com/v2/places";

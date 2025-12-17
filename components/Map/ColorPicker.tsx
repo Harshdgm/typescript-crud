@@ -25,11 +25,6 @@ export default function ColorPicker({ selectedColor, onChange }: ColorPickerProp
 
   return (
     <div ref={wrapperRef} className="relative inline-block">
-      {/* <div
-        className="w-8 h-8 rounded-full border cursor-pointer shadow-md"
-        style={{ backgroundColor: selectedColor }}
-        onClick={() => setOpen(!open)}
-      /> */}
       <div
         className="w-8 h-8 flex items-center justify-center rounded-full border cursor-pointer shadow-md bg-blue-600"
         onClick={() => setOpen(!open)}
