@@ -27,11 +27,10 @@ declare module "leaflet" {
     function control(options?: RoutingOptions): Control;
   }
 
-  // Augment L with Routing
   const Routing: typeof Routing;
 }
 
 declare module "leaflet-routing-machine" {
   import * as L from "leaflet";
-  export = L.Routing; // use export = syntax
+  export = L.Routing; 
 }

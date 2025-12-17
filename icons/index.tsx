@@ -1,6 +1,6 @@
 export { CiCirclePlus } from "react-icons/ci";
 
-export { FaPalette, FaCrosshairs, FaCar, FaMotorcycle, FaTruck, FaBus, FaBicycle, FaWalking, FaMapPin, FaFlagCheckered } from "react-icons/fa"
+export { FaPalette, FaCrosshairs, FaCar, FaMotorcycle, FaTruck, FaBus, FaBicycle, FaWalking, FaMapPin, FaFlagCheckered, FaGasPump, FaUtensils, FaHospital, FaUniversity, FaHotel } from "react-icons/fa"
 
 export { FiEdit, FiChevronDown, FiChevronUp, FiCheck, FiPlus, FiEye, FiMinusCircle, FiShare2 } from "react-icons/fi";
 

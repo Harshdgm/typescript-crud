@@ -22,7 +22,8 @@ import PlaceImagePopup from "./PlaceImagePopup";
 import { useNearbyPlaces } from "@/hooks/useNearbyPlaces";
 import PlaceCategorySelector from "./PlaceCategorySelector";
 import { useMapEvents } from "react-leaflet";
-import { PLACE_CATEGORIES, PlaceCategory } from "@/constant/placeCategories";
+import { PlaceCategory } from "@/constant/placeCategories";
+import { getMarkerIcon } from "./placeMarkerIcons";
 
   L.Marker.prototype.options.icon = DEFAULT_LEAFLET_ICON;
 
@@ -47,11 +48,9 @@ import { PLACE_CATEGORIES, PlaceCategory } from "@/constant/placeCategories";
     const labels = useLabels();
     const [distance, setDistance] = useState<number | null>(null);
     const [routeCoords, setRouteCoords] = useState<[number, number][]>([]);
-    const [selectedCategory, setSelectedCategory] =
-      useState<PlaceCategory>(PLACE_CATEGORIES[0]);
-
-    const [clickCoords, setClickCoords] =
-      useState<[number, number]>([23.0225, 72.5714]);
+    const [selectedCategory, setSelectedCategory] = useState<PlaceCategory | null>(null);
+      // useState<PlaceCategory>(PLACE_CATEGORIES[0]);
+    const [clickCoords, setClickCoords] = useState<[number, number]>([23.0225, 72.5714]);
       
 
     const layerList: Layer[] = [
@@ -171,12 +170,16 @@ import { PLACE_CATEGORIES, PlaceCategory } from "@/constant/placeCategories";
           )}
 
            {places.map((p) => (
-            <Marker key={p.id} position={[p.lat, p.lon]}>
+            <Marker
+              key={p.id}
+              position={[p.lat, p.lon]}
+              icon={getMarkerIcon(selectedCategory)}
+            >
               <Popup>
                 <strong>{p.name}</strong>
               </Popup>
             </Marker>
-            ))}
+          ))}
         </MapContainer>
       </div>
     );

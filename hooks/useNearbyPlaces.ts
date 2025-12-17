@@ -29,46 +29,51 @@ interface GeoapifyResponse {
 
 export function useNearbyPlaces(
   coords: [number, number],
-  category: PlaceCategory
+  category: PlaceCategory | null
 ) {
-  const [places, setPlaces] = useState<NearbyPlace[]>([]);
+  const [fetchedPlaces, setFetchedPlaces] = useState<NearbyPlace[]>([]);
 
   useEffect(() => {
+    if (!category) return;
+
     let cancelled = false;
 
     const load = async () => {
       const [lat, lon] = coords;
 
-      const url =
-        `https://api.geoapify.com/v2/places?` +
-        `categories=${category.apiCategories}` +
-        `&filter=circle:${lon},${lat},3000` +
-        `&limit=50` +
-        `&apiKey=${GEOAPIFY_API_KEY}`;
+      try {
+        const url =
+          `https://api.geoapify.com/v2/places?` +
+          `categories=${category.apiCategories}` +
+          `&filter=circle:${lon},${lat},3000` +
+          `&limit=50` +
+          `&apiKey=${GEOAPIFY_API_KEY}`;
 
-      const res = await fetch(url);
-      const data: GeoapifyResponse = await res.json();
+        const res = await fetch(url);
+        const data: GeoapifyResponse = await res.json();
 
-      if (cancelled || !data.features) {
-        setPlaces([]);  
-        return;
+        if (cancelled || !data.features) return;
+
+        const formatted: NearbyPlace[] = data.features.map((f) => ({
+          id: f.properties.place_id,
+          name: f.properties.name ?? "Unnamed place",
+          lat: f.geometry.coordinates[1],
+          lon: f.geometry.coordinates[0],
+          category: f.properties.categories?.[0]?.name ?? "",
+        }));
+
+        const strictlyMatched = formatted.filter((p) =>
+          category.strictKeywords.some((k) =>
+            p.name.toLowerCase().includes(k)
+          )
+        );
+
+        if (!cancelled) {
+          setFetchedPlaces(strictlyMatched);
+        }
+      } catch {
+        if (!cancelled) setFetchedPlaces([]);
       }
-
-      const formatted: NearbyPlace[] = data.features.map((f) => ({
-        id: f.properties.place_id,
-        name: f.properties.name ?? "Unnamed place",
-        lat: f.geometry.coordinates[1],
-        lon: f.geometry.coordinates[0],
-        category: f.properties.categories?.[0]?.name ?? "",
-      }));
-
-      const strictlyMatched = formatted.filter((p) =>
-        category.strictKeywords.some((k) =>
-          p.name.toLowerCase().includes(k)
-        )
-      );
-
-      setPlaces(strictlyMatched);
     };
 
     load();
@@ -78,5 +83,5 @@ export function useNearbyPlaces(
     };
   }, [coords, category]);
 
-  return places;
+  return category ? fetchedPlaces : [];
 }
