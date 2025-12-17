@@ -45,7 +45,7 @@ export function useNearbyPlaces(
         const url =
           `https://api.geoapify.com/v2/places?` +
           `categories=${category.apiCategories}` +
-          `&filter=circle:${lon},${lat},3000` +
+          `&filter=circle:${lon},${lat},5000` +
           `&limit=50` +
           `&apiKey=${GEOAPIFY_API_KEY}`;
 
