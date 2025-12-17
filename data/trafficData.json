@@ -1,0 +1,39 @@
+{
+  "trafficSegments": [
+    {
+      "start": [21.1702, 72.8311],
+      "end": [21.6210, 73.0000],
+      "color": "green",
+      "from": "Surat",
+      "to": "Ankleshwar"
+    },
+    {
+      "start": [21.6210, 73.0000],
+      "end": [21.7051, 73.0080],
+      "color": "yellow",
+      "from": "Ankleshwar",
+      "to": "Bharuch"
+    },
+    {
+      "start": [21.7051, 73.0080],
+      "end": [22.5645, 72.9289],
+      "color": "red",
+      "from": "Bharuch",
+      "to": "Anand"
+    },
+    {
+      "start": [22.5645, 72.9289],
+      "end": [22.9868, 72.8160],
+      "color": "green",
+      "from": "Anand",
+      "to": "Nadiad"
+    },
+    {
+      "start": [22.9868, 72.8160],
+      "end": [23.0225, 72.5714],
+      "color": "green",
+      "from": "Nadiad",
+      "to": "Ahmedabad"
+    }
+  ]
+}
