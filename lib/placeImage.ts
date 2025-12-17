@@ -16,9 +16,7 @@ export async function getPlaceImage(place: string): Promise<string | null> {
 }
 
 async function fetchWikipediaImage(query: string): Promise<string | null> {
-  let url = `${WIKIPEDIA_API_BASE}&prop=pageimages&format=json&pithumbsize=600&titles=${encodeURIComponent(
-    query
-  )}&origin=*`;
+  let url = `${WIKIPEDIA_API_BASE}&prop=pageimages&format=json&pithumbsize=600&titles=${encodeURIComponent(query)}&origin=*`;
 
   let res = await fetch(url);
   let data = await res.json();
