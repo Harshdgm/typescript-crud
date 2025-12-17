@@ -9,7 +9,7 @@ import {
 } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouteTracking } from "@/hooks/useRouteTracking";
 import { useLabels } from "@/hooks/useLabels";
 import { TILE_LAYER_URLS } from "@/constant/mapApi";
@@ -24,6 +24,7 @@ import PlaceCategorySelector from "./PlaceCategorySelector";
 import { useMapEvents } from "react-leaflet";
 import { PlaceCategory } from "@/constant/placeCategories";
 import { getMarkerIcon } from "./placeMarkerIcons";
+import { getLiveCoordinates, Coordinates } from "@/utils/getLiveCoordinates";
 
   L.Marker.prototype.options.icon = DEFAULT_LEAFLET_ICON;
 
@@ -48,10 +49,21 @@ import { getMarkerIcon } from "./placeMarkerIcons";
     const labels = useLabels();
     const [distance, setDistance] = useState<number | null>(null);
     const [routeCoords, setRouteCoords] = useState<[number, number][]>([]);
+    const [liveCoords, setLiveCoords] = useState<[number, number] | null>(null);
     const [selectedCategory, setSelectedCategory] = useState<PlaceCategory | null>(null);
       // useState<PlaceCategory>(PLACE_CATEGORIES[0]);
     const [clickCoords, setClickCoords] = useState<[number, number]>([23.0225, 72.5714]);
       
+    useEffect(() => {
+  // Fetch live coordinates once when component mounts
+      getLiveCoordinates()
+        .then((coords: Coordinates) => {
+          const live: [number, number] = [coords.lat, coords.lon];
+          setLiveCoords(live);
+          setClickCoords(live); // update clickCoords with live location
+        })
+        .catch((err) => console.error("Failed to get location:", err));
+    }, []);
 
     const layerList: Layer[] = [
       { name: labels.layer_default, url: TILE_LAYER_URLS.GOOGLE_NORMAL, checked: true },
@@ -169,7 +181,7 @@ import { getMarkerIcon } from "./placeMarkerIcons";
             />
           )}
 
-           {places.map((p) => (
+           {liveCoords && places.map((p) => (
             <Marker
               key={p.id}
               position={[p.lat, p.lon]}
