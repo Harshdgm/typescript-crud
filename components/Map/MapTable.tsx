@@ -1,24 +1,28 @@
-  "use client";
+"use client";
 
-  import {
+import {
     MapContainer,
     TileLayer,
     Marker,
     Popup,
     LayersControl,
-  } from "react-leaflet";
-  import L from "leaflet";
-  import "leaflet/dist/leaflet.css";
-  import { useState } from "react";
-  import { useRouteTracking } from "@/hooks/useRouteTracking";
-  import { useLabels } from "@/hooks/useLabels";
-  import { TILE_LAYER_URLS } from "@/constant/mapApi";
-  import { DEFAULT_LEAFLET_ICON } from "@/constant/leafletClient";
-  import MapWithVehicles from "./MapWithVehicles";
-  import GraphHopperRouting from "./GraphHopperRouting";
-  import LiveTrackingLayer from "./LiveTrackingLayer";
-  import StaticTrucks from "./StaticTrucks";
-  import PlaceImagePopup from "./PlaceImagePopup";
+} from "react-leaflet";
+import L from "leaflet";
+import "leaflet/dist/leaflet.css";
+import { useState } from "react";
+import { useRouteTracking } from "@/hooks/useRouteTracking";
+import { useLabels } from "@/hooks/useLabels";
+import { TILE_LAYER_URLS } from "@/constant/mapApi";
+import { DEFAULT_LEAFLET_ICON } from "@/constant/leafletClient";
+import MapWithVehicles from "./MapWithVehicles";
+import GraphHopperRouting from "./GraphHopperRouting";
+import LiveTrackingLayer from "./LiveTrackingLayer";
+import StaticTrucks from "./StaticTrucks";
+import PlaceImagePopup from "./PlaceImagePopup";
+import { useNearbyPlaces } from "@/hooks/useNearbyPlaces";
+import PlaceCategorySelector from "./PlaceCategorySelector";
+import { useMapEvents } from "react-leaflet";
+import { PLACE_CATEGORIES, PlaceCategory } from "@/constant/placeCategories";
 
   L.Marker.prototype.options.icon = DEFAULT_LEAFLET_ICON;
 
@@ -43,6 +47,12 @@
     const labels = useLabels();
     const [distance, setDistance] = useState<number | null>(null);
     const [routeCoords, setRouteCoords] = useState<[number, number][]>([]);
+    const [selectedCategory, setSelectedCategory] =
+      useState<PlaceCategory>(PLACE_CATEGORIES[0]);
+
+    const [clickCoords, setClickCoords] =
+      useState<[number, number]>([23.0225, 72.5714]);
+      
 
     const layerList: Layer[] = [
       { name: labels.layer_default, url: TILE_LAYER_URLS.GOOGLE_NORMAL, checked: true },
@@ -65,11 +75,34 @@
       }
     };
 
+    const places = useNearbyPlaces(clickCoords, selectedCategory);
+
+    function MapClickHandler({
+        onClick,
+      }: {
+        onClick: (coords: [number, number]) => void;
+      }) {
+        useMapEvents({
+          click(e) {
+            console.log("MAP CLICK:", e.latlng.lat, e.latlng.lng);
+            onClick([e.latlng.lat, e.latlng.lng]);
+          },
+        });
+        return null;
+      }
+
     return (
       <div className="relative w-full h-full">
+
+         <PlaceCategorySelector
+          selected={selectedCategory}
+          onSelect={setSelectedCategory}
+        />
         {distance !== null && <MapWithVehicles distance={distance} />}
 
         <MapContainer center={center} zoom={8} style={{ height: "100%", width: "100%" }}>
+          <MapClickHandler onClick={setClickCoords} />
+
           <LayersControl position="topright">
             {layerList.map((layer) => (
               <LayersControl.BaseLayer
@@ -136,6 +169,14 @@
               color={pathColor}
             />
           )}
+
+           {places.map((p) => (
+            <Marker key={p.id} position={[p.lat, p.lon]}>
+              <Popup>
+                <strong>{p.name}</strong>
+              </Popup>
+            </Marker>
+            ))}
         </MapContainer>
       </div>
     );

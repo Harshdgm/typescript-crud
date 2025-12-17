@@ -50,3 +50,4 @@ export const GEOAPIFY_BASE_URL = "https://api.geoapify.com/v1/geocode/autocomple
 export const GEOAPIFY_GEOCODE_URL = "https://api.geoapify.com/v1/geocode/search?";
 export const GEOAPIFY_API_KEY = '60680497a83a446ba6eee788ec8ffe7f';
 export const GEOAPIFY_REVERSE_URL = "https://api.geoapify.com/v1/geocode/reverse?";
+export const GEOAPIFY_PLACES_URL = "https://api.geoapify.com/v2/places";
