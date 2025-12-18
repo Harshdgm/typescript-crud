@@ -26,6 +26,7 @@ import { PlaceCategory } from "@/constant/placeCategories";
 import { getMarkerIcon } from "./placeMarkerIcons";
 import { getLiveCoordinates, Coordinates } from "@/utils/getLiveCoordinates";
 import { routeFromLiveToMarker } from "@/utils/mapUtils";
+import RouteTrafficLayer from "./RouteTrafficLayer";
 
   L.Marker.prototype.options.icon = DEFAULT_LEAFLET_ICON;
 
@@ -182,6 +183,10 @@ import { routeFromLiveToMarker } from "@/utils/mapUtils";
               onRouteReady={setRouteCoords}
               color={pathColor}
             />
+          )}
+
+          {pathPoints.length === 2 && routeCoords.length > 0 && (
+            <RouteTrafficLayer routeCoords={routeCoords} routeUpdateTrigger={pathColor} />
           )}
 
            {liveCoords && places.map((p) => (

@@ -15,7 +15,7 @@ const CustomMap = dynamic(() => import("@/components/Map/MapTable"), {
 
 export default function MapPage() {
   const [pathPoints, setPathPoints] = useState<[number, number][]>([]);
-  const [pathColor, setPathColor] = useState<string>("red");
+  const [pathColor, setPathColor] = useState<string>("blue");
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);

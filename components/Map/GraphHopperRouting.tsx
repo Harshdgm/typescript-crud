@@ -104,6 +104,10 @@ export default function GraphHopperRouting({
         weight: idx === selectedRouteIndex ? 6 : 4,
         opacity: idx === selectedRouteIndex ? 1 : 0.5,
       });
+
+    //   if (idx === selectedRouteIndex) {
+    //   poly.bringToFront();
+    // }
     });
   }, [selectedRouteIndex, color]);
 
